@@ -24,7 +24,7 @@ Konzept **„Technische Zeichnung“**, freigegeben am 2026-09-22 und vom Betrei
 
 **Bausteine:** `Seitenkopf.astro` (Etiketten, große Überschrift), `Startbild.astro` (Einleitung und Zeichen als „Abb. 01“ mit Mittellinien und Messkreis), `ProjectEntry.astro` (Datenblatt auf der Startseite), `Abbildung.astro` (Sucherecken, Maßlinie), `Stueckliste.astro` (Projektübersicht). Nummern der Navigation aus `src/lib/navigation.ts`, Projektnummern `P-01` ab dem ältesten über `projektNummer`.
 
-**Kopf und Fuß:** Kopfzeile klebt oben, halb durchsichtig mit Weichzeichner; links das Zeichen, rechts nummerierte Navigation. Fußzeile dunkel in Iron Grey mit Farbschimmer: große E-Mail-Adresse, darunter das Schriftfeld (Name, Seite, Pfad, Stand, Rechtliches). Der Name steht nur dort, im Browser-Tab, im JSON-LD und im Lebenslauf-PDF. Kein Portraitfoto, kein Suchstatus, keine Schaltflächen.
+**Kopf und Fuß:** Kopfzeile klebt oben, halb durchsichtig mit Weichzeichner; links das Zeichen (auf allen Seiten, auch der Startseite), rechts nummerierte Navigation. Fußzeile dunkel in Iron Grey mit Farbschimmer: große E-Mail-Adresse, darunter das Schriftfeld (Name, Seite, Pfad, Stand, Rechtliches). Der Name steht nur dort, im Browser-Tab, im JSON-LD und im Lebenslauf-PDF. Kein Portraitfoto, kein Suchstatus, keine Schaltflächen.
 
 **Nur echte Angaben in der Zeichnung:** Schriftfeld, Datenleiste und Maßlinien zeigen nur, was aus den Daten folgt (Pfad, Baumonat `STAND`, Anzahl der Projekte, Themen, Pixelmaße). Nichts erfinden, auch keine Koordinaten oder Versionen.
 
@@ -33,6 +33,8 @@ Konzept **„Technische Zeichnung“**, freigegeben am 2026-09-22 und vom Betrei
 **Farben:** Palette unverändert, abgeleitete Töne nur per `color-mix` aus Iron Grey und Mist. `--color-konstruktion` nie für Text. Cool Sky: Zeichen, Marker, Messkreis, Sucherecken beim Zeigen, Schimmer. Der Marker (`--color-mark-soft`) steht am aktiven Navigationspunkt, bei `<mark>` und `hr`; `.trenner` gibt es nicht mehr.
 
 **Bewegung:** Linien zeichnen sich beim Scrollen, `.erscheinen` blendet ein (`animation-timeline: view()`, kein JavaScript). Überschriften steigen auf, Messkreis dreht, Schimmer schwebt, Bilder zoomen beim Zeigen. Bei `prefers-reduced-motion` steht alles still.
+
+**Freigegeben (nicht mehr verboten):** Monospace- und Versalien-Beschriftungen, Nummern (01, P-01), Farbverläufe als Schimmer, Millimeterraster, dunkle Fläche, Einblenden beim Scrollen, Effekte beim Zeigen, Cool Sky außerhalb des Markers, das Zeichen in der Kopfzeile der Startseite.
 
 **Weiter verboten:** Karten mit Schatten, Glaseffekt auf Inhaltsflächen, pulsierende Punkte, Status-Badges, Pfeile an Linktexten, Emojis, Hervorhebung einzelner Wörter in Überschriften, Mittelpunkte zwischen Metadaten, Cursor-Effekte, Partikel, Tipp-Animationen, Parallax, „Hi, I'm …“, Kontaktformulare, Cookie-Banner.
 

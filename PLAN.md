@@ -125,7 +125,7 @@ Gemessene Kontraste (WCAG):
 - **Felder** (`.feld`): jeder Abschnitt hat oben eine Haarlinie von Rand zu Rand mit einer Kreuzmarke an beiden Enden. `.knapp` für schmale Zeilen, `.ohne-linie` für das erste Feld unter der Kopfzeile.
 - **Raster:** links ein Drittel für Nummer und Einordnung, rechts zwei Drittel für den Inhalt. `.geteilt` zeichnet ab `60rem` die senkrechte Linie in der Mitte der Lücke. `.zweispaltig` und `.gegliedert` (Zwischenüberschrift links neben ihrem Absatz, automatisch nummeriert) folgen demselben Raster.
 - **Zellen** (`.zellen`): wie im Schriftfeld. Die erste Spalte ist genau so breit, dass ihre Linie mit der Teilungslinie fluchtet (`--erste-spalte`).
-- **Kopfzeile:** bleibt oben stehen, halb durchsichtig mit Weichzeichner. Links das Zeichen (Link zur Startseite), rechts die Navigation mit Nummern: 01 Projekte, 02 Über mich, 03 Lebenslauf, danach freie Seiten mit `navigation: true`. Die Nummern kommen aus `src/lib/navigation.ts` und erscheinen auch im Seitenkopf.
+- **Kopfzeile:** bleibt oben stehen, halb durchsichtig mit Weichzeichner. Links das Zeichen (Link zur Startseite) auf allen Seiten, auch auf der Startseite, rechts die Navigation mit Nummern: 01 Projekte, 02 Über mich, 03 Lebenslauf, danach freie Seiten mit `navigation: true`. Die Nummern kommen aus `src/lib/navigation.ts` und erscheinen auch im Seitenkopf.
 - **Seitenkopf** (`Seitenkopf.astro`): Etiketten links (Nummer und Seite) und rechts (Stand), große Überschrift, optional ein Einleitungssatz, Millimeterraster im Hintergrund.
 - **Fußzeile:** dunkel in Iron Grey mit zwei weichen Farbschimmern. Oben „Kontakt“ mit der E-Mail-Adresse sehr groß, dazu GitHub und LinkedIn. Darunter das Schriftfeld mit Name, Seite, Pfad, Stand und Rechtlichem.
 - **Der Name** steht im Schriftfeld, im Browser-Tab, im JSON-LD und im Lebenslauf-PDF. In der Kopfzeile nicht.
@@ -157,7 +157,14 @@ Schriftfeld, Datenleiste, Etiketten und Maßlinien zeigen nur, was aus den Daten
 
 ### Verbotsliste
 
-Mit dem Konzept „Technische Zeichnung“ sind erlaubt: Etiketten in Monospace und Versalien, Nummern (01, P-01), Farbverläufe als weicher Schimmer, das Millimeterraster, eine dunkle Fläche, Einblenden beim Scrollen, Effekte beim Zeigen und die durchscheinende Kopfzeile.
+Mit dem Konzept „Technische Zeichnung“ vom Betreiber freigegeben (2026-09-22) und damit nicht mehr verboten:
+
+- Beschriftungen in Monospace und Versalien, Nummern wie 01 und P-01
+- Farbverläufe als weicher Schimmer, das Millimeterraster als Hintergrundmuster, eine dunkle Fläche (Fußzeile)
+- Einblenden beim Scrollen und Effekte beim Zeigen mit der Maus
+- Cool Sky auch außerhalb des Markers: im Messkreis, im Schimmer und bei den Sucherecken
+- Das kleine Zeichen in der Kopfzeile aller Seiten, auch der Startseite, weil die Kopfzeile beim Scrollen oben bleibt
+- Die durchscheinende Kopfzeile mit Weichzeichner
 
 Weiterhin nicht verwenden:
 
