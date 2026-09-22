@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Name des Workers bei Cloudflare. Er steht auch in der Adresse
+  // https://<name>.<dein-konto>.workers.dev
+  "name": "website",
+  "compatibility_date": "2026-09-16",
+
+  // Nur statische Dateien, kein Worker-Skript. Deshalb gibt es kein "main".
+  "assets": {
+    "directory": "./dist",
+    // /seite wird auf /seite/ umgeleitet, passend zu trailingSlash: "always".
+    "html_handling": "force-trailing-slash",
+    // Unbekannte Adressen bekommen dist/404.html mit Status 404.
+    "not_found_handling": "404-page"
+  }
+}

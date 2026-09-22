@@ -1,0 +1,38 @@
+{
+  "name": "website",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "new": "node scripts/new.mjs",
+    "new-seite": "node scripts/new-seite.mjs",
+    "zeichen": "node scripts/zeichen-erzeugen.mjs",
+    "video": "node scripts/video.mjs",
+    "shots": "node scripts/shots.mjs",
+    "cv": "node scripts/cv.mjs",
+    "check": "node scripts/check.mjs",
+    "deploy": "node scripts/deploy.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
+    "astro": "^7.3.2",
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "playwright": "~1.62.1",
+    "typescript": "^6.0.3"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "sharp": true
+  }
+}

@@ -1,0 +1,47 @@
+# Dein Lebenslauf. Die Abschnitte erscheinen in der Reihenfolge, in der sie
+# hier stehen. Es gibt zwei Arten von Eintraegen:
+#   Station: titel, organisation, ort, von, bis, punkte
+#   Liste:   bereich, liste
+# Zeitangaben im Format JJJJ-MM. "bis" leer lassen bedeutet "heute".
+# Keine Adresse, keine Telefonnummer, kein Geburtsdatum.
+
+abschnitte:
+  - titel: Education
+    startseite: true # dieser Abschnitt erscheint in der Kurzform auf der Startseite
+    eintraege:
+      - titel: "[TODO: z. B. M.Sc. Robotics, Cognition, Intelligence]"
+        organisation: "[TODO: Hochschule]"
+        ort: "[TODO: Ort]"
+        von: 2025-10
+        bis:
+        punkte:
+          - "[TODO: Schwerpunkt, Abschlussarbeit oder Note, wenn sie gut ist]"
+
+      - titel: "[TODO: z. B. B.Sc. Elektrotechnik]"
+        organisation: "[TODO: Hochschule]"
+        ort: "[TODO: Ort]"
+        von: 2021-10
+        bis: 2025-09
+        punkte:
+          - "[TODO: Thema der Bachelorarbeit]"
+
+  - titel: Experience
+    startseite: true
+    eintraege:
+      - titel: "[TODO: z. B. Werkstudent Perception]"
+        organisation: "[TODO: Firma]"
+        ort: "[TODO: Ort]"
+        von: 2024-04
+        bis: 2025-03
+        punkte:
+          - "[TODO: Was du gebaut hast, mit Zahl oder Ergebnis]"
+          - "[TODO: Zweiter Punkt, wenn noetig]"
+
+  - titel: Skills
+    eintraege:
+      - bereich: Robotics
+        liste: ["[TODO: z. B. ROS 2]", "[TODO: Gazebo]", "[TODO: Nav2]"]
+      - bereich: Programming
+        liste: ["[TODO: Python]", "[TODO: C++]"]
+      - bereich: Languages
+        liste: ["[TODO: Deutsch, Muttersprache]", "[TODO: Englisch, C1]"]

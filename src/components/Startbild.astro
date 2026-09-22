@@ -1,0 +1,214 @@
+---
+import Zeichen from './Zeichen.astro';
+import { einstellungen } from '../lib/einstellungen';
+import { STAND } from '../lib/text';
+import { t } from '../i18n';
+
+interface Props {
+  einleitung?: string;
+}
+
+const { einleitung = '' } = Astro.props;
+const texte = t(einstellungen.sprache);
+
+/*
+  Oben auf der Startseite: die Einleitung groß, daneben das Zeichen als
+  Abbildung einer technischen Zeichnung. Mittellinien kreuzen sich in seiner
+  Mitte, ein gestrichelter Kreis dreht sich langsam darum. Dahinter liegt ein
+  Millimeterraster und ein weicher Schimmer aus den beiden Farben des Zeichens.
+*/
+---
+
+<section class="feld ohne-linie startbild" aria-label={texte.index}>
+  {/* Eigene Ebene mit Beschnitt, damit die Kreuzmarken am Rand des Felds
+      sichtbar bleiben. */}
+  <div class="grund" aria-hidden="true">
+    <div class="raster-grund"></div>
+    <div class="schimmer"></div>
+  </div>
+
+  <div class="etiketten">
+    <p class="etikett">00 / {texte.index}</p>
+    <p class="etikett">{texte.stand} {STAND}</p>
+  </div>
+
+  <div class="buehne">
+    {einleitung !== '' && <p class="aussage">{einleitung}</p>}
+
+    <figure class="zeichnung" aria-hidden="true">
+      <div class="flaeche">
+        <div class="zeichen">
+          <Zeichen groesse={280} />
+        </div>
+
+        <svg class="konstruktion" viewBox="0 0 100 100" focusable="false">
+          <line class="mittellinie" x1="0" y1="50" x2="100" y2="50"></line>
+          <line class="mittellinie" x1="50" y1="0" x2="50" y2="100"></line>
+          <circle class="kreis" cx="50" cy="50" r="44"></circle>
+          <circle class="kreis-innen" cx="50" cy="50" r="1.4"></circle>
+          <path class="marke" d="M50 3 v4 M50 93 v4 M3 50 h4 M93 50 h4"></path>
+        </svg>
+      </div>
+
+      <figcaption class="etikett">{texte.abbildung} 01 / {texte.zeichen}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .startbild {
+    padding-block: var(--space-24) clamp(3rem, 2rem + 5vw, 7rem);
+  }
+
+  .grund {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .etiketten {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-8) var(--space-24);
+  }
+
+  .buehne {
+    display: grid;
+    gap: var(--space-48);
+    align-items: center;
+    margin-top: var(--space-48);
+  }
+
+  .aussage {
+    max-width: 15ch;
+    font-size: var(--text-display);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+    animation: aufsteigen 1s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* Die Zeichnung: das Zeichen sitzt mittig, die Konstruktion liegt darüber
+     und ragt über es hinaus. */
+  .zeichnung {
+    order: -1;
+    width: min(15rem, 70vw);
+    margin: 0;
+  }
+
+  .flaeche {
+    position: relative;
+    aspect-ratio: 1;
+  }
+
+  .zeichen {
+    position: absolute;
+    inset: 16%;
+    line-height: 0;
+  }
+
+  .zeichen :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .konstruktion {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    fill: none;
+    stroke: var(--color-konstruktion);
+    stroke-width: 1;
+  }
+
+  .konstruktion * {
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* Mittellinie: Strich, Lücke, Punkt, Lücke. */
+  .mittellinie {
+    stroke-dasharray: 14 5 2 5;
+  }
+
+  .kreis {
+    stroke: var(--color-mark);
+    stroke-dasharray: 2 6;
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    animation: drehen 80s linear infinite;
+  }
+
+  .kreis-innen {
+    fill: var(--color-text);
+    stroke: none;
+  }
+
+  figcaption {
+    margin-top: var(--space-16);
+    text-align: center;
+  }
+
+  /* Weicher Schimmer aus Cool Sky und Dusty Rose hinter dem Zeichen. */
+  .schimmer {
+    position: absolute;
+    top: 10%;
+    left: 0;
+    width: 22rem;
+    height: 22rem;
+    background:
+      radial-gradient(circle at 35% 40%, color-mix(in srgb, var(--color-mark) 55%, transparent), transparent 60%),
+      radial-gradient(circle at 65% 65%, color-mix(in srgb, var(--color-line) 55%, transparent), transparent 60%);
+    filter: blur(48px);
+    opacity: 0.55;
+    animation: schweben 18s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+
+  @keyframes drehen {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes schweben {
+    to {
+      translate: 2.5rem -1.5rem;
+      scale: 1.12;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .buehne {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--luecke);
+      min-height: 24rem;
+      margin-top: var(--space-32);
+    }
+
+    .zeichnung {
+      order: 0;
+      width: clamp(15rem, 8rem + 14vw, 22rem);
+    }
+
+    .schimmer {
+      top: 12%;
+      left: auto;
+      right: 4%;
+      width: 30rem;
+      height: 30rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kreis,
+    .schimmer {
+      animation: none;
+    }
+  }
+</style>

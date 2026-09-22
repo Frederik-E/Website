@@ -1,0 +1,18 @@
+# Abhängigkeiten
+node_modules/
+
+# Build-Ergebnisse
+dist/
+.astro/
+
+# Werkzeuge
+.screenshots/
+.wrangler/
+public/cv.pdf
+
+# Betriebssystem und Editor
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.production

@@ -1,0 +1,33 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { alleSeiten, type Seite } from '../lib/seiten';
+
+export const getStaticPaths = (async () => {
+  const seiten = await alleSeiten();
+  return seiten.map((seite) => ({ params: { seite: seite.id }, props: { seite } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  seite: Seite;
+}
+
+const { seite } = Astro.props;
+const { Content } = await render(seite);
+---
+
+<BaseLayout
+  titel={seite.data.titel}
+  beschreibung={seite.data.beschreibung ?? seite.data.titel}
+  noindex={seite.data.noindex}
+>
+  <Seitenkopf titel={seite.data.titel} />
+
+  <div class="feld geteilt">
+    <div class="zweispaltig">
+      <div class="fliesstext rechts"><Content /></div>
+    </div>
+  </div>
+</BaseLayout>

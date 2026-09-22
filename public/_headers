@@ -1,0 +1,10 @@
+# Kopfzeilen fuer Cloudflare Workers mit statischen Dateien.
+# Die Dateien in /_astro/ tragen einen Hash im Namen und aendern sich nie.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()

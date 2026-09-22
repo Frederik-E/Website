@@ -1,0 +1,170 @@
+---
+import { istListe, type Abschnitt } from '../lib/lebenslauf';
+import { einstellungen } from '../lib/einstellungen';
+import { zeitraum } from '../i18n';
+
+interface Props {
+  abschnitt: Abschnitt;
+  /** Zweistellige Nummer des Abschnitts, z. B. "01". */
+  nummer?: string;
+  /** Kurzform: nur Titel, Organisation und Zeitraum. */
+  kurz?: boolean;
+  ebene?: 2 | 3;
+}
+
+const { abschnitt, nummer, kurz = false, ebene = 2 } = Astro.props;
+const sprache = einstellungen.sprache;
+const Ueberschrift = `h${ebene}` as 'h2' | 'h3';
+---
+
+<section class="feld geteilt abschnitt">
+  <div class="kopf erscheinen">
+    {nummer && <p class="etikett nummer">{nummer}</p>}
+    <Ueberschrift class="abschnitt-titel">{abschnitt.titel}</Ueberschrift>
+  </div>
+
+  <ul class="eintraege erscheinen">
+    {
+      abschnitt.eintraege.map((eintrag) =>
+        istListe(eintrag) ? (
+          <li class="eintrag liste-eintrag">
+            <p class="etikett bereich">{eintrag.bereich}</p>
+            <p class="liste">{eintrag.liste.join(', ')}</p>
+          </li>
+        ) : (
+          <li class="eintrag">
+            <div class="zeile">
+              <p class="eintrag-titel">{eintrag.titel}</p>
+              <p class="etikett zeitraum">{zeitraum(eintrag.von, eintrag.bis ?? undefined, sprache)}</p>
+            </div>
+            {(eintrag.organisation || (eintrag.ort && !kurz)) && (
+              <p class="organisation">
+                {[eintrag.organisation, kurz ? undefined : eintrag.ort].filter(Boolean).join(', ')}
+              </p>
+            )}
+            {!kurz && eintrag.punkte.length > 0 && (
+              <ul class="punkte">
+                {eintrag.punkte.map((punkt) => (
+                  <li>{punkt}</li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ),
+      )
+    }
+  </ul>
+</section>
+
+<style>
+  .abschnitt {
+    display: grid;
+    gap: var(--space-24) var(--luecke);
+  }
+
+  .nummer {
+    color: var(--color-text);
+    margin-bottom: var(--space-12);
+  }
+
+  .abschnitt-titel {
+    font-size: var(--text-h2);
+    letter-spacing: -0.03em;
+  }
+
+  .eintraege {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .eintrag + .eintrag {
+    margin-top: var(--space-32);
+    padding-top: var(--space-32);
+    border-top: 1px solid var(--color-haarlinie);
+  }
+
+  /* Titel links, Zeitraum rechts auf derselben Grundlinie. */
+  .zeile {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4) var(--space-24);
+  }
+
+  .eintrag-titel {
+    font-size: var(--text-h3);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+
+  .organisation,
+  .liste {
+    color: var(--color-text-muted);
+  }
+
+  .organisation {
+    margin-top: var(--space-4);
+  }
+
+  .punkte {
+    list-style: disc;
+    margin: var(--space-16) 0 0;
+    padding-left: var(--space-24);
+    max-width: var(--textbreite);
+  }
+
+  .punkte li::marker {
+    color: var(--color-text-muted);
+  }
+
+  .punkte li + li {
+    margin-top: var(--space-4);
+  }
+
+  .liste-eintrag + .liste-eintrag {
+    margin-top: var(--space-16);
+    padding-top: var(--space-16);
+  }
+
+  .bereich {
+    color: var(--color-text);
+  }
+
+  .liste {
+    margin-top: var(--space-4);
+  }
+
+  @media (min-width: 40rem) {
+    .liste-eintrag {
+      display: grid;
+      grid-template-columns: 10rem minmax(0, 1fr);
+      gap: var(--space-24);
+      align-items: baseline;
+    }
+
+    .liste {
+      margin-top: 0;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .abschnitt {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+  }
+
+  @media print {
+    .abschnitt {
+      padding-block: 5mm 6mm;
+    }
+
+    .eintrag + .eintrag {
+      margin-top: 4mm;
+      padding-top: 4mm;
+      break-inside: avoid;
+    }
+  }
+</style>

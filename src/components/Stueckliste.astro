@@ -1,0 +1,229 @@
+---
+import ProjectMedia from './ProjectMedia.astro';
+import { hatDetailseite, projektNummer, type Projekt } from '../lib/projekte';
+import { einstellungen } from '../lib/einstellungen';
+import { t } from '../i18n';
+
+interface Props {
+  projekte: Projekt[];
+}
+
+const { projekte } = Astro.props;
+const texte = t(einstellungen.sprache);
+
+const ziel = (projekt: Projekt) =>
+  hatDetailseite(projekt) ? `/projects/${projekt.id}/` : (projekt.data.code ?? projekt.data.demo);
+
+/*
+  Alle Projekte als Stückliste wie auf einer technischen Zeichnung: eine
+  Zeile pro Projekt, Spalten für Nummer, Vorschau, Titel, Themen und Datum.
+  Die Kopfzeile ist nur Beschriftung; jede Zeile steht auch allein verständlich.
+*/
+---
+
+<div class="stueckliste">
+  <div class="feld knapp spalten kopf" aria-hidden="true">
+    <span class="etikett">{texte.nummer}</span>
+    <span class="etikett titel-spalte">{texte.titel}</span>
+    <span class="etikett themen">{texte.themen}</span>
+    <span class="etikett datum">{texte.datum}</span>
+  </div>
+
+  <ol>
+    {
+      projekte.map((projekt, stelle) => (
+        <li class="feld knapp spalten zeile zeigbar erscheinen">
+          <span class="etikett nr">{projektNummer(projekte, projekt)}</span>
+
+          <div class="vorschau">
+            {projekt.data.titelbild && (
+              <ProjectMedia
+                projektId={projekt.id}
+                titelbild={projekt.data.titelbild}
+                titelbildAlt={projekt.data.titelbild_alt}
+                zuerst={stelle === 0}
+                breite={480}
+                sizes="(min-width: 48rem) 10rem, 100vw"
+                bewegt={false}
+              />
+            )}
+          </div>
+
+          <div class="haupt">
+            <h2 class="titel">
+              {ziel(projekt) ? (
+                <a class="ziel" href={ziel(projekt)}>
+                  {projekt.data.titel}
+                </a>
+              ) : (
+                projekt.data.titel
+              )}
+              {projekt.data.entwurf && <span class="etikett entwurf">{texte.entwurf}</span>}
+            </h2>
+            <p class="kurz">{projekt.data.kurz}</p>
+          </div>
+
+          <p class="themen">{projekt.data.tags.join(', ')}</p>
+          <p class="etikett datum">{projekt.data.datum}</p>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kopf {
+    display: none;
+  }
+
+  .zeile {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'nr datum'
+      'vorschau vorschau'
+      'haupt haupt'
+      'themen themen';
+    gap: var(--space-12) var(--space-24);
+    padding-block: var(--space-24);
+    transition: background-color 0.3s ease;
+  }
+
+  .zeile:hover {
+    background-color: var(--color-flaeche);
+  }
+
+  .nr {
+    grid-area: nr;
+    color: var(--color-text);
+  }
+
+  .datum {
+    grid-area: datum;
+  }
+
+  .vorschau {
+    grid-area: vorschau;
+    overflow: hidden;
+    border-radius: var(--radius);
+  }
+
+  .vorschau:empty {
+    display: none;
+  }
+
+  .vorschau :global(.medium) {
+    transition: scale 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .zeile:hover .vorschau :global(.medium) {
+    scale: 1.06;
+  }
+
+  .haupt {
+    grid-area: haupt;
+  }
+
+  .titel {
+    font-size: var(--text-h3);
+    letter-spacing: -0.02em;
+  }
+
+  .ziel {
+    color: inherit;
+    text-decoration-color: transparent;
+  }
+
+  .ziel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .zeile:hover .ziel {
+    text-decoration-color: currentColor;
+  }
+
+  .ziel:focus-visible {
+    outline: none;
+  }
+
+  .ziel:focus-visible::after {
+    outline: 2px solid var(--color-link);
+    outline-offset: -4px;
+  }
+
+  .entwurf {
+    margin-left: var(--space-8);
+  }
+
+  .kurz {
+    margin-top: var(--space-4);
+    max-width: 52ch;
+    font-size: var(--text-ui);
+    line-height: 1.55;
+    color: var(--color-text-muted);
+  }
+
+  .themen {
+    grid-area: themen;
+    font-size: var(--text-klein);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  /* Breit: echte Spalten mit gemeinsamer Kopfzeile. */
+  @media (min-width: 48rem) {
+    .spalten {
+      display: grid;
+      grid-template-columns: 4.5rem 10rem minmax(0, 1fr) 13rem 5.5rem;
+      grid-template-areas: 'nr vorschau haupt themen datum';
+      column-gap: var(--space-24);
+      align-items: start;
+    }
+
+    .kopf {
+      display: grid;
+    }
+
+    .titel-spalte {
+      grid-column: 2 / 4;
+    }
+
+    .kopf .themen,
+    .kopf .datum {
+      font-size: var(--text-etikett);
+    }
+
+    .zeile {
+      padding-block: var(--space-24);
+    }
+
+    .zeile .nr,
+    .zeile .datum,
+    .zeile .themen {
+      padding-top: 0.3em;
+    }
+
+    .datum {
+      text-align: right;
+    }
+
+    .vorschau:empty {
+      display: block;
+      aspect-ratio: 16 / 9;
+      background:
+        linear-gradient(to top right, transparent calc(50% - 0.5px), var(--color-haarlinie) 50%, transparent calc(50% + 0.5px)),
+        linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--color-haarlinie) 50%, transparent calc(50% + 0.5px));
+      outline: 1px solid var(--color-haarlinie);
+      outline-offset: -1px;
+    }
+  }
+</style>

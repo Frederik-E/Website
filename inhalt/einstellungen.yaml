@@ -1,0 +1,25 @@
+# Grundeinstellungen der Website. Nach jeder Änderung speichern,
+# die lokale Vorschau (npm run dev) aktualisiert sich von selbst.
+
+# Sprache aller Oberflächentexte: en oder de
+sprache: en
+
+# Dein Name. Er steht klein in der Fusszeile, im Browser-Tab und im Lebenslauf.
+name: "[TODO: Vorname Nachname]"
+
+# Kurze Einordnung, z. B. Studiengang und Hochschule. Steht nicht auf der
+# Seite selbst, sondern im Browser-Tab, in Suchergebnissen und im Lebenslauf-PDF.
+untertitel: "[TODO: z. B. Masterstudium Robotik, TU Muenchen]"
+
+# Ein bis zwei Saetze ganz oben auf der Startseite: woran du arbeitest.
+# Leer lassen ("") blendet die Zeile aus.
+einleitung: "[TODO: z. B. Ich baue Wahrnehmung und Regelung fuer Roboter, die selbst fahren.]"
+
+# Kontakt
+email: "[TODO: kontakt@meine-domain.de]"
+github: "[TODO: https://github.com/benutzername]"
+linkedin: "[TODO: https://www.linkedin.com/in/benutzername]"
+
+# Deine gekaufte Domain, mit https:// und ohne Schrägstrich am Ende.
+# Sie darf noch nicht auf die Seite zeigen.
+domain: "https://example.com"

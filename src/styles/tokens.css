@@ -1,0 +1,69 @@
+/*
+  Alle Gestaltungswerte an einem Ort.
+  --font-sans und --font-mono setzt Astros Fonts-API selbst (siehe astro.config.ts).
+*/
+:root {
+  color-scheme: light;
+
+  /* Farben */
+  --color-bg: #fcf7ff; /* Lavender Mist */
+  --color-text: #394648; /* Iron Grey */
+  --color-text-muted: #60696d; /* Sekundärtext */
+  --color-link: #8c271e; /* Chestnut, nur Links im Fließtext */
+  --color-underline: #b98389; /* Dusty Rose, Unterstreichung von Links im Fließtext */
+  --color-mark: #65afff; /* Cool Sky, nur als Marker */
+  --color-mark-soft: #b8d7ff; /* Textmarker */
+  --color-line: #b98389; /* Dusty Rose, zweite Form des Zeichens */
+
+  /* Aufgehelltes Iron Grey, keine neue Farbe: Haarlinien, dezente
+     Unterstreichungen und die Fläche hinter Medien, solange sie laden. */
+  --color-haarlinie: color-mix(in srgb, var(--color-text) 16%, var(--color-bg));
+  --color-flaeche: color-mix(in srgb, var(--color-text) 6%, var(--color-bg));
+
+  /* Technische Zeichnung: Konstruktionslinien und Millimeterraster. */
+  --color-konstruktion: color-mix(in srgb, var(--color-text) 38%, var(--color-bg));
+  --color-raster: color-mix(in srgb, var(--color-text) 7%, var(--color-bg));
+
+  /* Dunkle Fläche: Iron Grey als Grund, Lavender Mist als Schrift. */
+  --color-dunkel: var(--color-text);
+  --color-auf-dunkel: var(--color-bg);
+  --color-auf-dunkel-leise: color-mix(in srgb, var(--color-bg) 70%, var(--color-text));
+  --color-linie-dunkel: color-mix(in srgb, var(--color-bg) 18%, var(--color-text));
+
+  /* Technische Beschriftung: Monospace, Versalien, weit gesperrt. */
+  --text-etikett: 0.75rem;
+  --sperrung-etikett: 0.08em;
+
+  /* Schriftgrößen. Groß und eng gesetzte Überschriften gegen kleine,
+     ruhige Angaben: der Abstand zwischen beiden trägt die Hierarchie. */
+  --text-klein: 0.875rem;
+  --text-ui: 0.9375rem;
+  --text-basis: 1.0625rem;
+  --text-gross: clamp(1.1875rem, 1.05rem + 0.45vw, 1.375rem);
+  --text-h3: clamp(1.25rem, 1.15rem + 0.3vw, 1.375rem);
+  --text-h2: clamp(1.5rem, 1.25rem + 0.9vw, 2rem);
+  --text-h1: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);
+  --text-display: clamp(2.375rem, 1.3rem + 4.4vw, 5rem);
+
+  /* Abstände */
+  --space-4: 0.25rem;
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+  --space-48: 3rem;
+  --space-64: 4rem;
+  --space-96: 6rem;
+
+  /* Maße. Das Blatt ist die Fläche zwischen den beiden Randlinien, innen
+     steht der Inhalt mit Abstand zu ihnen. */
+  --breite-seite: 76rem;
+  --rand: clamp(0.75rem, 0.2rem + 2.4vw, 2.5rem);
+  --innen: clamp(1rem, 0.5rem + 2vw, 2.5rem);
+  --feld: clamp(2.5rem, 1.5rem + 3.5vw, 5rem);
+  --kopf-hoehe: 4rem;
+  --luecke: clamp(1.5rem, 0.8rem + 2.4vw, 3rem);
+  --textbreite: 64ch;
+  --radius: 3px;
+}

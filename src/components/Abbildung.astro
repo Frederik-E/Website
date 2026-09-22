@@ -1,0 +1,139 @@
+---
+import ProjectMedia from './ProjectMedia.astro';
+import { einstellungen } from '../lib/einstellungen';
+import { t } from '../i18n';
+
+interface Props {
+  projektId: string;
+  titelbild: ImageMetadata;
+  titelbildAlt?: string;
+  video?: string;
+  zuerst?: boolean;
+  breite?: number;
+  sizes?: string;
+  bewegt?: boolean;
+  /** Projektnummer, z. B. "P-02". Steht links an der Maßlinie. */
+  nummer?: string;
+}
+
+const { nummer, ...medium } = Astro.props;
+const texte = t(einstellungen.sprache);
+
+/*
+  Ein Medium wie auf einer technischen Zeichnung: Sucherecken an den vier
+  Ecken und darunter eine Maßlinie mit den echten Pixelmaßen des Bildes.
+  Läuft ein Video, steht dort "Video" statt der Maße des Posterbildes.
+*/
+const zeigtVideo = Boolean(medium.video) && medium.bewegt !== false;
+const mass = zeigtVideo
+  ? texte.video
+  : `${medium.titelbild.width} × ${medium.titelbild.height} px`;
+---
+
+<div class="abbildung">
+  <div class="rahmen">
+    <div class="bild">
+      <ProjectMedia {...medium} />
+    </div>
+    <span class="sucher" aria-hidden="true"></span>
+  </div>
+
+  <div class="mass etikett" aria-hidden="true">
+    {nummer && <span class="nummer">{texte.abbildung} {nummer}</span>}
+    <span class="linie"><span class="wert">{mass}</span></span>
+  </div>
+</div>
+
+<style>
+  .rahmen {
+    position: relative;
+  }
+
+  .bild {
+    overflow: hidden;
+    border-radius: var(--radius);
+  }
+
+  .bild :global(.medium) {
+    transition: scale 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* Sucherecken: acht kurze Linien aus Verläufen, je zwei pro Ecke. */
+  .sucher {
+    --l: 12px;
+    --strich: var(--color-konstruktion);
+    position: absolute;
+    inset: -10px;
+    pointer-events: none;
+    background:
+      linear-gradient(var(--strich), var(--strich)) top left / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) top left / 1px var(--l) no-repeat,
+      linear-gradient(var(--strich), var(--strich)) top right / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) top right / 1px var(--l) no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom left / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom left / 1px var(--l) no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom right / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom right / 1px var(--l) no-repeat;
+    transition:
+      inset 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+      --strich 0.5s ease;
+  }
+
+  /* Maßlinie: Endstriche links und rechts, der Wert in der Mitte. */
+  .mass {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+    margin-top: var(--space-16);
+  }
+
+  .nummer {
+    flex: 0 0 auto;
+    color: var(--color-text);
+  }
+
+  .linie {
+    --strich: var(--color-konstruktion);
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+  }
+
+  .linie::before,
+  .linie::after {
+    content: '';
+    flex: 1 1 auto;
+    height: 9px;
+    background: linear-gradient(var(--strich), var(--strich)) 0 50% / 100% 1px no-repeat;
+  }
+
+  .linie::before {
+    border-left: 1px solid var(--strich);
+  }
+
+  .linie::after {
+    border-right: 1px solid var(--strich);
+  }
+
+  .wert {
+    flex: 0 0 auto;
+  }
+
+  /* Beim Zeigen auf den Eintrag: das Bild rückt leicht näher, die
+     Sucherecken ziehen sich zusammen. */
+  :global(.zeigbar:hover) .bild :global(.medium) {
+    scale: 1.035;
+  }
+
+  :global(.zeigbar:hover) .sucher {
+    inset: -5px;
+    --strich: var(--color-mark);
+  }
+
+  @property --strich {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: transparent;
+  }
+</style>

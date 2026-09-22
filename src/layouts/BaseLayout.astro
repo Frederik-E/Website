@@ -1,0 +1,340 @@
+---
+import { Font } from 'astro:assets';
+import Zeichen from '../components/Zeichen.astro';
+import { einstellungen } from '../lib/einstellungen';
+import { navigation } from '../lib/navigation';
+import { STAND } from '../lib/text';
+import { t } from '../i18n';
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+interface Props {
+  /** Name der Seite. Auf der Startseite leer lassen. */
+  titel?: string;
+  beschreibung: string;
+  istStartseite?: boolean;
+  /** Absolute Adresse eines Vorschaubildes für geteilte Links. */
+  ogBild?: string;
+  noindex?: boolean;
+}
+
+const {
+  titel,
+  beschreibung,
+  istStartseite = false,
+  ogBild,
+  noindex = false,
+} = Astro.props;
+const texte = t(einstellungen.sprache);
+
+const seitentitel = istStartseite
+  ? `${einstellungen.name}, ${einstellungen.untertitel}`
+  : `${titel} | ${einstellungen.name}`;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const sameAs = [einstellungen.github, einstellungen.linkedin].filter(
+  (adresse) => adresse !== '' && !adresse.includes('[TODO'),
+);
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: einstellungen.name,
+  url: Astro.site?.href ?? canonical,
+  jobTitle: einstellungen.untertitel,
+  ...(sameAs.length > 0 ? { sameAs } : {}),
+};
+
+// Feste Seiten plus alles aus inhalt/seiten/ mit navigation: true, durchnummeriert.
+// Die Kopfzeile markiert den aktuellen Punkt selbst. Auf einer Projekt-
+// Detailseite bleibt dadurch "Projekte" markiert.
+const eintraege = await navigation(texte);
+const seitenname = istStartseite ? texte.index : titel;
+
+const pfad = Astro.url.pathname;
+const zustand = (adresse: string) => {
+  if (pfad === adresse) return 'page' as const;
+  return pfad.startsWith(adresse) ? ('true' as const) : undefined;
+};
+---
+
+<!doctype html>
+<html lang={einstellungen.sprache}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>{seitentitel}</title>
+    <meta name="description" content={beschreibung} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={seitentitel} />
+    <meta property="og:description" content={beschreibung} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={einstellungen.sprache === 'de' ? 'de_DE' : 'en_GB'} />
+    {ogBild && <meta property="og:image" content={ogBild} />}
+    <meta name="twitter:card" content={ogBild ? 'summary_large_image' : 'summary'} />
+
+    <Font cssVariable="--font-sans" preload />
+    <Font cssVariable="--font-mono" preload />
+
+    {
+      istStartseite && (
+        <script type="application/ld+json" set:html={JSON.stringify(person)} is:inline />
+      )
+    }
+  </head>
+  <body>
+    <a class="sprunglink" href="#inhalt">{texte.zumInhalt}</a>
+
+    <header class="kopfzeile">
+      <div class="blatt kopf">
+        <a class="zeichen" href="/" aria-label={texte.zurStartseite}>
+          <Zeichen groesse={28} />
+        </a>
+
+        <nav class="nav" aria-label={texte.navigation}>
+          {
+            eintraege.map((eintrag) => (
+              <a href={eintrag.adresse} aria-current={zustand(eintrag.adresse)}>
+                <span class="nr" aria-hidden="true">
+                  {eintrag.nummer}
+                </span>
+                <span class:list={['text', zustand(eintrag.adresse) && 'mark']}>{eintrag.text}</span>
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main id="inhalt" class="blatt">
+      <slot />
+    </main>
+
+    <footer class="fusszeile">
+      <div class="blatt">
+        <section class="feld ohne-linie kontakt" aria-labelledby="kontakt-titel">
+          <h2 class="etikett" id="kontakt-titel">{texte.kontakt}</h2>
+          <a class="mail" href={`mailto:${einstellungen.email}`}>{einstellungen.email}</a>
+          <nav class="reihe" aria-label={texte.kontakt}>
+            {einstellungen.github !== '' && <a href={einstellungen.github} rel="me noopener">{texte.navGithub}</a>}
+            {einstellungen.linkedin !== '' && <a href={einstellungen.linkedin} rel="me noopener">{texte.navLinkedin}</a>}
+            <a href={`mailto:${einstellungen.email}`}>{texte.mailSchreiben}</a>
+          </nav>
+        </section>
+
+        {/* Schriftfeld wie auf einer technischen Zeichnung: nur echte Angaben
+            über diese Seite, nichts Erfundenes. */}
+        <div class="feld schriftfeld">
+          <dl class="zellen">
+            <div>
+              <dt class="etikett">{texte.name}</dt>
+              <dd>{einstellungen.name}</dd>
+            </div>
+            <div>
+              <dt class="etikett">{texte.seite}</dt>
+              <dd>{seitenname}</dd>
+            </div>
+            <div>
+              <dt class="etikett">{texte.pfad}</dt>
+              <dd class="mono">{Astro.url.pathname}</dd>
+            </div>
+            <div>
+              <dt class="etikett">{texte.stand}</dt>
+              <dd class="mono stand">{STAND}</dd>
+            </div>
+            <div>
+              <dt class="etikett">{texte.rechtliches}</dt>
+              <dd class="reihe">
+                <a href="/impressum/">{texte.impressum}</a>
+                <a href="/datenschutz/">{texte.datenschutz}</a>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  /* Kopfzeile: bleibt oben stehen, halb durchscheinend mit Unschärfe. Die
+     Randlinien des Blatts laufen durch sie hindurch. */
+  .kopfzeile {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: color-mix(in srgb, var(--color-bg) 72%, transparent);
+    backdrop-filter: blur(16px) saturate(1.6);
+    border-bottom: 1px solid var(--color-haarlinie);
+  }
+
+  .kopf {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+    height: var(--kopf-hoehe);
+    padding-inline: var(--innen);
+  }
+
+  .zeichen {
+    display: block;
+    line-height: 0;
+    text-decoration: none;
+  }
+
+  .nav {
+    display: flex;
+    gap: var(--space-8) var(--space-24);
+    font-size: var(--text-ui);
+    line-height: 1.4;
+  }
+
+  .nav a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  .nav a:hover,
+  .nav a[aria-current] {
+    color: var(--color-text);
+  }
+
+  .nr {
+    display: none;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.6875rem;
+    letter-spacing: var(--sperrung-etikett);
+    color: var(--color-text-muted);
+  }
+
+  /* Beim Zeigen wächst eine feine Linie unter dem Wort von links heran. */
+  .nav a:not([aria-current]) .text {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition: background-size 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .nav a:not([aria-current]):hover .text {
+    background-size: 100% 1px;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+
+  /* Dunkle Fläche: Kontakt und Schriftfeld. Zwei weiche Farbschimmer aus der
+     Palette liegen am unteren Rand. */
+  .fusszeile {
+    --linie: var(--color-linie-dunkel);
+    color: var(--color-auf-dunkel);
+    background:
+      radial-gradient(55% 90% at 88% 115%, color-mix(in srgb, var(--color-mark) 24%, transparent), transparent 70%),
+      radial-gradient(40% 70% at 8% 125%, color-mix(in srgb, var(--color-line) 30%, transparent), transparent 70%),
+      var(--color-dunkel);
+  }
+
+  .fusszeile .feld {
+    --kreuz: var(--color-auf-dunkel-leise);
+  }
+
+  .fusszeile .etikett {
+    color: var(--color-auf-dunkel-leise);
+  }
+
+  .fusszeile a {
+    color: inherit;
+    text-decoration-color: var(--color-linie-dunkel);
+  }
+
+  .fusszeile a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .kontakt {
+    padding-block: clamp(4rem, 2.5rem + 6vw, 8rem) clamp(3rem, 2rem + 4vw, 6rem);
+  }
+
+  .mail {
+    display: inline-block;
+    margin-top: var(--space-24);
+    font-size: clamp(1.75rem, 0.9rem + 3.6vw, 4rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    overflow-wrap: anywhere;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+
+  .fusszeile .mail:hover {
+    text-decoration-color: var(--color-mark);
+  }
+
+  .reihe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8) var(--space-24);
+  }
+
+  .kontakt .reihe {
+    margin-top: var(--space-32);
+    font-size: var(--text-ui);
+  }
+
+  /* Schriftfeld: fünf Zellen, schmal zwei pro Zeile. */
+  .schriftfeld {
+    padding: 0;
+  }
+
+  .schriftfeld dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .schriftfeld dl > div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .mono {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.8125rem;
+  }
+
+  .stand {
+    white-space: nowrap;
+  }
+
+  @media (min-width: 34rem) {
+    .nr {
+      display: inline;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .schriftfeld dl {
+      grid-template-columns: var(--erste-spalte) 0.9fr 1.3fr minmax(max-content, 0.7fr) 1.2fr;
+    }
+
+    .schriftfeld dl > div:last-child {
+      grid-column: auto;
+    }
+  }
+
+  @media print {
+    .kopfzeile,
+    .fusszeile {
+      display: none;
+    }
+  }
+</style>

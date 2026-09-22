@@ -1,0 +1,218 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Startbild from '../components/Startbild.astro';
+import ProjectEntry from '../components/ProjectEntry.astro';
+import { alleProjekte, projektNummer, startseitenProjekte } from '../lib/projekte';
+import { alleSeiten } from '../lib/seiten';
+import { einstellungen } from '../lib/einstellungen';
+import { ogAdresse } from '../lib/og';
+import { monatJahr, t } from '../i18n';
+
+const texte = t(einstellungen.sprache);
+const projekte = await alleProjekte();
+const auswahl = startseitenProjekte(projekte);
+const ogBild = await ogAdresse(auswahl[0]?.data.titelbild, Astro.site);
+
+// Datenleiste unter dem Startbild: nur Angaben, die aus den Projekten folgen.
+const themen = [...new Set(projekte.flatMap((projekt) => projekt.data.tags))];
+const daten = [
+  { name: texte.projekte, wert: String(projekte.length).padStart(2, '0') },
+  ...(projekte[0] ? [{ name: texte.zuletzt, wert: monatJahr(projekte[0].data.datum, einstellungen.sprache) }] : []),
+  ...(themen.length > 0 ? [{ name: texte.themen, wert: themen.join(', ') }] : []),
+];
+
+// Die Startseite ist das Inhaltsverzeichnis der Mappe: erst die Arbeiten,
+// danach alles Weitere, was auf der Seite steht.
+const weitereInhalte = [
+  { adresse: '/about/', titel: texte.ueberMich, beschreibung: texte.ueberMichKurz },
+  { adresse: '/cv/', titel: texte.lebenslauf, beschreibung: texte.lebenslaufKurz },
+  ...(await alleSeiten()).map((seite) => ({
+    adresse: `/${seite.id}/`,
+    titel: seite.data.titel,
+    beschreibung: seite.data.beschreibung ?? '',
+  })),
+];
+---
+
+<BaseLayout istStartseite beschreibung={einstellungen.einleitung || einstellungen.untertitel} ogBild={ogBild}>
+  <h1 class="nur-vorlesen">{einstellungen.name}</h1>
+
+  <Startbild einleitung={einstellungen.einleitung} />
+
+  <div class="feld datenleiste">
+    <dl class="zellen">
+      {
+        daten.map((angabe) => (
+          <div>
+            <dt class="etikett">{angabe.name}</dt>
+            <dd>{angabe.wert}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+
+  <section aria-labelledby="arbeiten">
+    <div class="feld knapp geteilt abschnittskopf">
+      <p class="etikett nummer">01</p>
+      <div class="kopf-rechts">
+        <h2 class="etikett" id="arbeiten">{texte.ausgewaehlteArbeiten}</h2>
+        <a class="etikett alle" href="/projects/">{texte.alleProjekte(projekte.length)}</a>
+      </div>
+    </div>
+
+    <ol class="liste">
+      {
+        auswahl.map((projekt, stelle) => (
+          <li>
+            <ProjectEntry projekt={projekt} nummer={projektNummer(projekte, projekt)} zuerst={stelle === 0} />
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section aria-labelledby="weitere">
+    <div class="feld knapp geteilt abschnittskopf">
+      <p class="etikett nummer">02</p>
+      <div class="kopf-rechts">
+        <h2 class="etikett" id="weitere">{texte.weitereInhalte}</h2>
+      </div>
+    </div>
+
+    <ul class="liste">
+      {
+        weitereInhalte.map((eintrag, stelle) => (
+          <li class="feld knapp geteilt zeile">
+            <p class="etikett">02.{stelle + 1}</p>
+            <a class="ziel" href={eintrag.adresse}>
+              <span class="zeile-titel">{eintrag.titel}</span>
+              {eintrag.beschreibung !== '' && <span class="zeile-beschreibung">{eintrag.beschreibung}</span>}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Datenleiste: Zellen wie ein Schriftfeld. Schmal zwei pro Zeile, die
+     Themen darunter über die ganze Breite. */
+  .datenleiste {
+    padding: 0;
+  }
+
+  .datenleiste dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .datenleiste dl > div:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  /* Abschnittskopf: Nummer links, Name und Verweis rechts. */
+  .abschnittskopf {
+    display: grid;
+    gap: var(--space-4) var(--luecke);
+  }
+
+  .nummer {
+    color: var(--color-text);
+  }
+
+  .kopf-rechts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-8) var(--space-24);
+  }
+
+  .kopf-rechts h2 {
+    color: var(--color-text);
+  }
+
+  .alle {
+    text-decoration-color: var(--color-haarlinie);
+  }
+
+  .alle:hover {
+    color: var(--color-text);
+    text-decoration-color: currentColor;
+  }
+
+  /* Weitere Inhalte: jede Zeile ist ein Link über die ganze Breite. */
+  .zeile {
+    display: grid;
+    gap: var(--space-4) var(--luecke);
+    align-items: baseline;
+    padding-block: var(--space-24);
+    transition: background-color 0.3s ease;
+  }
+
+  .zeile:hover {
+    background-color: var(--color-flaeche);
+  }
+
+  .ziel {
+    display: grid;
+    gap: var(--space-4) var(--luecke);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ziel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .zeile-titel {
+    font-size: var(--text-h2);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+  }
+
+  .zeile:hover .zeile-titel {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .zeile-beschreibung {
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 40rem) {
+    .datenleiste dl {
+      grid-template-columns: 1fr 1fr 2fr;
+    }
+
+    .datenleiste dl > div:nth-child(3) {
+      grid-column: auto;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .datenleiste dl {
+      grid-template-columns: var(--erste-spalte) 1fr 3fr;
+    }
+
+    .abschnittskopf,
+    .zeile {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    .ziel {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: baseline;
+    }
+  }
+</style>

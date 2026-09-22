@@ -1,0 +1,187 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Abbildung from '../../components/Abbildung.astro';
+import {
+  alleProjekte,
+  hatDetailseite,
+  naechstesProjekt,
+  projektNummer,
+  type Projekt,
+} from '../../lib/projekte';
+import { einstellungen } from '../../lib/einstellungen';
+import { ogAdresse } from '../../lib/og';
+import { monatJahr, t } from '../../i18n';
+
+export const getStaticPaths = (async () => {
+  const projekte = await alleProjekte();
+  return projekte.filter(hatDetailseite).map((projekt) => ({
+    params: { id: projekt.id },
+    props: { projekt, projekte },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  projekt: Projekt;
+  projekte: Projekt[];
+}
+
+const { projekt, projekte } = Astro.props;
+const daten = projekt.data;
+const texte = t(einstellungen.sprache);
+const { Content } = await render(projekt);
+const naechstes = naechstesProjekt(projekte, projekt);
+const ogBild = await ogAdresse(daten.titelbild, Astro.site);
+const nummer = projektNummer(projekte, projekt);
+const hatVerweise = Boolean(daten.code || daten.demo);
+---
+
+<BaseLayout titel={daten.titel} beschreibung={daten.kurz} ogBild={ogBild}>
+  <Seitenkopf
+    titel={daten.titel}
+    einleitung={daten.kurz}
+    etikett={`${nummer} / ${texte.projekte}`}
+    etikettRechts={daten.datum}
+  />
+
+  {/* Angaben als Schriftfeld: Zellen mit Linien dazwischen. */}
+  <div class="feld angaben">
+    <dl class="zellen">
+      <div>
+        <dt class="etikett">{texte.datum}</dt>
+        <dd>{monatJahr(daten.datum, einstellungen.sprache)}</dd>
+      </div>
+      {
+        daten.rolle && (
+          <div>
+            <dt class="etikett">{texte.rolle}</dt>
+            <dd>{daten.rolle}</dd>
+          </div>
+        )
+      }
+      {
+        daten.tags.length > 0 && (
+          <div>
+            <dt class="etikett">{texte.themen}</dt>
+            <dd>{daten.tags.join(', ')}</dd>
+          </div>
+        )
+      }
+      {
+        hatVerweise && (
+          <div>
+            <dt class="etikett">{texte.verweise}</dt>
+            <dd class="verweise dezent">
+              {daten.code && <a href={daten.code}>{texte.codeAufGithub}</a>}
+              {daten.demo && <a href={daten.demo}>{texte.demoAnsehen}</a>}
+            </dd>
+          </div>
+        )
+      }
+    </dl>
+  </div>
+
+  {
+    daten.titelbild && (
+      <div class="feld medium erscheinen">
+        <Abbildung
+          projektId={projekt.id}
+          titelbild={daten.titelbild}
+          titelbildAlt={daten.titelbild_alt}
+          video={daten.video}
+          breite={1600}
+          nummer={nummer}
+          zuerst
+        />
+      </div>
+    )
+  }
+
+  <div class="feld geteilt">
+    <div class="fliesstext gegliedert">
+      <Content />
+    </div>
+  </div>
+
+  <nav class="feld weiter" aria-label={texte.projekte}>
+    {
+      naechstes && (
+        <a class="weiter-link" href={`/projects/${naechstes.id}/`}>
+          <span class="etikett">{texte.naechstesProjekt}</span>
+          <span class="weiter-titel">{naechstes.data.titel}</span>
+        </a>
+      )
+    }
+    <a class="weiter-link alle" href="/projects/">
+      <span class="etikett">{texte.projekte}</span>
+      <span class="weiter-titel">{texte.zurueckZuProjekten}</span>
+    </a>
+  </nav>
+</BaseLayout>
+
+<style>
+  .angaben {
+    padding: 0;
+  }
+
+  .angaben dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .verweise {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .medium {
+    padding-block: var(--feld);
+  }
+
+  .weiter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-32) var(--space-48);
+  }
+
+  .weiter-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .weiter-titel {
+    font-size: var(--text-h2);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .weiter-link:hover .weiter-titel {
+    text-decoration-color: currentColor;
+  }
+
+  .alle {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  /* Die erste Zelle ist so breit wie die linke Spalte des Rasters, damit
+     die Linie darunter mit der des Fließtexts fluchtet. */
+  @media (min-width: 60rem) {
+    .angaben dl {
+      grid-template-columns: var(--erste-spalte) repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

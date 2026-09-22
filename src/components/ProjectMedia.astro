@@ -1,0 +1,108 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { videoAdresse } from '../lib/projekte';
+
+interface Props {
+  projektId: string;
+  titelbild?: ImageMetadata;
+  titelbildAlt?: string;
+  video?: string;
+  /** Das erste Medium der Seite wird sofort geladen, alle anderen spaeter. */
+  zuerst?: boolean;
+  /** Groesste ausgelieferte Breite. In der Uebersicht kleiner als auf der Detailseite. */
+  breite?: number;
+  /** Wie breit das Medium auf der Seite steht, fuer die Auswahl der Bildgroesse. */
+  sizes?: string;
+  /**
+   * false zeigt nur das Titelbild, auch wenn ein Video vorliegt. In der
+   * Uebersicht ist das so: die Steuerleiste des Videos wuerde ein kleines
+   * Vorschaubild erschlagen, und die Videos muessten alle geladen werden.
+   */
+  bewegt?: boolean;
+}
+
+const {
+  projektId,
+  titelbild,
+  titelbildAlt = '',
+  video,
+  zuerst = false,
+  breite = 1280,
+  sizes = '(min-width: 80rem) 76rem, 100vw',
+  bewegt = true,
+} = Astro.props;
+
+// Drei Stufen bis zur groessten Breite. Astro vergroessert nie ueber das Original.
+const widths = [Math.round(breite * 0.4), Math.round(breite * 0.65), breite];
+
+const posterQuelle = titelbild
+  ? await getImage({ src: titelbild, width: breite, format: 'jpeg' })
+  : undefined;
+const videoQuelle = video && bewegt ? videoAdresse(projektId, video) : undefined;
+const videoTyp = video?.endsWith('.webm') ? 'video/webm' : 'video/mp4';
+---
+
+{
+  videoQuelle && posterQuelle ? (
+    <video
+      class="medium"
+      muted
+      loop
+      playsinline
+      controls
+      preload="none"
+      poster={posterQuelle.src}
+      aria-label={titelbildAlt}
+      data-sichtbar-abspielen
+    >
+      <source src={videoQuelle} type={videoTyp} />
+    </video>
+  ) : titelbild ? (
+    <Image
+      class="medium"
+      src={titelbild}
+      alt={titelbildAlt}
+      widths={widths}
+      sizes={sizes}
+      loading={zuerst ? 'eager' : 'lazy'}
+      fetchpriority={zuerst ? 'high' : undefined}
+    />
+  ) : null
+}
+
+<style>
+  .medium {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius);
+    background: var(--color-flaeche);
+  }
+</style>
+
+<script>
+  // Videos starten, sobald sie sichtbar werden, und pausieren beim Verlassen.
+  // Ohne JavaScript bleibt es beim Posterbild mit Steuerelementen.
+  const videos = document.querySelectorAll<HTMLVideoElement>('video[data-sichtbar-abspielen]');
+  const wenigerBewegung = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (videos.length > 0 && !wenigerBewegung.matches) {
+    const beobachter = new IntersectionObserver(
+      (eintraege) => {
+        for (const eintrag of eintraege) {
+          const video = eintrag.target as HTMLVideoElement;
+          if (eintrag.isIntersecting) {
+            const versuch = video.play();
+            if (versuch) versuch.catch(() => {});
+          } else if (!video.paused) {
+            video.pause();
+          }
+        }
+      },
+      { threshold: 0.25 },
+    );
+
+    for (const video of videos) beobachter.observe(video);
+  }
+</script>

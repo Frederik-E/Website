@@ -1,0 +1,168 @@
+---
+import Abbildung from './Abbildung.astro';
+import { hatDetailseite, type Projekt } from '../lib/projekte';
+import { einstellungen } from '../lib/einstellungen';
+import { monatJahr, t } from '../i18n';
+
+interface Props {
+  projekt: Projekt;
+  /** Feste Projektnummer, z. B. "P-02". */
+  nummer: string;
+  ebene?: 2 | 3;
+  zuerst?: boolean;
+}
+
+const { projekt, nummer, ebene = 3, zuerst = false } = Astro.props;
+const texte = t(einstellungen.sprache);
+const daten = projekt.data;
+
+const detailseite = hatDetailseite(projekt);
+const titelZiel = detailseite ? `/projects/${projekt.id}/` : (daten.code ?? daten.demo);
+const Ueberschrift = `h${ebene}` as 'h2' | 'h3';
+
+const angaben = [
+  { name: texte.datum, wert: monatJahr(daten.datum, einstellungen.sprache) },
+  { name: texte.rolle, wert: daten.rolle },
+  { name: texte.themen, wert: daten.tags.join(', ') },
+].filter((angabe) => angabe.wert);
+---
+
+{/* Datenblatt: links Nummer, Titel und Angaben, rechts Beschreibung und Bild.
+    Der ganze Eintrag ist klickbar, der Titel-Link spannt sich über ihn. */}
+<article class="feld geteilt eintrag zeigbar">
+  <div class="links erscheinen">
+    <p class="etikett nummer">{nummer}</p>
+    <Ueberschrift class="titel">
+      {titelZiel ? <a class="ziel" href={titelZiel}>{daten.titel}</a> : daten.titel}
+      {daten.entwurf && <span class="etikett entwurf">{texte.entwurf}</span>}
+    </Ueberschrift>
+
+    <dl class="angaben">
+      {
+        angaben.map((angabe) => (
+          <div>
+            <dt class="etikett">{angabe.name}</dt>
+            <dd>{angabe.wert}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+
+  <div class="rechts erscheinen">
+    <p class="kurz">{daten.kurz}</p>
+    {
+      daten.titelbild && (
+        <div class="medium">
+          <Abbildung
+            projektId={projekt.id}
+            titelbild={daten.titelbild}
+            titelbildAlt={daten.titelbild_alt}
+            video={daten.video}
+            zuerst={zuerst}
+            breite={1600}
+            sizes="(min-width: 80rem) 48rem, (min-width: 60rem) 62vw, 100vw"
+            bewegt={false}
+            nummer={nummer}
+          />
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .eintrag {
+    display: grid;
+    gap: var(--space-32) var(--luecke);
+  }
+
+  .ziel {
+    color: inherit;
+    text-decoration-color: transparent;
+  }
+
+  .ziel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .eintrag:hover .ziel {
+    text-decoration-color: currentColor;
+  }
+
+  .ziel:focus-visible {
+    outline: none;
+  }
+
+  .ziel:focus-visible::after {
+    outline: 2px solid var(--color-link);
+    outline-offset: -4px;
+  }
+
+  .nummer {
+    color: var(--color-text);
+  }
+
+  .titel {
+    margin-top: var(--space-16);
+    font-size: var(--text-h2);
+    letter-spacing: -0.03em;
+  }
+
+  .entwurf {
+    display: block;
+    margin-top: var(--space-8);
+  }
+
+  /* Angaben als Datenblatt: Beschriftung links, Wert rechts, Linie dazwischen. */
+  .angaben {
+    margin-top: var(--space-32);
+    font-size: var(--text-klein);
+    line-height: 1.5;
+  }
+
+  .angaben > div {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: var(--space-12);
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--color-haarlinie);
+  }
+
+  .angaben > div:last-child {
+    border-bottom: 1px solid var(--color-haarlinie);
+  }
+
+  .angaben dt {
+    padding-top: 0.1em;
+  }
+
+  .kurz {
+    max-width: 44ch;
+    font-size: var(--text-gross);
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: var(--color-text-muted);
+  }
+
+  .medium {
+    margin-top: var(--space-32);
+  }
+
+  /* Breit: die linke Spalte bleibt beim Scrollen unter der Kopfzeile stehen,
+     solange das Bild rechts vorbeiläuft. */
+  @media (min-width: 60rem) {
+    .eintrag {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    .links {
+      position: sticky;
+      top: calc(var(--kopf-hoehe) + var(--space-32));
+      align-self: start;
+    }
+  }
+</style>
