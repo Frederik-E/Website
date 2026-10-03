@@ -6,26 +6,26 @@ Wie du deine Änderungen ins Netz bringst. Für den allerersten Aufbau gibt es e
 
 ## Der ganze Vorgang
 
-1. Terminal im Projektordner öffnen.
-2. `npm run deploy` eingeben.
-3. Warten. Meist unter zwei Minuten.
+Die Seite liegt bei GitHub Pages. Einrichtung einmalig: [ANLEITUNG-GITHUB.md](ANLEITUNG-GITHUB.md).
+
+1. `npm run deploy` eingeben. Das prüft alles und zeigt, was noch nicht hochgeladen ist.
+2. `git add -A`, dann `git commit -m "Was du geändert hast"`, dann `git push`.
+3. Im Repository unter „Actions" zuschauen. Meist unter drei Minuten.
 4. Die Seite im Browser neu laden.
 
-Das ist alles. Es gibt kein Kontingent, du kannst beliebig oft veröffentlichen.
-
-Siehst du deine Änderung nicht, lade mit `Strg + Shift + R` neu (auf dem Mac `Cmd + Shift + R`). Der Browser hält alte Dateien manchmal fest.
+Siehst du deine Änderung nicht, lade mit `Strg + Shift + R` neu (auf dem Mac `Cmd + Shift + R`).
 
 ---
 
 ## Was dabei passiert
 
-`npm run deploy` macht nacheinander:
+GitHub macht nach dem Push nacheinander:
 
 1. **Prüfen.** Es sucht nach fehlenden Texten, kaputten Links, Problemen bei der Barrierefreiheit und Anfragen an fremde Server.
 2. **Bauen.** Aus deinen Dateien in `inhalt/` entstehen fertige HTML-Seiten, verkleinerte Bilder und das Lebenslauf-PDF.
-3. **Hochladen.** Nur wenn Schritt 1 fehlerfrei war.
+3. **Veröffentlichen.** Nur wenn Schritt 1 fehlerfrei war.
 
-Findet die Prüfung etwas, bricht der Befehl ab und lädt nichts hoch. Deine Seite im Netz bleibt dann unverändert. Es kann also nichts kaputtgehen.
+Findet die Prüfung etwas, bleibt die alte Fassung online. Es kann nichts kaputtgehen.
 
 ---
 
@@ -38,13 +38,7 @@ Findet die Prüfung etwas, bricht der Befehl ab und lädt nichts hoch. Deine Sei
 
 In dieser Vorschau siehst du auch alles, was als Entwurf markiert ist. Auf der veröffentlichten Seite fehlt das.
 
-Willst du den ganzen Ablauf testen, ohne etwas hochzuladen:
-
-```
-npm run deploy -- --dry-run
-```
-
-Das prüft und baut alles und hört vor dem Hochladen auf.
+Willst du den Ablauf testen, ohne etwas hochzuladen: `npm run check`.
 
 ---
 
@@ -108,29 +102,13 @@ Meist ist ein Doppelpunkt, ein Anführungszeichen oder eine Einrückung verrutsc
 
 ---
 
-## Wenn das Hochladen scheitert
+## Wenn der Lauf bei GitHub scheitert
 
-**„Not logged in" oder eine Frage nach Anmeldung**
-
-```
-npx wrangler login
-```
-
-Der Browser öffnet sich, auf „Allow" klicken.
-
-**„wrangler: command not found"**
-
-```
-npm install -D wrangler
-```
-
-**Der Befehl hängt sehr lange**
-
-Mit `Strg + C` abbrechen und noch einmal starten. Es wird nichts halb hochgeladen: entweder die ganze neue Fassung ist oben oder die alte bleibt stehen.
+Im Repository unter „Actions" den roten Lauf öffnen. Beim Schritt „npm run check" steht derselbe Bericht wie lokal. Weitere Fälle: [ANLEITUNG-GITHUB.md](ANLEITUNG-GITHUB.md), Abschnitt „Wenn etwas nicht klappt".
 
 **Eine Datei ist zu groß**
 
-Cloudflare nimmt höchstens 25 MB pro Datei. Betrifft praktisch nur Videos. `npm run video` warnt ab 10 MB und bricht ab 25 MB ab.
+GitHub nimmt Dateien im Repository nur bis 100 MB, Pages-Seiten höchstens 1 GB. Videos bleiben mit `npm run video` weit darunter.
 
 ---
 
@@ -142,7 +120,7 @@ Wenn du mit Git arbeitest (siehe [ANLEITUNG-START.md](ANLEITUNG-START.md), letzt
 
 1. `git status` zeigt, was du geändert hast.
 2. `git checkout -- inhalt/` setzt alle Änderungen in `inhalt/` zurück.
-3. `npm run deploy` veröffentlicht den alten Stand wieder.
+3. Neu committen und pushen. Oder gleich `git revert HEAD` und `git push`.
 
 Ohne Git: die Datei aus deiner Sicherungskopie zurückholen und neu veröffentlichen.
 
@@ -154,8 +132,7 @@ Ohne Git: die Datei aus deiner Sicherungskopie zurückholen und neu veröffentli
 |---|---|
 | `npm run dev` | Lokale Vorschau, mit Entwürfen |
 | `npm run check` | Alles prüfen, nichts hochladen |
-| `npm run deploy` | Prüfen und veröffentlichen |
-| `npm run deploy -- --dry-run` | Alles außer dem Hochladen |
+| `npm run deploy` | Prüfen und zeigen, was noch hochzuladen ist |
 | `npm run new -- "Titel"` | Neues Projekt anlegen |
 | `npm run new-seite -- "Titel"` | Neue Seite anlegen |
 | `npm run video -- <datei> <ordner>` | Video verkleinern und einbauen |

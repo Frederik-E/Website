@@ -27,7 +27,7 @@ Pflege-Anforderungen, nach Wichtigkeit:
 |---|---|---|
 | Framework | Astro 6 oder neuer, TypeScript strict | Statische Seiten, Inhalte als Markdown, kein unnötiges JavaScript |
 | Styling | Reines CSS mit Custom Properties | Volle Kontrolle, keine Utility-Klassen-Optik |
-| Schrift | Geist und Geist Mono über Astros eingebaute Fonts-API mit Fontsource-Provider | Schriftdateien werden beim Build geladen und von der eigenen Domain ausgeliefert, mit Preload und angepassten Fallback-Metriken |
+| Schrift | Barlow, Barlow Semi Condensed und IBM Plex Mono über Astros eingebaute Fonts-API mit Fontsource-Provider | Schriftdateien werden beim Build geladen und von der eigenen Domain ausgeliefert, mit Preload und angepassten Fallback-Metriken |
 | Inhalte | Ordner `inhalt/` mit Markdown und YAML, geprüft mit Zod 4 aus `astro/zod` (z. B. `z.url()` statt des veralteten `z.string().url()`) | Alles, was gepflegt wird, liegt an einem Ort; Fehler werden beim Build klar gemeldet |
 | Bilder | `astro:assets` | Automatische Optimierung und responsive Größen |
 | Hosting | Cloudflare Workers mit statischen Assets, Upload per `wrangler deploy`, ohne Adapter | Anfragen an statische Dateien sind kostenlos und unbegrenzt, und Deploys verbrauchen kein Kontingent |
@@ -57,12 +57,12 @@ Die Palette bleibt. Alle weiteren Töne sind mit `color-mix` aus Iron Grey und L
 | `--color-text-muted` | `#60696D` | Sekundärtext und alle Etiketten |
 | `--color-link` | `#8C271E` Chestnut | Links im Fließtext, Fokus-Ring |
 | `--color-underline` | `#B98389` Dusty Rose | Unterstreichung der Links im Fließtext |
-| `--color-mark` | `#65AFFF` Cool Sky | Zeichen, Marker, Messkreis, Sucherecken beim Zeigen, Farbschimmer |
+| `--color-mark` | `#65AFFF` Cool Sky | Zeichen, Marker, Sucherecken beim Zeigen, Farbschimmer |
 | `--color-mark-soft` | `#B8D7FF` | Textmarker, Textauswahl |
-| `--color-line` | `#B98389` Dusty Rose | zweite Form des Zeichens, Farbschimmer |
+| `--color-line` | `#B98389` Dusty Rose | zweite Welle des Zeichens, Farbschimmer |
 | `--color-haarlinie` | 16 % Iron Grey auf Mist | Randlinien, Feldlinien, Zellen |
 | `--color-flaeche` | 6 % Iron Grey auf Mist | Fläche beim Zeigen, Grund hinter ladenden Bildern |
-| `--color-konstruktion` | 38 % Iron Grey auf Mist | Kreuzmarken, Mittellinien, Sucherecken, Maßlinien. **Nie für Text** |
+| `--color-konstruktion` | 38 % Iron Grey auf Mist | Kreuzmarken, Punkte des Zeichens, Sucherecken, Maßlinien. **Nie für Text** |
 | `--color-raster` | 7 % Iron Grey auf Mist | Millimeterraster |
 | `--color-auf-dunkel-leise` | 70 % Mist auf Iron Grey | Etiketten auf der dunklen Fläche |
 | `--color-linie-dunkel` | 18 % Mist auf Iron Grey | Linien auf der dunklen Fläche |
@@ -86,19 +86,19 @@ Gemessene Kontraste (WCAG):
 
 ### Das Zeichen und der Marker
 
-**Das Zeichen**, klein in der Kopfzeile jeder Seite und groß als „Abb. 01“ im Startbild: **zwei organische Formen übereinander**. Eine in Cool Sky, darüber leicht versetzt und gedreht eine deckende in Dusty Rose. Beide quillen und wandern langsam und schieben sich dadurch dynamisch übereinander.
+**Das Zeichen: Punktmatrix.** Ein Raster aus Punkten. Von einem Startpunkt laufen schmale Ringe nach außen, abwechselnd in Cool Sky und Dusty Rose, alle 2,5 Sekunden einer, wie Wellen um einen Tropfen. Jeder Ring startet an einem zufällig gewählten Punkt der Matrix; der aktuelle Startpunkt ist in Iron Grey markiert und pulsiert kurz, wenn sein Ring losläuft. Groß als „Abb. 01“ im Startbild (9 × 9 Punkte), klein in der Kopfzeile jeder Seite (4 × 4 Punkte), als Standbild im Favicon. Vorher umgesetzt und verworfen: zwei Wellen aus zwei festen Ecken, eine feste Quelle in der Mitte.
 
-**Zur Farbwahl:** Dusty Rose ist die einzige Palettenfarbe ohne Textrolle und bildet warm gegen kalt einen echten Kontrast. Eine hellere Fassung von Cool Sky wurde verworfen, sie sah aus wie ein Schatten.
+**Zur Bedeutung:** keine. Das Zeichen ist ein reiner Blickfang. Der Betreiber hat Motive mit Inhalt ausdrücklich abgelehnt, sowohl solche zu einzelnen Projekten (Linienfolger, LiDAR-Scan, Sprungantwort, Roboterarm) als auch übergeordnete (Bezugssystem, Autonomie-Stapel, Zustandsschätzung, Fourier-Reihe, neuronales Netz). Das frühere organische Zeichen, zwei quellende Blobs, gefiel als Blickfang, war aber nicht technisch genug. Aus derselben Auswahlrunde gefielen auch zwei 3D-Würfel, die umeinander kreisen, und das Moiré zweier schraffierter Formen.
 
-**Zum Überlapp:** Eine Form deckt immer die andere. Im Überlapp steht also Rose oder Blau, nie eine Mischfarbe. Ein Überdruck mit `mix-blend-mode: multiply` (tiefes Indigo im Überlapp) wurde ausprobiert und verworfen: die dritte Farbe gehört nicht zur Palette.
+**Zur Farbwahl:** Dusty Rose ist die einzige Palettenfarbe ohne Textrolle und bildet warm gegen kalt einen echten Kontrast. Wo ein Punkt blau und rosa zugleich leuchtet, liegt Rosa oben; es gibt keine Mischfarbe und keinen `mix-blend-mode`.
 
-**Zur Reihenfolge:** Zweimal in 40 Sekunden gehen die Formen schräg auseinander, bis sie sich nicht mehr berühren, und kommen mit getauschter Reihenfolge zurück: erst Blau vorn, dann wieder Rose vorn. Getauscht wird nur, wenn sie getrennt sind, sonst würde die Farbe im Überlapp springen.
+**Technisch:** `src/lib/zeichen.ts` zieht beim Bauen eine zufällige Folge von Startpunkten, bei jedem Bau eine neue. `src/components/Zeichen.astro` schreibt sie als Keyframes, die registrierte CSS-Variablen für Startpunkt, Farbe und Bild umschalten; jeder Punkt berechnet mit `hypot()` seinen Abstand zum Startpunkt und daraus sein Leuchten. Kein GIF, kein JavaScript, kein SMIL. Bei `prefers-reduced-motion: reduce` und im Druck steht ein blauer Ring um die Mitte still. Das Favicon zeigt einen dunklen Startpunkt mit blauem und rosa Ring.
 
-**Verworfen:** Schatten am Zeichen, sowohl ein leichter Schlagschatten als auch ein innerer Schatten (Zeichen eine Ebene unter der Seite). Beides sah nicht stimmig aus.
+**Raster:** Im Startbild zeichnet das Zeichen sein Millimeterraster selbst, im halben Punktabstand, damit jeder Punkt auf einer Kreuzung liegt. Das Raster blendet zum Rand hin aus und endet am Rand des Startbilds.
 
-**Technisch:** `<path>`-Elemente mit denselben `@keyframes`, die rosa Form mit negativer `animation-delay`, damit beide an verschiedenen Stellen ihrer Bewegung stehen. Für den Wechsel der Reihenfolge liegt eine zweite blaue Form ganz oben und wird ein- und ausgeschaltet, weil SVG kein `z-index` kennt. Kein GIF, kein JavaScript, kein SMIL. `npm run zeichen` erzeugt `src/styles/zeichen.css` und `src/lib/zeichen.ts` aus `scripts/zeichen-erzeugen.mjs`. Bei `prefers-reduced-motion: reduce` und im Druck stehen die Formen still.
+**Initialen:** Alle 40 Sekunden, das erste Mal nach 7,5 Sekunden, zeichnen die Ringe die Initialen aus `inhalt/einstellungen.yaml` (Feld `initialen`, bis zu drei Buchstaben). Die Front eines Rings ist die Übergangslinie: hinter ihr bleibt der erste Buchstabe in Cool Sky stehen, ein späterer Ring verwandelt ihn im Vorbeilaufen in den zweiten Buchstaben in Dusty Rose, der letzte wischt ihn weg. Solange Buchstaben stehen, leuchten die übrigen Ringe gedämpft. Im Standbild gibt es keine Buchstaben. Vorher liefen hier geometrische Formen; der Betreiber wollte stattdessen seine Initialen.
 
-**Verworfen:** Der Blob formte sich zwischendurch zu Piktogrammen (Roboter, Antenne, Chip, Zahnrad). Der Code bleibt im Generator hinter `MIT_PIKTOGRAMMEN`, steht aber auf `false`.
+**Verworfen:** Schatten am Zeichen, sowohl ein leichter Schlagschatten als auch ein innerer Schatten. Beides sah nicht stimmig aus.
 
 **Der Marker** (Textmarker-Strich in `--color-mark-soft`) tritt an drei Stellen auf: aktiver Navigationspunkt zusätzlich zu `aria-current`, `<mark>` in eigenen Texten (höchstens einmal pro Seite, nie in Überschriften) und `hr` im Fließtext. Der frühere Gliederungsstrich `.trenner` ist durch die Felder ersetzt.
 
@@ -113,10 +113,11 @@ Gemessene Kontraste (WCAG):
 
 ### Typografie
 
-- **Geist** (400, 500, dazu 400 kursiv als eigener Eintrag) für alles. **Geist Mono** (400) für Etiketten, Nummern, Datumsangaben in Listen und Code. Subset `latin`.
-- Überschriften im Gewicht 500 und eng gesetzt: je größer, desto enger (bis `-0.045em` im Startbild). `strong` ist 500.
-- **Etiketten** (`.etikett`): Geist Mono, 12 px, Versalien, gesperrt um `0.08em`, in Muted.
-- Fließtext `1.0625rem` (17 px), Zeilenhöhe 1.65, Textbreite höchstens `64ch`.
+- **Barlow** (400, 500, dazu 400 kursiv als eigener Eintrag) für Text und Überschriften. An DIN angelehnt, der Normschrift technischer Zeichnungen, mit ruhigen, eindeutigen Ziffern. **Barlow Semi Condensed** (500) für Etiketten, Nummern und Datumsangaben in Listen. **IBM Plex Mono** (400) nur für Code. Subset `latin`.
+- **Verworfen:** Geist. Der Betreiber fand die Ziffern komisch: die schmale 1 mit langem Anstrich bringt Zahlenreihen wie „1:10“ oder „2025“ aus dem Takt.
+- Überschriften im Gewicht 500. Barlow ist schmal gezeichnet und verträgt nur wenig Verengung: höchstens `-0.02em` im Startbild (Tokens `--laufweite-*`). `strong` ist 500.
+- **Etiketten** (`.etikett`): Barlow Semi Condensed 500, 13 px, Versalien, gesperrt um `0.09em`, in Muted.
+- Fließtext `1.125rem` (18 px), Zeilenhöhe 1.65, Textbreite höchstens `64ch`.
 - Größen stehen in `tokens.css` (`--text-klein` bis `--text-display`), mit `clamp()` fließend.
 
 ### Aufbau
@@ -128,7 +129,7 @@ Gemessene Kontraste (WCAG):
 - **Kopfzeile:** bleibt oben stehen, halb durchsichtig mit Weichzeichner. Links das Zeichen (Link zur Startseite) auf allen Seiten, auch auf der Startseite, rechts die Navigation mit Nummern: 01 Projekte, 02 Über mich, 03 Lebenslauf, danach freie Seiten mit `navigation: true`. Die Nummern kommen aus `src/lib/navigation.ts` und erscheinen auch im Seitenkopf.
 - **Seitenkopf** (`Seitenkopf.astro`): Etiketten links (Nummer und Seite) und rechts (Stand), große Überschrift, optional ein Einleitungssatz, Millimeterraster im Hintergrund.
 - **Fußzeile:** dunkel in Iron Grey mit zwei weichen Farbschimmern. Oben „Kontakt“ mit der E-Mail-Adresse sehr groß, dazu GitHub und LinkedIn. Darunter das Schriftfeld mit Name, Seite, Pfad, Stand und Rechtlichem.
-- **Der Name** steht im Schriftfeld, im Browser-Tab, im JSON-LD und im Lebenslauf-PDF. In der Kopfzeile nicht.
+- **Der Name** steht im Schriftfeld, im Browser-Tab, im JSON-LD und im Lebenslauf-PDF. In der Kopfzeile nicht. Die Initialen erscheinen nur in der Animation des Zeichens im Startbild.
 - **Kein Portraitfoto, kein Suchstatus.**
 - Mobil gilt derselbe Aufbau, einspaltig. Die Nummern in der Navigation entfallen unter `34rem`.
 
@@ -138,10 +139,12 @@ Schriftfeld, Datenleiste, Etiketten und Maßlinien zeigen nur, was aus den Daten
 
 ### Seiten im Einzelnen
 
-- **Startseite:** Startbild mit Einleitung groß links und dem Zeichen als „Abb. 01“ rechts (Mittellinien, gestrichelter Messkreis in Cool Sky, Millimeterraster, Farbschimmer). Darunter die Datenleiste. Dann „01 Ausgewählte Arbeiten“ als Datenblätter (`ProjectEntry`): links Projektnummer, Titel und Angaben, die beim Scrollen stehen bleiben; rechts Kurztext und Titelbild. Zuletzt „02 Weitere Inhalte“.
+- **Startseite:** Startbild mit Einleitung groß links und der großen Punktmatrix als „Abb. 01“ rechts, dahinter Millimeterraster und Farbschimmer. Darunter die Datenleiste. Dann „01 Ausgewählte Arbeiten“ als Datenblätter (`ProjectEntry`): links Projektnummer, Titel und Angaben, die beim Scrollen stehen bleiben; rechts Kurztext und Titelbild. Zuletzt „02 Weitere Inhalte“.
 - **Projektnummer:** `P-01` ab dem ältesten Projekt (`projektNummer`), damit neue Projekte die alten Nummern nicht verschieben.
 - **Abbildung** (`Abbildung.astro`): Sucherecken an allen vier Ecken, darunter eine Maßlinie mit Endstrichen und den Pixelmaßen, bei laufendem Video „Video“.
 - **Projektübersicht:** Stückliste (`Stueckliste.astro`) mit den Spalten Nr., Vorschau, Titel, Themen, Datum. Ohne Titelbild steht der technische Platzhalter, ein Rechteck mit Diagonalkreuz.
+- **Bilder behalten ihr eigenes Seitenverhältnis**, nur Videos stehen im festen 16:9-Kasten. Technische Zeichnungen sind flach und würden darin beschnitten. Breite einfarbige Ränder nimmt `npm run bild` weg.
+- **Quelltexte zu einem Projekt** liegen in `public/code/<projekt>/` und werden aus dem Text verlinkt. `public/_headers` gibt ihnen `text/plain`, sonst lädt der Browser sie herunter, statt sie anzuzeigen.
 - **Projektseite:** Seitenkopf, Angaben als Zellen (Datum, Rolle, Themen, Links), Abbildung in voller Breite, gegliederter Text, am Ende nächstes Projekt und alle Projekte.
 - **Lebenslauf:** nummerierte Abschnitte im Raster, Zeitraum als Etikett rechts. Das PDF übernimmt den Stil ohne Randlinien und Kreuzmarken.
 - Nie Karten mit Schatten, nie identische Kacheln.
@@ -149,11 +152,11 @@ Schriftfeld, Datenleiste, Etiketten und Maßlinien zeigen nur, was aus den Daten
 ### Bewegung
 
 - Linien zeichnen sich, wenn ihr Feld ins Bild kommt; Inhalte mit `.erscheinen` blenden ein. Beides per `animation-timeline: view()`, ohne JavaScript. Browser ohne Scroll-Animationen zeigen alles sofort.
-- Überschriften steigen beim Laden auf, der Messkreis dreht sich in 80 s, der Farbschimmer schwebt.
+- Überschriften steigen beim Laden auf, Ringe laufen von zufälligen Punkten des Zeichens nach außen, der Farbschimmer schwebt.
 - Beim Zeigen: Bilder rücken leicht näher, Sucherecken ziehen sich in Cool Sky zusammen, Zeilen bekommen die Fläche als Grund, in der Navigation wächst eine Linie unter dem Wort.
 - Bei `prefers-reduced-motion: reduce` steht alles still. Im Druck gibt es keine Bewegung.
 
-**Offener Punkt zur Barrierefreiheit:** Das Zeichen, der Messkreis und der Schimmer laufen in einer Endlosschleife, also länger als fünf Sekunden. WCAG 2.2.2 verlangt dafür streng genommen eine Möglichkeit, sie anzuhalten. Umgesetzt ist `prefers-reduced-motion`. Das ist bewusst so entschieden, weil die Bewegung zum Merkmal der Seite gehört.
+**Offener Punkt zur Barrierefreiheit:** Das Zeichen und der Schimmer laufen in einer Endlosschleife, also länger als fünf Sekunden. WCAG 2.2.2 verlangt dafür streng genommen eine Möglichkeit, sie anzuhalten. Umgesetzt ist `prefers-reduced-motion`. Das ist bewusst so entschieden, weil die Bewegung zum Merkmal der Seite gehört.
 
 ### Verbotsliste
 
@@ -162,7 +165,7 @@ Mit dem Konzept „Technische Zeichnung“ vom Betreiber freigegeben (2026-09-22
 - Beschriftungen in Monospace und Versalien, Nummern wie 01 und P-01
 - Farbverläufe als weicher Schimmer, das Millimeterraster als Hintergrundmuster, eine dunkle Fläche (Fußzeile)
 - Einblenden beim Scrollen und Effekte beim Zeigen mit der Maus
-- Cool Sky auch außerhalb des Markers: im Messkreis, im Schimmer und bei den Sucherecken
+- Cool Sky auch außerhalb des Markers: im Zeichen, im Schimmer und bei den Sucherecken
 - Das kleine Zeichen in der Kopfzeile aller Seiten, auch der Startseite, weil die Kopfzeile beim Scrollen oben bleibt
 - Die durchscheinende Kopfzeile mit Weichzeichner
 
@@ -235,6 +238,7 @@ vorlagen/
 | `titel` | ja | Projektname |
 | `kurz` | ja | Ein bis zwei Sätze für die Übersicht, höchstens 200 Zeichen |
 | `datum` | ja | Format `JJJJ-MM`; bestimmt die Reihenfolge |
+| `bis` | nein | Format `JJJJ-MM`; Ende eines Zeitraums, nicht vor `datum` |
 | `rolle` | nein | z. B. „Allein“ oder „Perception im Viererteam“ |
 | `tags` | nein | Liste, z. B. `[ROS 2, SLAM, Python]` |
 | `titelbild` | wenn `video` gesetzt | Relativer Pfad, z. B. `./titelbild.jpg`; dient auch als Posterbild |
@@ -317,7 +321,7 @@ URLs sind unabhängig von der Sprache gleich.
 | `npm run dev` | Lokale Vorschau, inklusive Entwürfe |
 | `npm run new -- "Titel"` | Legt `inhalt/projekte/<ordner>/index.md` aus der Vorlage an (`datum` = aktueller Monat, `entwurf: true`) |
 | `npm run new-seite -- "Titel"` | Legt `inhalt/seiten/<name>.md` aus der Vorlage an, erreichbar unter `/<name>/` |
-| `npm run zeichen` | Erzeugt die Formen des Zeichens neu, nach Änderungen in `scripts/zeichen-erzeugen.mjs` |
+| `npm run bild -- <datei>` | Schneidet den einfarbigen Rand eines Bildes ab und legt 2 % der Breite als Rand wieder an. Ersetzt die Datei |
 | `npm run video -- <datei> <ordner>` | Komprimiert ein Video mit ffmpeg (H.264, höchstens 1280px breit, 30 fps, ohne Ton, `+faststart`) als `demo.mp4` in den Projektordner und trägt `video` ein |
 | `npm run shots` | Screenshots aller Seiten bei 390px und 1440px Breite nach `.screenshots/` |
 | `npm run cv` | Baut die Seite und erzeugt das PDF, falls kein eigenes vorliegt |

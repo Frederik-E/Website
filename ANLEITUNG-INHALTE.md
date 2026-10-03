@@ -32,7 +32,7 @@ vorlagen/                Vorlagen, von den Skripten benutzt
 
 Die Startseite ist wie ein technisches Zeichnungsblatt aufgebaut und besteht aus drei Teilen, die du alle über `inhalt/` steuerst.
 
-**Oben das Startbild.** Deine Einleitung groß links, rechts das bewegte Zeichen als „Abb. 01“ mit Mittellinien und Messkreis. Darunter eine Leiste mit der Anzahl deiner Projekte, dem Datum des neuesten und allen Themen aus den Kopfdaten.
+**Oben das Startbild.** Deine Einleitung groß links, rechts das bewegte Zeichen als „Abb. 01“: eine Punktmatrix, über die farbige Ringe laufen, jeder von einem zufälligen Punkt aus. Alle 40 Sekunden zeichnen die Ringe deine Initialen, einen Buchstaben nach dem anderen. Welche Buchstaben das sind, steht in `inhalt/einstellungen.yaml` bei `initialen`; leer lassen blendet sie aus. Darunter eine Leiste mit der Anzahl deiner Projekte, dem Datum des neuesten und allen Themen aus den Kopfdaten.
 
 - Die **Einleitung** steht in `inhalt/einstellungen.yaml` bei `einleitung`. Ein bis zwei Sätze, woran du arbeitest, nicht wer du bist. Leer lassen (`einleitung: ""`) blendet sie aus.
 - Die Leiste füllt sich von selbst. Du musst dort nichts eintragen.
@@ -63,6 +63,7 @@ Die Startseite ist wie ein technisches Zeichnungsblatt aufgebaut und besteht aus
 | `titel` | ja | Name des Projekts |
 | `kurz` | ja | Ein bis zwei Sätze für die Übersicht, höchstens 200 Zeichen |
 | `datum` | ja | Format `JJJJ-MM`, bestimmt die Reihenfolge |
+| `bis` | nein | Format `JJJJ-MM`, Ende eines Zeitraums. Dann steht auf der Seite „Mai 2026 – Juli 2026“ |
 | `rolle` | nein | „Allein" oder „Perception im Viererteam" |
 | `tags` | nein | `[ROS 2, SLAM, Python]` |
 | `titelbild` | nur mit Video | `./titelbild.jpg` |
@@ -113,7 +114,7 @@ Der Eintrag erscheint dann in der Übersicht und verlinkt direkt auf das Reposit
 3. Auch bei `# titelbild_alt:` das `#` entfernen und beschreiben, was zu sehen ist.
 4. Speichern.
 
-Das Titelbild erscheint in der Übersicht als kleine Vorschau, auf der Startseite und auf der Unterseite groß. Um die Größe musst du dich nicht kümmern, die Seite erzeugt passende Fassungen selbst.
+Das Titelbild erscheint in der Übersicht als kleine Vorschau, auf der Startseite und auf der Unterseite groß. Es behält sein eigenes Seitenverhältnis, wird also nicht beschnitten. Hat deine Zeichnung einen breiten einfarbigen Rand, schneide ihn mit `npm run bild -- inhalt/projekte/mein-projekt/titelbild.png` weg. Das ersetzt die Datei, hebe sie vorher auf, wenn du sie noch brauchst. Um die Größe musst du dich nicht kümmern, die Seite erzeugt passende Fassungen selbst.
 
 Weitere Bilder mitten im Text: Datei daneben legen und einbinden mit
 `![Was zu sehen ist](./aufbau.png)`

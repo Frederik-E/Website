@@ -49,6 +49,8 @@ Der ganze Weg in der Reihenfolge, in der du ihn gehen solltest. Einmal durcharbe
 
 `einleitung` ist der erste Satz auf der Startseite, groß gesetzt. Schreib dort, woran du arbeitest.
 
+`initialen` sind bis zu drei Buchstaben, die das bewegte Zeichen auf der Startseite alle 40 Sekunden zeichnet. Leer lassen (`initialen: ""`) blendet sie aus.
+
 Dein Name erscheint nur klein in der Fußzeile, im Browser-Tab und im Lebenslauf. `untertitel` steht gar nicht auf der Seite, sondern im Browser-Tab, in Suchergebnissen und über dem Lebenslauf im PDF.
 
 ---

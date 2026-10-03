@@ -1,0 +1,52 @@
+# Veroeffentlicht die Seite bei GitHub Pages, sobald auf main gepusht wird.
+# Zuerst laeuft dieselbe Pruefung wie lokal (npm run check). Findet sie etwas,
+# wird nichts veroeffentlicht und die alte Fassung bleibt online.
+name: Veroeffentlichen
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Nur ein Lauf gleichzeitig; ein neuerer Push ersetzt einen wartenden.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  bauen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Die Pruefung und das Lebenslauf-PDF brauchen einen Browser.
+      - run: npx playwright install --with-deps chromium
+
+      # Baut nach dist/, prueft alles und legt dist/cv.pdf an.
+      - run: npm run check
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  veroeffentlichen:
+    needs: bauen
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

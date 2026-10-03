@@ -80,7 +80,8 @@ const zustand = (adresse: string) => {
     <meta name="twitter:card" content={ogBild ? 'summary_large_image' : 'summary'} />
 
     <Font cssVariable="--font-sans" preload />
-    <Font cssVariable="--font-mono" preload />
+    <Font cssVariable="--font-etikett" preload />
+    <Font cssVariable="--font-mono" />
 
     {
       istStartseite && (
@@ -211,8 +212,9 @@ const zustand = (adresse: string) => {
 
   .nr {
     display: none;
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 0.6875rem;
+    font-family: var(--font-etikett, system-ui, sans-serif);
+    font-size: 0.75rem;
+    font-weight: 500;
     letter-spacing: var(--sperrung-etikett);
     color: var(--color-text-muted);
   }
@@ -272,7 +274,7 @@ const zustand = (adresse: string) => {
     font-size: clamp(1.75rem, 0.9rem + 3.6vw, 4rem);
     font-weight: 500;
     line-height: 1.1;
-    letter-spacing: -0.04em;
+    letter-spacing: var(--laufweite-gross);
     overflow-wrap: anywhere;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.18em;
@@ -307,8 +309,9 @@ const zustand = (adresse: string) => {
   }
 
   .mono {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 0.8125rem;
+    font-family: var(--font-etikett, system-ui, sans-serif);
+    font-weight: 500;
+    letter-spacing: 0.03em;
   }
 
   .stand {

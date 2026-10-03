@@ -12,7 +12,7 @@
     "preview": "astro preview",
     "new": "node scripts/new.mjs",
     "new-seite": "node scripts/new-seite.mjs",
-    "zeichen": "node scripts/zeichen-erzeugen.mjs",
+    "bild": "node scripts/bild.mjs",
     "video": "node scripts/video.mjs",
     "shots": "node scripts/shots.mjs",
     "cv": "node scripts/cv.mjs",

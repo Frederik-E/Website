@@ -18,6 +18,16 @@ const TYPEN = {
   '.json': 'application/json; charset=utf-8',
   '.xml': 'application/xml; charset=utf-8',
   '.txt': 'text/plain; charset=utf-8',
+  // Quelltexte aus public/code/ werden im Browser gelesen. Cloudflare bekommt
+  // denselben Typ ueber public/_headers.
+  '.hpp': 'text/plain; charset=utf-8',
+  '.cpp': 'text/plain; charset=utf-8',
+  '.h': 'text/plain; charset=utf-8',
+  '.c': 'text/plain; charset=utf-8',
+  '.py': 'text/plain; charset=utf-8',
+  '.yaml': 'text/plain; charset=utf-8',
+  '.yml': 'text/plain; charset=utf-8',
+  '.md': 'text/plain; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',

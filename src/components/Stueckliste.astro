@@ -42,8 +42,8 @@ const ziel = (projekt: Projekt) =>
                 titelbild={projekt.data.titelbild}
                 titelbildAlt={projekt.data.titelbild_alt}
                 zuerst={stelle === 0}
-                breite={480}
-                sizes="(min-width: 48rem) 10rem, 100vw"
+                breite={620}
+                sizes="(min-width: 48rem) 13rem, 100vw"
                 bewegt={false}
               />
             )}
@@ -118,7 +118,13 @@ const ziel = (projekt: Projekt) =>
     display: none;
   }
 
+  /* In der Liste bleibt die Vorschau flach: sehr hohe Bilder würden die
+     Zeile sonst auseinanderziehen. */
   .vorschau :global(.medium) {
+    width: auto;
+    max-width: 100%;
+    max-height: 7rem;
+    margin-inline: auto;
     transition: scale 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
@@ -132,7 +138,6 @@ const ziel = (projekt: Projekt) =>
 
   .titel {
     font-size: var(--text-h3);
-    letter-spacing: -0.02em;
   }
 
   .ziel {
@@ -183,7 +188,7 @@ const ziel = (projekt: Projekt) =>
   @media (min-width: 48rem) {
     .spalten {
       display: grid;
-      grid-template-columns: 4.5rem 10rem minmax(0, 1fr) 13rem 5.5rem;
+      grid-template-columns: 4.5rem 13rem minmax(0, 1fr) 12rem 5.5rem;
       grid-template-areas: 'nr vorschau haupt themen datum';
       column-gap: var(--space-24);
       align-items: start;

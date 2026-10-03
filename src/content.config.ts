@@ -19,6 +19,7 @@ const projekte = defineCollection({
           .min(1, { error: 'Feld "kurz" darf nicht leer sein.' })
           .max(200, { error: 'Feld "kurz" darf hoechstens 200 Zeichen haben.' }),
         datum: monatSchema('datum'),
+        bis: monatSchema('bis').optional(),
         rolle: z.string().optional(),
         tags: z.array(z.string()).default([]),
         titelbild: image().optional(),
@@ -29,6 +30,10 @@ const projekte = defineCollection({
         startseite: z.boolean().default(false),
         reihenfolge: z.number().optional(),
         entwurf: z.boolean().default(false),
+      })
+      .refine((daten) => !daten.bis || daten.bis >= daten.datum, {
+        error: 'Feld "bis" liegt vor "datum".',
+        path: ['bis'],
       })
       .refine((daten) => !daten.video || daten.titelbild, {
         error: 'Wenn "video" gesetzt ist, braucht das Projekt auch "titelbild" als Posterbild.',

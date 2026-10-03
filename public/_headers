@@ -1,7 +1,14 @@
-# Kopfzeilen fuer Cloudflare Workers mit statischen Dateien.
+# Nur wirksam bei Cloudflare. GitHub Pages ignoriert diese Datei und setzt
+# die Kopfzeilen selbst. Sie bleibt liegen, falls die Seite einmal umzieht.
 # Die Dateien in /_astro/ tragen einen Hash im Namen und aendern sich nie.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Quelltexte werden im Browser gelesen, nicht heruntergeladen. Ohne diese
+# Zeile liefert Cloudflare .hpp und .cpp als Download, und wegen nosniff
+# raet der Browser den Typ auch nicht.
+/code/*
+  Content-Type: text/plain; charset=utf-8
 
 /*
   X-Content-Type-Options: nosniff

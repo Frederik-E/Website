@@ -21,6 +21,12 @@ export const einstellungenSchema = z.object({
   github: text('github').default(''),
   linkedin: text('linkedin').default(''),
   domain: text('domain').min(1, { error: 'Feld "domain" darf nicht leer sein.' }),
+  initialen: text('initialen')
+    .transform((wert) => wert.toUpperCase())
+    .refine((wert) => /^[A-ZÄÖÜ]{0,3}$/.test(wert), {
+      error: 'Feld "initialen" darf nur bis zu drei Buchstaben enthalten, zum Beispiel "FE".',
+    })
+    .default(''),
 });
 
 export type Einstellungen = z.infer<typeof einstellungenSchema>;

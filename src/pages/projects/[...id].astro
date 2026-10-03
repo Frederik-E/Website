@@ -13,7 +13,7 @@ import {
 } from '../../lib/projekte';
 import { einstellungen } from '../../lib/einstellungen';
 import { ogAdresse } from '../../lib/og';
-import { monatJahr, t } from '../../i18n';
+import { monatJahr, t, zeitraum } from '../../i18n';
 
 export const getStaticPaths = (async () => {
   const projekte = await alleProjekte();
@@ -36,6 +36,8 @@ const naechstes = naechstesProjekt(projekte, projekt);
 const ogBild = await ogAdresse(daten.titelbild, Astro.site);
 const nummer = projektNummer(projekte, projekt);
 const hatVerweise = Boolean(daten.code || daten.demo);
+// Ein Projekt ohne "bis" nennt nur seinen Monat, eines mit "bis" den Zeitraum.
+const zeitangabe = daten.bis ? zeitraum(daten.datum, daten.bis, einstellungen.sprache) : monatJahr(daten.datum, einstellungen.sprache);
 ---
 
 <BaseLayout titel={daten.titel} beschreibung={daten.kurz} ogBild={ogBild}>
@@ -43,7 +45,7 @@ const hatVerweise = Boolean(daten.code || daten.demo);
     titel={daten.titel}
     einleitung={daten.kurz}
     etikett={`${nummer} / ${texte.projekte}`}
-    etikettRechts={daten.datum}
+    etikettRechts={daten.bis ? `${daten.datum} \u2013 ${daten.bis}` : daten.datum}
   />
 
   {/* Angaben als Schriftfeld: Zellen mit Linien dazwischen. */}
@@ -51,7 +53,7 @@ const hatVerweise = Boolean(daten.code || daten.demo);
     <dl class="zellen">
       <div>
         <dt class="etikett">{texte.datum}</dt>
-        <dd>{monatJahr(daten.datum, einstellungen.sprache)}</dd>
+        <dd>{zeitangabe}</dd>
       </div>
       {
         daten.rolle && (
@@ -160,7 +162,7 @@ const hatVerweise = Boolean(daten.code || daten.demo);
     font-size: var(--text-h2);
     font-weight: 500;
     line-height: 1.2;
-    letter-spacing: -0.03em;
+    letter-spacing: var(--laufweite-titel);
     text-decoration: underline;
     text-decoration-color: transparent;
     text-decoration-thickness: 1px;

@@ -1,130 +1,283 @@
 ---
-import { BLOB, ZEICHEN_BREITE, ZEICHEN_HOEHE, ZEICHEN_DAUER } from '../lib/zeichen';
-import '../styles/zeichen.css';
+import { DAEMPFUNG, RING_TAKT, punktmatrix } from '../lib/zeichen';
+import { einstellungen } from '../lib/einstellungen';
 
 interface Props {
-  /** Kantenlänge in Pixeln. In der Kopfzeile klein, im Startbild groß. */
+  /** Kantenlänge in Pixeln. Unter 120 Pixeln die kleine Fassung mit 4 × 4 Punkten. */
   groesse?: number;
+  /**
+   * Zeichnet ein Millimeterraster unter die Punkte, das weit über das Zeichen
+   * hinausreicht und zum Rand hin ausblendet. Weil es im selben
+   * Koordinatensystem liegt, sitzt jeder Punkt auf einem Kreuzungspunkt.
+   */
+  mitRaster?: boolean;
 }
 
-const { groesse = 46 } = Astro.props;
+const { groesse = 28, mitRaster = false } = Astro.props;
+const fassung = groesse >= 120 ? 'gross' : 'klein';
+const m = punktmatrix(fassung, { initialen: einstellungen.initialen });
 
 /*
-  Zwei Formen übereinander, leicht versetzt und gegeneinander gedreht.
-  Beide benutzen dieselben Keyframes, die zweite mit negativer Verzögerung.
-  Dadurch stehen sie immer an verschiedenen Stellen ihrer Bewegung und
-  schieben sich dynamisch übereinander, ohne dass zweite Formdaten nötig sind.
-
-  Zweimal pro Takt gehen die Formen auseinander, bis sie sich nicht mehr
-  berühren, und kommen mit getauschter Reihenfolge zurück. SVG kennt kein
-  z-index, deshalb liegt eine zweite blaue Form ganz oben und wird im Moment
-  der Trennung sichtbar oder unsichtbar geschaltet.
+  Jeder Ring startet an einem zufälligen Punkt. Die Folge der Startpunkte
+  steht in Keyframes, die alle RING_TAKT Sekunden umschalten (steps). Jeder
+  Punkt rechnet im CSS seinen Abstand zum aktuellen Startpunkt aus und
+  leuchtet, wenn die Ringfront ihn erreicht. Alle 40 Sekunden zeichnen die
+  Ringe die Initialen: vor der Front gilt der alte Buchstabe, hinter ihr der
+  neue. Kein JavaScript.
 */
-const ZWEITE = {
-  versatz: `translate(5 4) rotate(140 ${ZEICHEN_BREITE / 2} ${ZEICHEN_HOEHE / 2}) scale(0.94)`,
-  verzoegerung: '-13s',
-};
+const zyklus = m.folge.length * RING_TAKT;
+const anteil = (ringe: number) => `${Math.round((ringe / m.folge.length) * 1e5) / 1e3}%`;
+const werte = (r: (typeof m.folge)[number]) =>
+  `--qx:${r.spalte};--qy:${r.zeile};--blau:${r.blau};--vorher:${r.vorher};--nachher:${r.nachher};--daempfung:${r.gedaempft ? DAEMPFUNG : 1}`;
 
-// Die Trennung fällt auf die Hälfte der Blob-Schleife. Dort stehen die Formen
-// schräg versetzt und kommen mit dem Weg in "auseinander-*" frei.
-const TAKT = `${parseFloat(ZEICHEN_DAUER) * 2}s`;
+const folge =
+  m.folge
+    .map((r, i) => `${anteil(i)}{${werte(r)}}`)
+    .join('') + `100%{${werte(m.folge[0])}}`;
+
+const keyframes = `@keyframes zeichen-ring{from{--t:0}to{--t:1}}@keyframes zeichen-folge-${fassung}{${folge}}`;
+
+const animationen = [
+  `zeichen-ring ${RING_TAKT}s linear infinite`,
+  `zeichen-folge-${fassung} ${zyklus}s steps(1, end) infinite`,
+].join(', ');
+
+// Ohne Bewegung gilt das Standbild aus diesen Werten.
+const stil = [
+  `--qx: ${m.ruhe.spalte}`,
+  `--qy: ${m.ruhe.zeile}`,
+  `--t: ${m.ruhe.t}`,
+  `--weite: ${m.weite}`,
+  `--spur: ${m.spur}`,
+  `--schritt: ${m.schritt}`,
+  `--rand: ${m.rand}`,
+  `animation: ${animationen}`,
+].join('; ');
+
+const buchstabenmarken = (buchstaben: number[]) => buchstaben.map((nummer) => `; --b${nummer}: 1`).join('');
+
+// Raster: halber Punktabstand, weit genug für das ganze Startbild.
+const raster = (() => {
+  if (!mitRaster) return '';
+  const schritt = m.schritt / 2;
+  const [links, rechts, oben, unten] = [-900, 500, -450, 850];
+  const linien: string[] = [];
+  for (let x = links; x <= rechts; x += schritt) linien.push(`M${x} ${oben}V${unten}`);
+  for (let y = oben; y <= unten; y += schritt) linien.push(`M${links} ${y}H${rechts}`);
+  return linien.join('');
+})();
 ---
 
 <svg
   class="zeichen-bild"
-  viewBox={`0 0 ${ZEICHEN_BREITE} ${ZEICHEN_HOEHE}`}
+  viewBox={`0 0 ${m.kante} ${m.kante}`}
   width={groesse}
   height={groesse}
   aria-hidden="true"
   focusable="false"
-  style={`--dauer: ${ZEICHEN_DAUER}; --verzoegerung: ${ZWEITE.verzoegerung}; --takt: ${TAKT};`}
+  style={stil}
 >
-  <g class="blau">
-    <path class="form" d={BLOB} />
-  </g>
-  <g class="rose">
-    <g transform={ZWEITE.versatz}>
-      <path class="form" d={BLOB} />
-    </g>
-  </g>
-  <g class="blau vorn">
-    <path class="form" d={BLOB} />
-  </g>
+  <style is:inline set:html={keyframes} />
+
+  {
+    mitRaster && (
+      <>
+        <defs>
+          <radialGradient id="zeichen-raster-verlauf" gradientUnits="userSpaceOnUse" cx="100" cy="100" r="430">
+            <stop offset="0" stop-color="#fff" />
+            <stop offset="0.35" stop-color="#fff" stop-opacity="0.8" />
+            <stop offset="1" stop-color="#fff" stop-opacity="0" />
+          </radialGradient>
+          <mask id="zeichen-raster-maske" maskUnits="userSpaceOnUse" x="-900" y="-450" width="1400" height="1300">
+            <rect x="-900" y="-450" width="1400" height="1300" fill="url(#zeichen-raster-verlauf)" />
+          </mask>
+        </defs>
+        <path class="raster" d={raster} mask="url(#zeichen-raster-maske)" />
+      </>
+    )
+  }
+
+  {m.punkte.map((p) => <circle class="punkt" cx={p.x} cy={p.y} r={m.radiusPunkt} />)}
+
+  {
+    m.punkte.map((p) => (
+      <circle
+        class="welle blau"
+        cx={p.x}
+        cy={p.y}
+        r={m.radiusWelle}
+        style={`--x: ${p.spalte}; --y: ${p.zeile}${buchstabenmarken(p.buchstabenBlau)}`}
+      />
+    ))
+  }
+  {
+    m.punkte.map((p) => (
+      <circle
+        class="welle rose"
+        cx={p.x}
+        cy={p.y}
+        r={m.radiusWelle}
+        style={`--x: ${p.spalte}; --y: ${p.zeile}${buchstabenmarken(p.buchstabenRose)}`}
+      />
+    ))
+  }
+
+  <circle class="quellpunkt" cx="0" cy="0" r={Math.round(m.radiusPunkt * 1.35 * 10) / 10} />
 </svg>
 
-<style>
+<style is:global>
+  /* Global statt gekapselt: sonst hängt Astro an jeden der gut 300 Kreise ein
+     Attribut, das allein etwa 8 KB kostet. Alle Regeln beginnen deshalb mit
+     .zeichen-bild. */
+
+  /* Registriert, damit sie sich animieren und vererben lassen. */
+  @property --t {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+  }
+
+  @property --qx {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+  }
+
+  @property --qy {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+  }
+
+  @property --blau {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+  }
+
+  @property --vorher {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+  }
+
+  @property --nachher {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+  }
+
+  @property --daempfung {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+  }
+
   .zeichen-bild {
     display: block;
     overflow: visible;
   }
 
-  .form {
-    animation: blob var(--dauer) linear infinite;
+  .zeichen-bild .raster {
+    fill: none;
+    stroke: var(--color-raster);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
   }
 
-  .blau {
-    fill: var(--color-mark);
-    animation: auseinander-blau var(--takt) ease-in-out infinite;
+  .zeichen-bild .punkt {
+    fill: var(--color-konstruktion);
   }
 
-  .rose {
-    fill: var(--color-line);
-    animation: auseinander-rose var(--takt) ease-in-out infinite;
-  }
-
-  .rose .form {
-    animation-delay: var(--verzoegerung);
-  }
-
-  .vorn {
+  .zeichen-bild .welle {
     opacity: 0;
-    animation:
-      auseinander-blau var(--takt) ease-in-out infinite,
-      vorn var(--takt) step-end infinite;
+    transform-box: fill-box;
+    transform-origin: center;
   }
 
-  @keyframes auseinander-blau {
-    0%, 15%, 35%, 65%, 85%, 100% {
-      transform: translate(0, 0);
+  .zeichen-bild .blau {
+    fill: var(--color-mark);
+  }
+
+  .zeichen-bild .rose {
+    fill: var(--color-line);
+  }
+
+  /* Der Punkt, von dem der aktuelle Ring ausgeht. Er springt mit der Folge. */
+  .zeichen-bild .quellpunkt {
+    fill: var(--color-text);
+    transform-box: fill-box;
+    transform-origin: center;
+    translate: calc((var(--qx) * var(--schritt) + var(--rand)) * 1px) calc((var(--qy) * var(--schritt) + var(--rand)) * 1px);
+  }
+
+  /*
+    Leuchten eines Punkts, alles in Punktabständen:
+    --d          Abstand zum Startpunkt
+    --r          Radius der Ringfront
+    --ring       1 an der Front, dahinter über --spur auslaufend, davor scharf
+    --erreicht   0 vor der Front, 1 dahinter
+    --in-vorher  1, wenn der Punkt zum Buchstaben vor der Front gehört
+    --in-nachher 1, wenn er zum Buchstaben hinter der Front gehört
+    Die Marken --b1 bis --b3 sagen, zu welchen Buchstaben dieser Kreis gehört.
+  */
+  @supports (width: hypot(3px, 4px)) {
+    .zeichen-bild .welle {
+      --b1: 0;
+      --b2: 0;
+      --b3: 0;
+      --d: hypot(var(--x) - var(--qx), var(--y) - var(--qy));
+      --r: calc(var(--t) * var(--weite));
+      --ring: min(
+        clamp(0, 1 - (var(--r) - var(--d)) / var(--spur), 1),
+        clamp(0, 1 - (var(--d) - var(--r)) / 0.35, 1),
+        clamp(0, (1 - var(--t)) * 12, 1)
+      );
+      --erreicht: clamp(0, (var(--r) - var(--d)) * 3, 1);
+      --in-vorher: calc(
+        var(--b1) * max(0, 1 - max(var(--vorher) - 1, 1 - var(--vorher))) +
+          var(--b2) * max(0, 1 - max(var(--vorher) - 2, 2 - var(--vorher))) +
+          var(--b3) * max(0, 1 - max(var(--vorher) - 3, 3 - var(--vorher)))
+      );
+      --in-nachher: calc(
+        var(--b1) * max(0, 1 - max(var(--nachher) - 1, 1 - var(--nachher))) +
+          var(--b2) * max(0, 1 - max(var(--nachher) - 2, 2 - var(--nachher))) +
+          var(--b3) * max(0, 1 - max(var(--nachher) - 3, 3 - var(--nachher)))
+      );
+      --buchstabe: calc(var(--in-vorher) * (1 - var(--erreicht)) + var(--in-nachher) * var(--erreicht));
+      --licht: max(var(--ring) * var(--farbe) * var(--daempfung), var(--buchstabe));
+      opacity: var(--licht);
+      scale: calc(0.35 + 0.65 * var(--licht));
     }
-    25%, 75% {
-      transform: translate(-8.8px, -8.8px);
+
+    .zeichen-bild .welle.blau {
+      --farbe: var(--blau);
+    }
+
+    .zeichen-bild .welle.rose {
+      --farbe: calc(1 - var(--blau));
+    }
+
+    /* Kurzer Puls, wenn ein Ring losläuft. */
+    .zeichen-bild .quellpunkt {
+      scale: calc(1 + 0.9 * max(0, 1 - var(--t) * 6));
     }
   }
 
-  @keyframes auseinander-rose {
-    0%, 15%, 35%, 65%, 85%, 100% {
-      transform: translate(0, 0);
-    }
-    25%, 75% {
-      transform: translate(8.8px, 8.8px);
-    }
-  }
-
-  /* Umschalten nur bei 25 % und 75 %, dem weitesten Abstand. */
-  @keyframes vorn {
-    0% {
-      opacity: 0;
-    }
-    25% {
-      opacity: 1;
-    }
-    75% {
-      opacity: 0;
-    }
-  }
-
-  /* Ohne CSS-Unterstützung für "d" bleibt die Ausgangsform aus dem Attribut
-     stehen. Das Zeichen ist dann still, aber vollständig, Rose vorn. */
+  /* Standbild: ein blauer Ring um den Startpunkt aus den Werten im style. */
   @media (prefers-reduced-motion: reduce) {
-    .zeichen-bild * {
-      animation: none;
+    .zeichen-bild {
+      animation: none !important;
     }
   }
 
   @media print {
-    .zeichen-bild * {
-      animation: none;
+    .zeichen-bild {
+      animation: none !important;
+    }
+
+    .zeichen-bild .raster {
+      display: none;
     }
   }
 </style>

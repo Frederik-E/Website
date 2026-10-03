@@ -2,23 +2,28 @@
 # die lokale Vorschau (npm run dev) aktualisiert sich von selbst.
 
 # Sprache aller Oberflächentexte: en oder de
-sprache: en
+sprache: de
 
 # Dein Name. Er steht klein in der Fusszeile, im Browser-Tab und im Lebenslauf.
-name: "[TODO: Vorname Nachname]"
+name: "Frederik Eichlohn"
 
 # Kurze Einordnung, z. B. Studiengang und Hochschule. Steht nicht auf der
 # Seite selbst, sondern im Browser-Tab, in Suchergebnissen und im Lebenslauf-PDF.
-untertitel: "[TODO: z. B. Masterstudium Robotik, TU Muenchen]"
+untertitel: "Master-Student KIT - Mechatronics and Information Techonlogy - AI and autonomous systems"
 
 # Ein bis zwei Saetze ganz oben auf der Startseite: woran du arbeitest.
 # Leer lassen ("") blendet die Zeile aus.
-einleitung: "[TODO: z. B. Ich baue Wahrnehmung und Regelung fuer Roboter, die selbst fahren.]"
+einleitung: "Sammlung an Projekten und Arbeiten"
 
 # Kontakt
-email: "[TODO: kontakt@meine-domain.de]"
-github: "[TODO: https://github.com/benutzername]"
-linkedin: "[TODO: https://www.linkedin.com/in/benutzername]"
+email: "frederik.eichlohn@gmail.com"
+github: "https://github.com/Frederik-E"
+#linkedin: "[TODO: https://www.linkedin.com/in/benutzername]"
+
+# Deine Initialen, bis zu drei Buchstaben. Die Wellen im bewegten Zeichen oben
+# auf der Startseite zeichnen sie alle 40 Sekunden, einen Buchstaben
+# nach dem anderen. Leer lassen ("") blendet sie aus.
+initialen: "FE"
 
 # Deine gekaufte Domain, mit https:// und ohne Schrägstrich am Ende.
 # Sie darf noch nicht auf die Seite zeigen.

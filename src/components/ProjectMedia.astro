@@ -74,10 +74,21 @@ const videoTyp = video?.endsWith('.webm') ? 'video/webm' : 'video/mp4';
   .medium {
     display: block;
     width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
     border-radius: var(--radius);
     background: var(--color-flaeche);
+  }
+
+  /* Bilder behalten ihr eigenes Seitenverhältnis. Technische Zeichnungen sind
+     oft breit und flach; ein fester 16:9-Kasten würde sie beschneiden. */
+  img.medium {
+    height: auto;
+  }
+
+  /* Das Video braucht den festen Kasten, damit das Posterbild und die
+     Steuerleiste nicht springen. */
+  video.medium {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
   }
 </style>
 

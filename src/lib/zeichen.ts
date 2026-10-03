@@ -1,20 +1,224 @@
 /**
- * Das Zeichen der Seite: eine organische Form, die langsam quillt und wandert.
- * 
+ * Das Zeichen der Seite: eine Punktmatrix. Von einem Punkt laufen Ringe nach
+ * außen, abwechselnd in Cool Sky und Dusty Rose, wie Wellen um einen Tropfen.
+ * Jeder Ring startet an einem anderen, zufällig gewählten Punkt der Matrix.
+ * Alle 40 Sekunden zeichnen die Ringe die Initialen aus den Einstellungen:
+ * hinter der Front eines Rings bleibt ein Buchstabe stehen, der nächste
+ * verwandelt ihn in den folgenden, der letzte wischt ihn weg.
  *
- * Diese Datei und src/styles/zeichen.css werden erzeugt:
- *
- *   npm run zeichen
- *
- * Die Werte dafuer stehen oben in scripts/zeichen-erzeugen.mjs. Dort laesst
- * sich mit MIT_PIKTOGRAMMEN auch zwischen den beiden Fassungen umschalten.
+ * Beim Bauen wird eine zufällige Folge von Startpunkten gezogen, bei jedem Bau
+ * eine neue. Im Browser rechnet CSS: die Folge steht in Keyframes, jeder Punkt
+ * berechnet mit hypot() seinen Abstand zum aktuellen Startpunkt und daraus, ob
+ * der Ring ihn gerade trifft. Kein JavaScript.
  */
 
-/** Ausgangsform, zugleich das unbewegte Bild fuer das Favicon. */
-export const BLOB = 'M 51.2 32.3 C 51.5 33.8 51.6 35.3 51.4 36.9 C 51.2 38.4 50.7 39.9 50.1 41.3 C 49.4 42.7 48.5 44 47.4 45.1 C 46.4 46.2 45.2 47.2 43.9 48 C 42.7 48.9 41.3 49.6 40 50.1 C 38.6 50.6 37.2 51 35.7 51.3 C 34.3 51.5 32.8 51.6 31.4 51.5 C 29.9 51.4 28.5 51.1 27.2 50.6 C 25.9 50.1 24.6 49.5 23.5 48.6 C 22.4 47.8 21.4 46.9 20.6 45.8 C 19.7 44.8 19 43.7 18.5 42.6 C 17.9 41.4 17.5 40.3 17.1 39.2 C 16.7 38 16.3 36.9 16 35.8 C 15.7 34.7 15.4 33.5 15.2 32.3 C 14.9 31.1 14.7 29.8 14.6 28.5 C 14.5 27.1 14.6 25.7 14.8 24.3 C 15.1 22.9 15.6 21.5 16.3 20.2 C 17 19 17.9 17.8 19.1 16.9 C 20.2 16 21.6 15.3 23 14.9 C 24.4 14.5 25.9 14.4 27.3 14.5 C 28.7 14.6 30.1 15 31.4 15.5 C 32.6 15.9 33.8 16.6 34.8 17.2 C 35.9 17.8 36.8 18.4 37.8 19 C 38.7 19.6 39.6 20.2 40.6 20.7 C 41.6 21.3 42.6 21.9 43.6 22.5 C 44.6 23.2 45.7 24 46.7 24.9 C 47.7 25.8 48.7 26.9 49.4 28.2 C 50.2 29.4 50.8 30.8 51.2 32.3 Z';
+/** Sekunden je Ring. */
+export const RING_TAKT = 2.5;
 
-export const ZEICHEN_BREITE = 60;
-export const ZEICHEN_HOEHE = 60;
+/** Mit diesem Ring (0-basiert) beginnen die Initialen: nach 7,5 Sekunden. */
+export const INITIALEN_AB_RING = 3;
 
-/** Dauer einer Runde der Animation. */
-export const ZEICHEN_DAUER = '20s';
+/** Danach alle so viele Ringe wieder (16 × 2,5 s = 40 s). */
+export const INITIALEN_ALLE = 16;
+
+/** Während die Initialen stehen, leuchten die übrigen Ringe gedämpft. */
+export const DAEMPFUNG = 0.55;
+
+export type Fassung = 'gross' | 'klein';
+
+export interface Ring {
+  spalte: number;
+  zeile: number;
+  /** 1: der Ring ist blau, 0: rosa. Die Farben wechseln sich ab. */
+  blau: 0 | 1;
+  /**
+   * Welcher Buchstabe vor und hinter der Ringfront steht (1 = erster
+   * Buchstabe, 0 = keiner). Wo die Front vorbeikommt, wechselt der Punkt vom
+   * einen zum anderen.
+   */
+  vorher: number;
+  nachher: number;
+  /** 1: der Ring leuchtet gedämpft, weil Buchstaben stehen. */
+  gedaempft: 0 | 1;
+}
+
+export interface Punkt {
+  spalte: number;
+  zeile: number;
+  x: number;
+  y: number;
+  /** Nummern der Buchstaben, in denen dieser Punkt blau bzw. rosa leuchtet. */
+  buchstabenBlau: number[];
+  buchstabenRose: number[];
+}
+
+export interface Matrix {
+  n: number;
+  /** Kantenlänge der viewBox. */
+  kante: number;
+  schritt: number;
+  rand: number;
+  radiusPunkt: number;
+  radiusWelle: number;
+  /** Radius, bis zu dem ein Ring wächst, in Punktabständen. */
+  weite: number;
+  /** Länge der Spur hinter der Ringfront, in Punktabständen. */
+  spur: number;
+  punkte: Punkt[];
+  folge: Ring[];
+  /** Standbild: Startpunkt und Fortschritt des Rings (0 bis 1). */
+  ruhe: { spalte: number; zeile: number; t: number };
+}
+
+/*
+  gross: 9 × 9 Punkte für das Startbild, 32 Ringe (80 s), zweimal die Initialen.
+  klein: 4 × 4 Punkte für die Kopfzeile, mit größeren Punkten und weniger Rand,
+  damit sie bei 28 Pixeln noch lesbar sind. 12 Ringe, keine Initialen.
+
+  weite: bis dahin wächst ein Ring. Etwas mehr als die längste Diagonale
+  (11,3 Punktabstände), damit am Ende eines Rings jeder Punkt erreicht ist.
+*/
+const FASSUNGEN = {
+  gross: {
+    n: 9,
+    rand: 1,
+    punkt: 0.14,
+    welle: 0.3,
+    ringe: 32,
+    weite: 12,
+    spur: 1.6,
+    ruhe: { spalte: 4, zeile: 4, radius: 2.2 },
+  },
+  klein: {
+    n: 4,
+    rand: 0.6,
+    punkt: 0.2,
+    welle: 0.36,
+    ringe: 12,
+    weite: 4.4,
+    spur: 1.1,
+    ruhe: { spalte: 1, zeile: 1, radius: 1.2 },
+  },
+} as const;
+
+/*
+  Pixelschrift für die Initialen: 5 × 7 Punkte, mittig auf dem 9 × 9-Raster
+  (Spalten 2 bis 6, Zeilen 1 bis 7). Umlaute stehen ohne Punkte.
+*/
+const SCHRIFT: Record<string, string> = {
+  A: '.###.#...##...#######...##...##...#',
+  B: '####.#...##...#####.#...##...#####.',
+  C: '.###.#...##....#....#....#...#.###.',
+  D: '####.#...##...##...##...##...#####.',
+  E: '######....#....####.#....#....#####',
+  F: '######....#....####.#....#....#....',
+  G: '.###.#...##....#.####...##...#.###.',
+  H: '#...##...##...#######...##...##...#',
+  I: '.###...#....#....#....#....#...###.',
+  J: '..###...#....#....#.#..#.#..#..##..',
+  K: '#...##..#.#.#..##...#.#..#..#.#...#',
+  L: '#....#....#....#....#....#....#####',
+  M: '#...###.###.#.##.#.##...##...##...#',
+  N: '#...###..##.#.##..###...##...##...#',
+  O: '.###.#...##...##...##...##...#.###.',
+  P: '####.#...##...#####.#....#....#....',
+  Q: '.###.#...##...##...##.#.##..#..##.#',
+  R: '####.#...##...#####.#.#..#..#.#...#',
+  S: '.#####....#.....###.....#....#####.',
+  T: '#####..#....#....#....#....#....#..',
+  U: '#...##...##...##...##...##...#.###.',
+  V: '#...##...##...##...##...#.#.#...#..',
+  W: '#...##...##...##.#.##.#.##.#.#.#.#.',
+  X: '#...##...#.#.#...#...#.#.#...##...#',
+  Y: '#...##...#.#.#...#....#....#....#..',
+  Z: '#####....#...#...#...#...#....#####',
+};
+const OHNE_PUNKTE: Record<string, string> = { Ä: 'A', Ö: 'O', Ü: 'U' };
+
+/** Punkte eines Buchstabens als Spalte und Zeile auf dem 9 × 9-Raster. */
+function buchstabe(zeichen: string): Set<string> {
+  const muster = SCHRIFT[OHNE_PUNKTE[zeichen] ?? zeichen] ?? '';
+  const punkte = new Set<string>();
+  [...muster].forEach((stelle, i) => {
+    if (stelle === '#') punkte.add(`${2 + (i % 5)},${1 + Math.floor(i / 5)}`);
+  });
+  return punkte;
+}
+
+const runden = (wert: number) => Math.round(wert * 100) / 100;
+
+export interface Optionen {
+  /** Bis zu drei Buchstaben, nur in der großen Fassung. */
+  initialen?: string;
+  zufall?: () => number;
+}
+
+export function punktmatrix(fassung: Fassung, { initialen = '', zufall = Math.random }: Optionen = {}): Matrix {
+  const f = FASSUNGEN[fassung];
+  const n = f.n;
+  const schritt = 20;
+  const rand = schritt * f.rand;
+  const kante = schritt * (n - 1) + 2 * rand;
+
+  // Buchstaben abwechselnd blau und rosa, der erste blau.
+  const buchstaben = fassung === 'gross' ? [...initialen.toUpperCase()].slice(0, 3).map(buchstabe) : [];
+
+  const punkte: Punkt[] = [];
+  for (let zeile = 0; zeile < n; zeile += 1) {
+    for (let spalte = 0; spalte < n; spalte += 1) {
+      const buchstabenBlau: number[] = [];
+      const buchstabenRose: number[] = [];
+      buchstaben.forEach((punkteDesBuchstabens, index) => {
+        if (!punkteDesBuchstabens.has(`${spalte},${zeile}`)) return;
+        (index % 2 === 0 ? buchstabenBlau : buchstabenRose).push(index + 1);
+      });
+      punkte.push({
+        spalte,
+        zeile,
+        x: runden(rand + spalte * schritt),
+        y: runden(rand + zeile * schritt),
+        buchstabenBlau,
+        buchstabenRose,
+      });
+    }
+  }
+
+  // Zufällige Startpunkte, nie zweimal derselbe hintereinander.
+  const folge: Ring[] = [];
+  let vorher = -1;
+  for (let i = 0; i < f.ringe; i += 1) {
+    let index = Math.floor(zufall() * n * n);
+    while (index === vorher) index = Math.floor(zufall() * n * n);
+    vorher = index;
+
+    // Initialen: jeder Buchstabe entsteht hinter der Front eines Rings und
+    // steht während des nächsten; dann verwandelt ihn der folgende Ring in
+    // den nächsten Buchstaben, der letzte Ring wischt ihn weg.
+    // Beispiel mit zwei Buchstaben: 0→1, 1→1, 1→2, 2→2, 2→0.
+    const k = buchstaben.length;
+    const j = (((i - INITIALEN_AB_RING) % INITIALEN_ALLE) + INITIALEN_ALLE) % INITIALEN_ALLE;
+    const imBlock = k > 0 && j <= 2 * k;
+    folge.push({
+      spalte: index % n,
+      zeile: Math.floor(index / n),
+      blau: i % 2 === 0 ? 1 : 0,
+      vorher: imBlock ? Math.ceil(j / 2) : 0,
+      nachher: imBlock && j < 2 * k ? Math.floor(j / 2) + 1 : 0,
+      gedaempft: imBlock ? 1 : 0,
+    });
+  }
+
+  return {
+    n,
+    kante: runden(kante),
+    schritt,
+    rand: runden(rand),
+    radiusPunkt: runden(schritt * f.punkt),
+    radiusWelle: runden(schritt * f.welle),
+    weite: f.weite,
+    spur: f.spur,
+    punkte,
+    folge,
+    ruhe: { spalte: f.ruhe.spalte, zeile: f.ruhe.zeile, t: runden(f.ruhe.radius / f.weite) },
+  };
+}

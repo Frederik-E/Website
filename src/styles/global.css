@@ -54,19 +54,18 @@ h2,
 h3 {
   font-weight: 500;
   line-height: 1.15;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--laufweite-titel);
   text-wrap: balance;
 }
 
 h1 {
   font-size: var(--text-h1);
   line-height: 1.02;
-  letter-spacing: -0.04em;
+  letter-spacing: var(--laufweite-gross);
 }
 
 h2 {
   font-size: var(--text-h2);
-  letter-spacing: -0.03em;
 }
 
 h3 {
@@ -171,11 +170,11 @@ li {
   }
 }
 
-/* Technische Beschriftung: Monospace, Versalien, gesperrt. */
+/* Technische Beschriftung: Versalien, gesperrt, schmale Schrift. */
 .etikett {
-  font-family: var(--font-mono, ui-monospace, monospace);
+  font-family: var(--font-etikett, system-ui, sans-serif);
   font-size: var(--text-etikett);
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.4;
   letter-spacing: var(--sperrung-etikett);
   text-transform: uppercase;
@@ -245,7 +244,6 @@ li {
 
 .fliesstext h2 {
   font-size: var(--text-gross);
-  letter-spacing: -0.015em;
 }
 
 .fliesstext h3 {
@@ -263,6 +261,34 @@ li {
 }
 
 .fliesstext li::marker {
+  color: var(--color-text-muted);
+}
+
+/* Abbildungen im Fließtext. Ein Absatz aus Bild und kursiver Zeile wird zur
+   Abbildung mit Unterschrift: technische Zeichnungen brauchen mehr Breite als
+   die Lesebreite, und ihre Unterschrift gehört sichtbar unter das Bild, nicht
+   nur in den Alt-Text. */
+.fliesstext p:has(> img) {
+  max-width: none;
+}
+
+.fliesstext p > img {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius);
+}
+
+/* Die Unterschrift folgt dem Bild im selben Absatz, je nach Zeilenumbruch mit
+   oder ohne <br> dazwischen. */
+.fliesstext p > img + em,
+.fliesstext p > img + br + em {
+  display: block;
+  max-width: var(--textbreite);
+  margin-top: var(--space-8);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-style: normal;
+  font-size: var(--text-klein);
+  line-height: 1.5;
   color: var(--color-text-muted);
 }
 
@@ -310,9 +336,9 @@ li {
   display: inline-block;
   min-width: 3.5ch;
   margin-right: var(--space-12);
-  font-family: var(--font-mono, ui-monospace, monospace);
+  font-family: var(--font-etikett, system-ui, sans-serif);
   font-size: var(--text-etikett);
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: var(--sperrung-etikett);
   color: var(--color-text-muted);
   vertical-align: 0.2em;

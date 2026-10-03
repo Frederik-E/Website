@@ -1,6 +1,7 @@
 /*
   Alle Gestaltungswerte an einem Ort.
-  --font-sans und --font-mono setzt Astros Fonts-API selbst (siehe astro.config.ts).
+  --font-sans, --font-etikett und --font-mono setzt Astros Fonts-API selbst
+  (siehe astro.config.ts).
 */
 :root {
   color-scheme: light;
@@ -11,9 +12,9 @@
   --color-text-muted: #60696d; /* Sekundärtext */
   --color-link: #8c271e; /* Chestnut, nur Links im Fließtext */
   --color-underline: #b98389; /* Dusty Rose, Unterstreichung von Links im Fließtext */
-  --color-mark: #65afff; /* Cool Sky: Zeichen, Marker, Messkreis, Sucherecken, Schimmer */
+  --color-mark: #65afff; /* Cool Sky: Zeichen, Marker, Sucherecken, Schimmer */
   --color-mark-soft: #b8d7ff; /* Textmarker */
-  --color-line: #b98389; /* Dusty Rose, zweite Form des Zeichens */
+  --color-line: #b98389; /* Dusty Rose, jeder zweite Ring des Zeichens */
 
   /* Aufgehelltes Iron Grey, keine neue Farbe: Haarlinien, dezente
      Unterstreichungen und die Fläche hinter Medien, solange sie laden. */
@@ -30,15 +31,21 @@
   --color-auf-dunkel-leise: color-mix(in srgb, var(--color-bg) 70%, var(--color-text));
   --color-linie-dunkel: color-mix(in srgb, var(--color-bg) 18%, var(--color-text));
 
-  /* Technische Beschriftung: Monospace, Versalien, weit gesperrt. */
-  --text-etikett: 0.75rem;
-  --sperrung-etikett: 0.08em;
+  /* Technische Beschriftung: Barlow Semi Condensed, Versalien, gesperrt. */
+  --text-etikett: 0.8125rem;
+  --sperrung-etikett: 0.09em;
+
+  /* Laufweiten. Barlow ist schmal gezeichnet und verträgt nur wenig
+     Verengung, auch in großen Größen. */
+  --laufweite-display: -0.02em;
+  --laufweite-gross: -0.015em;
+  --laufweite-titel: -0.01em;
 
   /* Schriftgrößen. Groß und eng gesetzte Überschriften gegen kleine,
      ruhige Angaben: der Abstand zwischen beiden trägt die Hierarchie. */
   --text-klein: 0.875rem;
   --text-ui: 0.9375rem;
-  --text-basis: 1.0625rem;
+  --text-basis: 1.125rem;
   --text-gross: clamp(1.1875rem, 1.05rem + 0.45vw, 1.375rem);
   --text-h3: clamp(1.25rem, 1.15rem + 0.3vw, 1.375rem);
   --text-h2: clamp(1.5rem, 1.25rem + 0.9vw, 2rem);

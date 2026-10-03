@@ -2,7 +2,7 @@
 import Abbildung from './Abbildung.astro';
 import { hatDetailseite, type Projekt } from '../lib/projekte';
 import { einstellungen } from '../lib/einstellungen';
-import { monatJahr, t } from '../i18n';
+import { monatJahr, t, zeitraum } from '../i18n';
 
 interface Props {
   projekt: Projekt;
@@ -21,7 +21,12 @@ const titelZiel = detailseite ? `/projects/${projekt.id}/` : (daten.code ?? date
 const Ueberschrift = `h${ebene}` as 'h2' | 'h3';
 
 const angaben = [
-  { name: texte.datum, wert: monatJahr(daten.datum, einstellungen.sprache) },
+  {
+    name: texte.datum,
+    wert: daten.bis
+      ? zeitraum(daten.datum, daten.bis, einstellungen.sprache)
+      : monatJahr(daten.datum, einstellungen.sprache),
+  },
   { name: texte.rolle, wert: daten.rolle },
   { name: texte.themen, wert: daten.tags.join(', ') },
 ].filter((angabe) => angabe.wert);
@@ -109,7 +114,6 @@ const angaben = [
   .titel {
     margin-top: var(--space-16);
     font-size: var(--text-h2);
-    letter-spacing: -0.03em;
   }
 
   .entwurf {
@@ -144,7 +148,6 @@ const angaben = [
     max-width: 44ch;
     font-size: var(--text-gross);
     line-height: 1.5;
-    letter-spacing: -0.01em;
     color: var(--color-text-muted);
   }
 

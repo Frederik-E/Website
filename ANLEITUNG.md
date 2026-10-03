@@ -1,10 +1,11 @@
 # Anleitung
 
-Drei Anleitungen, je nachdem was du vorhast.
+Vier Anleitungen, je nachdem was du vorhast.
 
 | | |
 |---|---|
-| **[Von der Domain bis zur veröffentlichten Website](ANLEITUNG-START.md)** | Der ganze Weg beim ersten Mal, in der richtigen Reihenfolge. Domain kaufen, Cloudflare einrichten, Inhalte schreiben, veröffentlichen. Einmal durcharbeiten. |
+| **[Von der Domain bis zur veröffentlichten Website](ANLEITUNG-START.md)** | Der ganze Weg beim ersten Mal, in der richtigen Reihenfolge. Domain kaufen, Inhalte schreiben. Die Schritte zu Cloudflare sind durch die GitHub-Anleitung ersetzt. Einmal durcharbeiten. |
+| **[Veröffentlichen mit GitHub Pages](ANLEITUNG-GITHUB.md)** | Einmalig einrichten: Repository, Domain, Pages. Danach genügt `git push`. |
 | **[Inhalte schreiben](ANLEITUNG-INHALTE.md)** | Projekte, Seiten, Bilder, Videos, Lebenslauf. Das brauchst du ständig. |
 | **[Veröffentlichen](ANLEITUNG-VEROEFFENTLICHEN.md)** | Änderungen ins Netz bringen und Fehlermeldungen lesen. Ein Befehl. |
 
@@ -15,7 +16,7 @@ Drei Anleitungen, je nachdem was du vorhast.
 ```
 npm run dev       Seite lokal ansehen, unter http://localhost:4321
 npm run check     Alles prüfen, nichts hochladen
-npm run deploy    Prüfen und veröffentlichen
+npm run deploy    Prüfen und anzeigen, was noch hochgeladen werden muss
 ```
 
 `npm run dev` beendest du mit `Strg + C`.

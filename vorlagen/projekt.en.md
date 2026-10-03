@@ -2,6 +2,7 @@
 titel: "[TODO: Project name]"                # Required: name of the project
 kurz: "[TODO: One or two sentences for the overview, at most 200 characters]"
 datum: "[TODO: YYYY-MM]"                     # Required: sets the order
+# bis: YYYY-MM                               # optional, end of a period
 rolle: "[TODO: e.g. On my own, or Perception in a team of four]"  # optional
 tags: []                                     # optional, e.g. [ROS 2, SLAM, Python]
 # titelbild: ./titelbild.jpg                 # optional, required if video is set

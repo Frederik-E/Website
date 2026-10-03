@@ -1,17 +1,29 @@
 import type { APIRoute } from 'astro';
-import { BLOB, ZEICHEN_BREITE, ZEICHEN_HOEHE } from '../lib/zeichen';
+import { punktmatrix } from '../lib/zeichen';
 
-// Dasselbe Zeichen wie auf der Seite, unbewegt.
+// Die kleine Punktmatrix als Standbild: ein dunkler Startpunkt, darum ein
+// blauer Ring und weiter außen ein rosa Ring.
+const QUELLE = { spalte: 1, zeile: 1 };
+const RINGE = [
+  { radius: 1.1, breite: 0.45, farbe: '#65afff' },
+  { radius: 2.15, breite: 0.4, farbe: '#b98389' },
+];
+
 export const GET: APIRoute = () => {
-  const versatz = `translate(5 4) rotate(140 ${ZEICHEN_BREITE / 2} ${ZEICHEN_HOEHE / 2}) scale(0.94)`;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Zeichen der Website">
-  <rect width="64" height="64" fill="#fcf7ff"/>
-  <g transform="translate(2 2)">
-    <path d="${BLOB}" fill="#65afff"/>
-    <g transform="${versatz}">
-      <path d="${BLOB}" fill="#b98389"/>
-    </g>
-  </g>
+  const m = punktmatrix('klein');
+  const kreise = m.punkte
+    .map((p) => {
+      const abstand = Math.hypot(p.spalte - QUELLE.spalte, p.zeile - QUELLE.zeile);
+      if (abstand === 0) return `<circle cx="${p.x}" cy="${p.y}" r="${m.radiusWelle * 0.75}" fill="#394648"/>`;
+      const ring = RINGE.find((r) => Math.abs(abstand - r.radius) <= r.breite);
+      return ring
+        ? `<circle cx="${p.x}" cy="${p.y}" r="${m.radiusWelle}" fill="${ring.farbe}"/>`
+        : `<circle cx="${p.x}" cy="${p.y}" r="${m.radiusPunkt}" fill="#a3a8ad"/>`;
+    })
+    .join('');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${m.kante} ${m.kante}" role="img" aria-label="Zeichen der Website">
+  <rect width="${m.kante}" height="${m.kante}" fill="#fcf7ff"/>
+  ${kreise}
 </svg>
 `;
   return new Response(svg, {

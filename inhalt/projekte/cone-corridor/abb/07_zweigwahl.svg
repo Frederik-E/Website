@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 452" width="720" height="452"
+     role="img" aria-labelledby="zweigwahl-titel">
+  <title id="zweigwahl-titel">Die fünf Planungszweige und ihre Reihenfolge</title>
+  <style>
+    .etikett { font: 500 11px "Liberation Sans", Arial, sans-serif; letter-spacing: .09em;
+               fill: #60696d; text-transform: uppercase; }
+    .nummer  { font: 500 12px "Liberation Sans", Arial, sans-serif; fill: #60696d; }
+    .kopf    { font: 400 14px "Liberation Sans", Arial, sans-serif; fill: #394648; }
+    .text    { font: 400 13px "Liberation Sans", Arial, sans-serif; fill: #394648; }
+    .leise   { font: 400 12px "Liberation Sans", Arial, sans-serif; fill: #60696d; }
+    .code    { font: 400 12px "IBM Plex Mono", ui-monospace, monospace; fill: #394648; }
+    .haar    { stroke: #dddbe2; stroke-width: 1; }
+    .konstr  { stroke: #b2b4ba; stroke-width: 1; }
+    .spine   { stroke: #394648; stroke-width: 1.5; }
+  </style>
+
+  <!-- Eingang -->
+  <line class="haar" x1="0" y1="24" x2="720" y2="24"/>
+  <text class="etikett" x="0" y="16">Jeder Zyklus plant komplett neu</text>
+
+  <text class="kopf" x="0" y="50">Pylonen aus dem Gedächtnis, Trigger erkannt</text>
+  <text class="code" x="0" y="70">classifyRows() — feste Nachbarschaftsdistanz 0,50 m</text>
+
+  <!-- Spine -->
+  <line class="spine" x1="18" y1="84" x2="18" y2="376"/>
+  <path d="M14 376 L18 384 L22 376 Z" fill="#394648"/>
+
+  <!-- Zweig 0.5 -->
+  <circle cx="18" cy="112" r="4" fill="#65afff"/>
+  <line class="konstr" x1="18" y1="112" x2="150" y2="112"/>
+  <text class="nummer" x="158" y="108">0.5</text>
+  <text class="text" x="196" y="108">Nur die vordere Reihe steht als Reihe</text>
+  <text class="leise" x="196" y="126">Die Trigger-Pylone ist noch isoliert. Muss zuerst geprüft werden,</text>
+  <text class="leise" x="196" y="142">sonst zieht Zweig 1.5 den Fall an und entartet dort.</text>
+
+  <!-- Zweig 1 -->
+  <circle cx="18" cy="172" r="4" fill="#65afff"/>
+  <line class="konstr" x1="18" y1="172" x2="150" y2="172"/>
+  <text class="nummer" x="158" y="168">1</text>
+  <text class="text" x="196" y="168">Beide Reihen besetzt, mindestens vier Pylonen</text>
+  <text class="leise" x="196" y="186">Delaunay, dualer Voronoi-Graph, auf eine Kette beschnitten.</text>
+  <text class="leise" x="196" y="202">Der genaueste Weg — und der mit den meisten Voraussetzungen.</text>
+
+  <!-- Zweig 1.5 -->
+  <circle cx="18" cy="232" r="4" fill="#65afff"/>
+  <line class="konstr" x1="18" y1="232" x2="150" y2="232"/>
+  <text class="nummer" x="158" y="228">1.5</text>
+  <text class="text" x="196" y="228">Genau eine Pylone gegenüber</text>
+  <text class="leise" x="196" y="246">Zu wenig für eine Triangulation. Die Trigger-Kette wird entlang</text>
+  <text class="leise" x="196" y="262">ihrer Normalen versetzt und liefert eine virtuelle Gegenreihe.</text>
+
+  <!-- Zweig 2 -->
+  <circle cx="18" cy="292" r="4" fill="#65afff"/>
+  <line class="konstr" x1="18" y1="292" x2="150" y2="292"/>
+  <text class="nummer" x="158" y="288">2</text>
+  <text class="text" x="196" y="288">Eine Reihe erkennbar</text>
+  <text class="leise" x="196" y="306">Die ganze Reihe wird als Fahrvektorkette abgefahren,</text>
+  <text class="leise" x="196" y="322">verbunden per Hermite.</text>
+
+  <!-- Zweig 2b -->
+  <circle cx="18" cy="352" r="4" fill="#b98389"/>
+  <line class="konstr" x1="18" y1="352" x2="150" y2="352"/>
+  <text class="nummer" x="158" y="348">2b</text>
+  <text class="text" x="196" y="348">Nichts davon</text>
+  <text class="leise" x="196" y="366">Dreieck-Heuristik aus Trigger und zwei Pylonen: ein einzelner</text>
+  <text class="leise" x="196" y="382">Zielpunkt, kein Pfad. Nur für die allererste Situation.</text>
+
+  <!-- Ausgang -->
+  <line class="haar" x1="0" y1="404" x2="720" y2="404"/>
+  <text class="text" x="0" y="424">Übergang von der Spur: Biarc, sonst Dubins, im Notfall enger Radius</text>
+  <text class="leise" x="0" y="444">Danach wird der Gesamtpfad als Ganzes gegen die Pylonen geprüft. Kein Zweig fällt auf einen anderen zurück.</text>
+</svg>

@@ -13,51 +13,50 @@ const texte = t(einstellungen.sprache);
 
 /*
   Oben auf der Startseite: die Einleitung groß, daneben das Zeichen als
-  Abbildung einer technischen Zeichnung. Mittellinien kreuzen sich in seiner
-  Mitte, ein gestrichelter Kreis dreht sich langsam darum. Dahinter liegt ein
-  Millimeterraster und ein weicher Schimmer aus den beiden Farben des Zeichens.
+  Abbildung, die große Punktmatrix. Das Millimeterraster zeichnet das Zeichen
+  selbst, damit die Punkte genau auf seinen Kreuzungen liegen. Es reicht über
+  das ganze Startbild und liegt unter dem Text. Dahinter ein weicher Schimmer
+  aus den beiden Farben des Zeichens.
 */
 ---
 
 <section class="feld ohne-linie startbild" aria-label={texte.index}>
-  {/* Eigene Ebene mit Beschnitt, damit die Kreuzmarken am Rand des Felds
-      sichtbar bleiben. */}
-  <div class="grund" aria-hidden="true">
-    <div class="raster-grund"></div>
-    <div class="schimmer"></div>
-  </div>
+  {/* Der Inhalt liegt in einer beschnittenen Ebene: das Raster des Zeichens
+      reicht weit über die Abbildung hinaus und soll am Rand des Startbilds
+      enden. Die Kreuzmarken des Felds liegen außerhalb und bleiben ganz. */}
+  <div class="innen">
+    <div class="grund" aria-hidden="true">
+      <div class="schimmer"></div>
+    </div>
 
-  <div class="etiketten">
-    <p class="etikett">00 / {texte.index}</p>
-    <p class="etikett">{texte.stand} {STAND}</p>
-  </div>
+    <div class="etiketten">
+      <p class="etikett">00 / {texte.index}</p>
+      <p class="etikett">{texte.stand} {STAND}</p>
+    </div>
 
-  <div class="buehne">
-    {einleitung !== '' && <p class="aussage">{einleitung}</p>}
+    <div class="buehne">
+      {einleitung !== '' && <p class="aussage">{einleitung}</p>}
 
-    <figure class="zeichnung" aria-hidden="true">
-      <div class="flaeche">
+      <figure class="zeichnung" aria-hidden="true">
         <div class="zeichen">
-          <Zeichen groesse={280} />
+          <Zeichen groesse={320} mitRaster />
         </div>
 
-        <svg class="konstruktion" viewBox="0 0 100 100" focusable="false">
-          <line class="mittellinie" x1="0" y1="50" x2="100" y2="50"></line>
-          <line class="mittellinie" x1="50" y1="0" x2="50" y2="100"></line>
-          <circle class="kreis" cx="50" cy="50" r="44"></circle>
-          <circle class="kreis-innen" cx="50" cy="50" r="1.4"></circle>
-          <path class="marke" d="M50 3 v4 M50 93 v4 M3 50 h4 M93 50 h4"></path>
-        </svg>
-      </div>
-
-      <figcaption class="etikett">{texte.abbildung} 01 / {texte.zeichen}</figcaption>
-    </figure>
+        <figcaption class="etikett">{texte.abbildung} 01 / {texte.zeichen}</figcaption>
+      </figure>
+    </div>
   </div>
 </section>
 
 <style>
   .startbild {
-    padding-block: var(--space-24) clamp(3rem, 2rem + 5vw, 7rem);
+    padding: 0;
+  }
+
+  .innen {
+    position: relative;
+    overflow: clip;
+    padding: var(--space-24) var(--innen) clamp(3rem, 2rem + 5vw, 7rem);
   }
 
   .grund {
@@ -87,66 +86,27 @@ const texte = t(einstellungen.sprache);
     font-size: var(--text-display);
     font-weight: 500;
     line-height: 1.02;
-    letter-spacing: -0.045em;
+    letter-spacing: var(--laufweite-display);
     text-wrap: balance;
     animation: aufsteigen 1s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 
-  /* Die Zeichnung: das Zeichen sitzt mittig, die Konstruktion liegt darüber
-     und ragt über es hinaus. */
+  /* Unter dem Text, damit das Raster des Zeichens nicht über die Schrift läuft. */
   .zeichnung {
+    position: relative;
+    z-index: -1;
     order: -1;
     width: min(15rem, 70vw);
     margin: 0;
   }
 
-  .flaeche {
-    position: relative;
-    aspect-ratio: 1;
-  }
-
   .zeichen {
-    position: absolute;
-    inset: 16%;
     line-height: 0;
   }
 
   .zeichen :global(svg) {
     width: 100%;
-    height: 100%;
-  }
-
-  .konstruktion {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    fill: none;
-    stroke: var(--color-konstruktion);
-    stroke-width: 1;
-  }
-
-  .konstruktion * {
-    vector-effect: non-scaling-stroke;
-  }
-
-  /* Mittellinie: Strich, Lücke, Punkt, Lücke. */
-  .mittellinie {
-    stroke-dasharray: 14 5 2 5;
-  }
-
-  .kreis {
-    stroke: var(--color-mark);
-    stroke-dasharray: 2 6;
-    transform-box: view-box;
-    transform-origin: 50% 50%;
-    animation: drehen 80s linear infinite;
-  }
-
-  .kreis-innen {
-    fill: var(--color-text);
-    stroke: none;
+    height: auto;
   }
 
   figcaption {
@@ -168,12 +128,6 @@ const texte = t(einstellungen.sprache);
     opacity: 0.55;
     animation: schweben 18s ease-in-out infinite alternate;
     pointer-events: none;
-  }
-
-  @keyframes drehen {
-    to {
-      rotate: 360deg;
-    }
   }
 
   @keyframes schweben {
@@ -206,7 +160,6 @@ const texte = t(einstellungen.sprache);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .kreis,
     .schimmer {
       animation: none;
     }
