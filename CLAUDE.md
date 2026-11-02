@@ -28,9 +28,9 @@ Konzept **„Technische Zeichnung“**, freigegeben am 2026-09-22 und vom Betrei
 
 **Keine Maßlinie unter Bildern** (Wunsch des Betreibers, 2026-11-01): Unter Projektbildern stand eine Maßlinie mit Endstrichen und den Pixelmaßen („1520 × 453 px“, bei Videos „Video“). Der Betreiber fand sie komisch, sie ist entfernt. Nicht wieder einführen. Die Sucherecken bleiben.
 
-**Kopf und Fuß:** Kopfzeile klebt oben, halb durchsichtig mit Weichzeichner; links das Zeichen (auf allen Seiten, auch der Startseite), rechts die Navigation. Fußzeile dunkel in Iron Grey mit Farbschimmer: E-Mail-Adresse (auf Wunsch des Betreibers seit 2026-11-02 höchstens 2,25rem statt 4rem), darunter das Schriftfeld (Name, Seite, Pfad, Stand, Rechtliches). Der Name steht nur dort, im Browser-Tab, im JSON-LD und im Lebenslauf-PDF; die Initialen erscheinen nur in der Animation des Zeichens im Startbild. Kein Suchstatus, keine Schaltflächen.
+**Kopf und Fuß:** Kopfzeile klebt oben, halb durchsichtig mit Weichzeichner; links das Zeichen (auf allen Seiten, auch der Startseite), rechts die Navigation. Fußzeile dunkel in Iron Grey mit Farbschimmer: E-Mail-Adresse (auf Wunsch des Betreibers seit 2026-11-02 höchstens 2,25rem statt 4rem), darunter das Schriftfeld (Name, Stand, Rechtliches). **Keine Zellen „Seite“ und „Pfad“** (Wunsch des Betreibers, 2026-11-02: „Page Index“ und „Path /en/“ gefielen ihm nicht); nicht wieder einführen. Der Name steht nur dort, im Browser-Tab, im JSON-LD und im Lebenslauf-PDF; die Initialen erscheinen nur in der Animation des Zeichens im Startbild. Kein Suchstatus, keine Schaltflächen.
 
-**Nur echte Angaben in der Zeichnung:** Schriftfeld und Datenleiste zeigen nur, was aus den Daten folgt (Pfad, Baumonat `STAND`, Anzahl der Projekte, Themen). Nichts erfinden, auch keine Koordinaten oder Versionen.
+**Nur echte Angaben in der Zeichnung:** Schriftfeld und Datenleiste zeigen nur, was aus den Daten folgt (Baumonat `STAND`, Anzahl der Projekte, Themen). Nichts erfinden, auch keine Koordinaten oder Versionen.
 
 **Links:** Chestnut mit Unterstreichung in Dusty Rose nur im Fließtext. Sonst `.ruhig` (Navigation, Titel, Listen) oder `.dezent` (einzelne Verweise). Ganze Einträge sind über einen aufgespannten Titel-Link klickbar.
 
@@ -117,7 +117,7 @@ Alles Pflegbare liegt in `inhalt/`, Vorlagen in `vorlagen/`, Code in `src/` und 
 - **Ganzseiten-Screenshots zeigen Bilder weit unter dem Sichtbereich manchmal grau**, weil Chromium sie nicht rechtzeitig dekodiert. Vor einem Fehlerbericht hinscrollen und den Sichtbereich fotografieren.
 - **`.feld` hat schon eine Animation** (Linie zeichnen). `.erscheinen` auf demselben Element ersetzt sie. Zum Einblenden ein inneres Element nehmen.
 - **Etiketten und kleiner Text nie in `--color-konstruktion`**: axe meldet zu wenig Kontrast. Muted verwenden.
-- **Zellen (`.zellen dd`) trennen mit `hyphens: auto`**, sonst brach ein langer Seitentitel im Schriftfeld des Fußes mitten im Wort um („Kreislauffabrike / n“). `dd.mono` (Pfad, Stand) bleibt ohne Trennstrich.
+- **Zellen (`.zellen dd`) trennen mit `hyphens: auto`**, sonst brach ein langer Seitentitel im Schriftfeld des Fußes mitten im Wort um („Kreislauffabrike / n“; die Zelle „Seite“ gibt es inzwischen nicht mehr). `dd.mono` (Stand) bleibt ohne Trennstrich.
 
 ## Abweichungen vom Plan (bewusst)
 

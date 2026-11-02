@@ -128,14 +128,14 @@ Gemessene Kontraste (WCAG):
 - **Zellen** (`.zellen`): wie im Schriftfeld. Die erste Spalte ist genau so breit, dass ihre Linie mit der Teilungslinie fluchtet (`--erste-spalte`).
 - **Kopfzeile:** bleibt oben stehen, halb durchsichtig mit Weichzeichner. Links das Zeichen (Link zur Startseite) auf allen Seiten, auch auf der Startseite, rechts die Navigation mit Nummern: 01 Projekte, 02 Über mich, 03 Lebenslauf, danach freie Seiten mit `navigation: true`. Die Nummern kommen aus `src/lib/navigation.ts` und erscheinen auch im Seitenkopf.
 - **Seitenkopf** (`Seitenkopf.astro`): Etiketten links (Nummer und Seite) und rechts (Stand), große Überschrift, optional ein Einleitungssatz, Millimeterraster im Hintergrund.
-- **Fußzeile:** dunkel in Iron Grey mit zwei weichen Farbschimmern. Oben „Kontakt“ mit der E-Mail-Adresse sehr groß, dazu GitHub und LinkedIn. Darunter das Schriftfeld mit Name, Seite, Pfad, Stand und Rechtlichem.
+- **Fußzeile:** dunkel in Iron Grey mit zwei weichen Farbschimmern. Oben „Kontakt“ mit der E-Mail-Adresse sehr groß, dazu GitHub und LinkedIn. Darunter das Schriftfeld mit Name, Stand und Rechtlichem (Seite und Pfad auf Wunsch des Betreibers seit 2026-11-02 entfernt).
 - **Der Name** steht im Schriftfeld, im Browser-Tab, im JSON-LD und im Lebenslauf-PDF. In der Kopfzeile nicht. Die Initialen erscheinen nur in der Animation des Zeichens im Startbild.
 - **Kein Portraitfoto, kein Suchstatus.**
 - Mobil gilt derselbe Aufbau, einspaltig. Die Nummern in der Navigation entfallen unter `34rem`.
 
 ### Nur echte Angaben in der Zeichnung
 
-Schriftfeld, Datenleiste und Etiketten zeigen nur, was aus den Daten folgt: Pfad der Seite, Baumonat (`STAND` in `src/lib/text.ts`), Anzahl der Projekte, Datum des neuesten, Themen aus den Kopfdaten. Keine erfundenen Koordinaten, Versionsnummern oder Kennzahlen über die Person.
+Schriftfeld, Datenleiste und Etiketten zeigen nur, was aus den Daten folgt: Baumonat (`STAND` in `src/lib/text.ts`), Anzahl der Projekte, Datum des neuesten, Themen aus den Kopfdaten. Keine erfundenen Koordinaten, Versionsnummern oder Kennzahlen über die Person.
 
 ### Seiten im Einzelnen
 

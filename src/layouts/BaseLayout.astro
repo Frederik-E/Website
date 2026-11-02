@@ -68,7 +68,6 @@ const person = {
 // Die Kopfzeile markiert den aktuellen Punkt selbst. Auf einer Projekt-
 // Detailseite bleibt dadurch "Projekte" markiert.
 const eintraege = await navigation(texte, sprache);
-const seitenname = istStartseite ? texte.index : titel;
 
 const pfad = Astro.url.pathname;
 const zustand = (adresse: string) => {
@@ -168,14 +167,6 @@ const zustand = (adresse: string) => {
             <div>
               <dt class="etikett">{texte.name}</dt>
               <dd>{einstellungen.name}</dd>
-            </div>
-            <div>
-              <dt class="etikett">{texte.seite}</dt>
-              <dd>{seitenname}</dd>
-            </div>
-            <div>
-              <dt class="etikett">{texte.pfad}</dt>
-              <dd class="mono">{Astro.url.pathname}</dd>
             </div>
             <div>
               <dt class="etikett">{texte.stand}</dt>
@@ -348,7 +339,7 @@ const zustand = (adresse: string) => {
     font-size: var(--text-ui);
   }
 
-  /* Schriftfeld: fünf Zellen, schmal zwei pro Zeile. */
+  /* Schriftfeld: drei Zellen, schmal zwei pro Zeile. */
   .schriftfeld {
     padding: 0;
   }
@@ -373,7 +364,7 @@ const zustand = (adresse: string) => {
 
   @media (min-width: 60rem) {
     .schriftfeld dl {
-      grid-template-columns: var(--erste-spalte) 0.9fr 1.3fr minmax(max-content, 0.7fr) 1.2fr;
+      grid-template-columns: var(--erste-spalte) minmax(max-content, 0.7fr) 1.2fr;
     }
 
     .schriftfeld dl > div:last-child {
