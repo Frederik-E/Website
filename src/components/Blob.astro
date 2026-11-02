@@ -1,6 +1,5 @@
 ---
-import { BLOB, BLOB_BREITE, BLOB_HOEHE, BLOB_DAUER } from '../lib/blob';
-import '../styles/blob.css';
+import { BLOB_BREITE, BLOB_HOEHE, BLOB_DAUER } from '../lib/blob';
 
 interface Props {
   /** Kantenlänge in Pixeln. In der Kopfzeile klein, im Startbild überschreibt das CSS sie. */
@@ -19,10 +18,11 @@ const { groesse = 280, farbe = 'beide' } = Astro.props;
   Der organische Blob aus Commit 559fdb9, als Zeichen in der Kopfzeile und
   als Blickfang im Startbild.
 
-  Zwei Formen übereinander, leicht versetzt und gegeneinander gedreht.
-  Beide benutzen dieselben Keyframes, die zweite mit negativer Verzögerung.
-  Dadurch stehen sie immer an verschiedenen Stellen ihrer Bewegung und
-  schieben sich übereinander, ohne dass zweite Formdaten nötig sind.
+  Zwei Formen übereinander, leicht versetzt und gegeneinander gedreht. Die
+  Formdaten und ihre Animation stehen einmal pro Seite in BlobFormen.astro
+  (im BaseLayout), hier stehen nur Verweise darauf (<use>). Die rosa Form ist
+  der blauen in derselben Bewegung voraus, so schieben sie sich
+  übereinander.
 
   Zweimal pro Takt gehen die Formen auseinander, bis sie sich nicht mehr
   berühren, und kommen mit getauschter Reihenfolge zurück. SVG kennt kein
@@ -42,10 +42,7 @@ const { groesse = 280, farbe = 'beide' } = Astro.props;
 // Kopfzeile und Seite zeigen den Blob gleichzeitig. Jede Fassung bekommt
 // deshalb ihren eigenen Filter, sonst gäbe es die ID doppelt.
 const SCHATTEN = `blob-schatten-${farbe}-${groesse}`;
-const ZWEITE = {
-  versatz: `translate(5 4) rotate(140 ${BLOB_BREITE / 2} ${BLOB_HOEHE / 2}) scale(0.94)`,
-  verzoegerung: '-13s',
-};
+const VERSATZ_ROSE = `translate(5 4) rotate(140 ${BLOB_BREITE / 2} ${BLOB_HOEHE / 2}) scale(0.94)`;
 
 // Die Trennung fällt auf die Hälfte der Formschleife. Dort stehen die Formen
 // schräg versetzt und kommen mit dem Weg in "blob-auseinander-*" frei.
@@ -59,7 +56,7 @@ const TAKT = `${parseFloat(BLOB_DAUER) * 2}s`;
   height={groesse}
   aria-hidden="true"
   focusable="false"
-  style={`--dauer: ${BLOB_DAUER}; --verzoegerung: ${ZWEITE.verzoegerung}; --takt: ${TAKT};`}
+  style={`--takt: ${TAKT};`}
 >
   <defs>
     <filter id={SCHATTEN} x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
@@ -69,15 +66,17 @@ const TAKT = `${parseFloat(BLOB_DAUER) * 2}s`;
   {
     farbe !== 'rose' && (
       <g class:list={['blau', farbe !== 'beide' && 'allein']} filter={`url(#${SCHATTEN})`}>
-        <path class="form" d={BLOB} />
+        <use class="bewegt" href="#blob-form-blau" />
+        <use class="still" href="#blob-form-still" />
       </g>
     )
   }
   {
     farbe !== 'blau' && (
       <g class:list={['rose', farbe !== 'beide' && 'allein']} filter={`url(#${SCHATTEN})`}>
-        <g transform={ZWEITE.versatz}>
-          <path class="form" d={BLOB} />
+        <g transform={VERSATZ_ROSE}>
+          <use class="bewegt" href="#blob-form-rose" />
+          <use class="still" href="#blob-form-still" />
         </g>
       </g>
     )
@@ -85,7 +84,8 @@ const TAKT = `${parseFloat(BLOB_DAUER) * 2}s`;
   {
     farbe === 'beide' && (
       <g class="blau vorn" filter={`url(#${SCHATTEN})`}>
-        <path class="form" d={BLOB} />
+        <use class="bewegt" href="#blob-form-blau" />
+        <use class="still" href="#blob-form-still" />
       </g>
     )
   }
@@ -97,8 +97,8 @@ const TAKT = `${parseFloat(BLOB_DAUER) * 2}s`;
     overflow: visible;
   }
 
-  .form {
-    animation: blob-form var(--dauer) linear infinite;
+  .still {
+    display: none;
   }
 
   .schatten {
@@ -114,10 +114,6 @@ const TAKT = `${parseFloat(BLOB_DAUER) * 2}s`;
   .rose {
     fill: var(--color-line);
     animation: blob-auseinander-rose var(--takt) ease-in-out infinite;
-  }
-
-  .rose .form {
-    animation-delay: var(--verzoegerung);
   }
 
   /* Allein gibt es niemanden, von dem die Form weggehen könnte. */
@@ -163,17 +159,20 @@ const TAKT = `${parseFloat(BLOB_DAUER) * 2}s`;
     }
   }
 
-  /* Ohne Bewegung bleibt die Ausgangsform aus dem Attribut stehen,
-     Rose vorn. */
-  @media (prefers-reduced-motion: reduce) {
+  /* Ohne Bewegung steht die Ausgangsform, Rose vorn. Die SVG-Animation der
+     Form lässt sich per CSS nicht anhalten, deshalb wird stattdessen die
+     stehende Form gezeigt. */
+  @media (prefers-reduced-motion: reduce), print {
     .blob-bild * {
       animation: none;
     }
-  }
 
-  @media print {
-    .blob-bild * {
-      animation: none;
+    .bewegt {
+      display: none;
+    }
+
+    .still {
+      display: inline;
     }
   }
 </style>

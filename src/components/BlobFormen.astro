@@ -1,0 +1,38 @@
+---
+import { BLOB, BLOB_DAUER, BLOB_FORMEN, BLOB_VORSPRUNG_ROSE } from '../lib/blob';
+
+/*
+  Die Formen des Blobs, einmal pro Seite. Jeder Blob (Kopfzeile, Startbild,
+  Seitenkopf) verweist mit <use> darauf, statt die Formdaten selbst zu tragen.
+
+  Die Formänderung läuft als SVG-Animation (<animate>), nicht als
+  CSS-Animation der Eigenschaft "d": Safari kann "d" nicht animieren, und auf
+  dem iPhone benutzen alle Browser Safaris Engine. Der Blob stand dort still.
+
+  Die rosa Form beginnt mit negativer Verzögerung. So stehen beide Formen
+  immer an verschiedenen Stellen derselben Bewegung.
+*/
+const werte = [...BLOB_FORMEN, BLOB_FORMEN[0]].join(';');
+---
+
+<svg class="blob-formen" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <path id="blob-form-blau" d={BLOB}>
+      <animate attributeName="d" values={werte} dur={BLOB_DAUER} repeatCount="indefinite" />
+    </path>
+    <path id="blob-form-rose" d={BLOB}>
+      <animate attributeName="d" values={werte} dur={BLOB_DAUER} begin={`-${BLOB_VORSPRUNG_ROSE}`} repeatCount="indefinite" />
+    </path>
+    {/* Ohne Bewegung und im Druck: die Ausgangsform. */}
+    <path id="blob-form-still" d={BLOB} />
+  </defs>
+</svg>
+
+<style>
+  .blob-formen {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+</style>

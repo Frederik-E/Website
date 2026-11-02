@@ -1,6 +1,7 @@
 ---
 import { Font } from 'astro:assets';
 import Blob from '../components/Blob.astro';
+import BlobFormen from '../components/BlobFormen.astro';
 import { einstellungenIn } from '../lib/einstellungen';
 import { navigation } from '../lib/navigation';
 import { adresse, andereSprache, ohneSprache, spracheVon } from '../lib/sprache';
@@ -117,6 +118,7 @@ const zustand = (adresse: string) => {
     }
   </head>
   <body>
+    <BlobFormen />
     <a class="sprunglink" href="#inhalt">{texte.zumInhalt}</a>
 
     <header class="kopfzeile">
