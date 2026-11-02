@@ -44,10 +44,10 @@ Der ganze Weg in der Reihenfolge, in der du ihn gehen solltest. Einmal durcharbe
 1. `inhalt/einstellungen.yaml` im Editor öffnen.
 2. Jede Zeile mit `[TODO: ...]` durch deine Angabe ersetzen. Die Anführungszeichen stehen lassen.
 3. Bei `domain` deine gekaufte Domain eintragen, mit `https://` und ohne Schrägstrich am Ende.
-4. Bei `sprache` `en` oder `de` wählen. Das ändert alle Beschriftungen der Seite.
+4. Bei `untertitel_en` und `einleitung_en` dieselben Angaben auf Englisch eintragen. Sie stehen auf der englischen Seite unter `/en/`.
 5. Speichern und im Browser nachsehen.
 
-`einleitung` ist der erste Satz auf der Startseite, groß gesetzt. Schreib dort, woran du arbeitest.
+`einleitung` ist die erste Zeile auf der Startseite, groß gesetzt. Schreib dort, woran du arbeitest. Darunter steht dein Profil aus `inhalt/lebenslauf.yaml`.
 
 `initialen` sind bis zu drei Buchstaben, die das bewegte Zeichen auf der Startseite alle 40 Sekunden zeichnet. Leer lassen (`initialen: ""`) blendet sie aus.
 
@@ -77,10 +77,10 @@ Das ist der eigentliche Aufwand. Wie es geht, steht in [ANLEITUNG-INHALTE.md](AN
 
 In dieser Reihenfolge:
 
-1. Die zwei Beispielprojekte löschen: die Ordner `inhalt/projekte/beispiel-modellauto/` und `inhalt/projekte/beispiel-slam-vergleich/`. Auch `inhalt/seiten/beispiel-seite.md` kannst du löschen.
+1. Die zwei Beispielprojekte löschen: die Ordner `inhalt/projekte/beispiel-modellauto/` und `inhalt/projekte/beispiel-slam-vergleich/`.
 2. Zwei bis vier eigene Projekte anlegen. Lieber wenige gute als viele halbe.
-3. `inhalt/ueber-mich.md` schreiben, 60 bis 120 Wörter.
-4. `inhalt/lebenslauf.yaml` ausfüllen.
+3. `inhalt/lebenslauf.yaml` ausfüllen: oben das Profil (60 bis 120 Wörter), darunter Ausbildung, Erfahrung und Kenntnisse.
+4. Ein Foto in `inhalt/foto/` legen, im Hochformat.
 5. Zwischendurch `npm run check` laufen lassen. Es zeigt, was noch fehlt.
 
 ---
@@ -195,8 +195,8 @@ Wenn der Ordner verloren geht, ist die Seite weg. Cloudflare speichert nur das E
 - [ ] Domain gekauft
 - [ ] `inhalt/einstellungen.yaml` ausgefüllt, `domain` eingetragen
 - [ ] Cloudflare-Konto, Domain hinzugefügt, Nameserver umgestellt, Status „Active"
-- [ ] Beispielprojekte und Beispielseite gelöscht
-- [ ] Eigene Projekte, Über mich, Lebenslauf geschrieben
+- [ ] Beispielprojekte gelöscht
+- [ ] Eigene Projekte, Profil und Lebenslauf geschrieben, Foto abgelegt
 - [ ] Impressum und Datenschutz geschrieben
 - [ ] `npm run check` meldet nichts mehr
 - [ ] `npm run deploy` gelaufen, workers.dev-Adresse geprüft

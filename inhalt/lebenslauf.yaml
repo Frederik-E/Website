@@ -1,47 +1,97 @@
-# Dein Lebenslauf. Die Abschnitte erscheinen in der Reihenfolge, in der sie
-# hier stehen. Es gibt zwei Arten von Eintraegen:
+# Dein Lebenslauf. Er steht auf /cv/, als PDF zum Herunterladen und in
+# Kurzform auf der Startseite.
+#
+# Ganz oben das Profil: ein paar Saetze in der Ich-Form. Es steht auf der
+# Startseite unter der grossen Zeile und im Lebenslauf als erster Abschnitt. Eine Leerzeile beginnt einen neuen Absatz.
+#
+# Danach die Abschnitte, in der Reihenfolge, in der sie hier stehen. Es gibt
+# zwei Arten von Eintraegen:
 #   Station: titel, organisation, ort, von, bis, punkte
 #   Liste:   bereich, liste
 # Zeitangaben im Format JJJJ-MM. "bis" leer lassen bedeutet "heute".
 # Keine Adresse, keine Telefonnummer, kein Geburtsdatum.
+#
+# "startseite: true" zeigt einen Abschnitt auch auf der Startseite. Dort
+# stehen nur Titel, Organisation und Zeitraum, die Stichpunkte nicht.
+
+profil: |
+  Mechatronik-Student mit fundierten Kenntnissen in den Bereichen Maschinenbau, maschinellem Lernen und Python-Software-Entwicklung.
+  Durch Praktika und Werkstudententätigkeiten in der Entwicklung automatisierter Teststände bringe ich Erfahrungen im ingenieurwissenschaftlichen Umfeld mit. Auf der Suche nach einer Abschlussarbeit (Master-Thesis), um technische Lösungen praxisnah mitzuentwickeln, mein Wissen einzubringen und meine Kenntnisse weiter auszubauen.
 
 abschnitte:
-  - titel: Education
-    startseite: true # dieser Abschnitt erscheint in der Kurzform auf der Startseite
-    eintraege:
-      - titel: "[TODO: z. B. M.Sc. Robotics, Cognition, Intelligence]"
-        organisation: "[TODO: Hochschule]"
-        ort: "[TODO: Ort]"
-        von: 2025-10
-        bis:
-        punkte:
-          - "[TODO: Schwerpunkt, Abschlussarbeit oder Note, wenn sie gut ist]"
-
-      - titel: "[TODO: z. B. B.Sc. Elektrotechnik]"
-        organisation: "[TODO: Hochschule]"
-        ort: "[TODO: Ort]"
-        von: 2021-10
-        bis: 2025-09
-        punkte:
-          - "[TODO: Thema der Bachelorarbeit]"
-
-  - titel: Experience
+  - titel: Ausbildung
     startseite: true
     eintraege:
-      - titel: "[TODO: z. B. Werkstudent Perception]"
-        organisation: "[TODO: Firma]"
-        ort: "[TODO: Ort]"
-        von: 2024-04
-        bis: 2025-03
+      - titel: "M. Sc. Mechatronics and Information Technology - autonomous systems and AI"
+        organisation: "Karlsruher Institut für Technologie (KIT)"
+        ort: "Karlsruhe"
+        von: 2025-04
+        bis:
         punkte:
-          - "[TODO: Was du gebaut hast, mit Zahl oder Ergebnis]"
-          - "[TODO: Zweiter Punkt, wenn noetig]"
+          - "Schwerpunkt KI und autonome Systeme"
 
-  - titel: Skills
+      - titel: "B. Sc. Allgemeine Ingenieurwissenschaften - Maschinenbau - Biomechanik"
+        organisation: "Technische Universität Hamburg (TUHH)"
+        ort: "Hamburg"
+        von: 2020 - 10 
+        bis: 2024-09 
+        punkte:
+          - "Bachelorarbeit: Einfluss der räumlichen Eingriffsbedingungen beim Umfangsschleifen von kohlenstofffaserverstärkten Kunststoffen auf die Zerspankräfte und Oberflächenrauheiten"
+
+  - titel: Praktische Erfahrung
+    startseite: true
     eintraege:
-      - bereich: Robotics
-        liste: ["[TODO: z. B. ROS 2]", "[TODO: Gazebo]", "[TODO: Nav2]"]
-      - bereich: Programming
-        liste: ["[TODO: Python]", "[TODO: C++]"]
-      - bereich: Languages
-        liste: ["[TODO: Deutsch, Muttersprache]", "[TODO: Englisch, C1]"]
+      - titel: "Wissenschaftliche Hilfskraft: Reinforcement Learning für Kreislauffabriken"
+        organisation: "wbk Institut für Produktionstechnik, KIT"
+        ort: "Karlsruhe"
+        von: 2026-07
+        bis: 2027-03
+        punkte:
+          - "Rekonfiguration von Produktionsstationen in Kreislauffabriken: intelligentes Rekonfigurationsmanagement mithilfe von Reinforcement-Learning-Agenten, zur Erhöhung produktionstechnisch relevanter KPIs"
+         
+      # Fuer jede weitere Stelle diesen Block kopieren.
+      - titel: "Praktikum und Werkstudententätigkeit: Entwicklung automatisierter Teststände"
+        organisation: "Löwenstein Medical Technologies GmbH & Co. KG"
+        ort: "Hamburg"
+        von: 2024-01 
+        bis: 2025-09 
+        punkte:
+          - "Entwicklung eines automatisierten Teststandes zur Vorbereitung von Material-Alterungsversuchen"
+          - "Entwicklung eines automatisierten Teststandes zur Überprüfung der CO2-Rückatmung von medizinischen Masken"
+          - "Implementierung mithilfe von Arduino, C++, Python"
+          - "Konstruktion und Rapid Prototyping von mechanischen Komponenten mit Creo"
+
+       # Fuer jede weitere Stelle diesen Block kopieren.
+      - titel: "Praktikum: Grundlagen der Metallbearbeitung und Zerspanung"
+        organisation: "Möllering Gummi- und Kunststofftechnik GmbH"
+        ort: "Norderstedt"
+        von: 2023-09 
+        bis: 2023-12 
+        punkte:
+          - "CNC-Fräsen, Drehen, Bohren, Schleifen"
+          - "Bau von Vorrichtungen und Werkzeugen"
+          - "Beantragung von Umweltzertifikaten (EcoVadis)"
+
+        # Fuer jede weitere Stelle diesen Block kopieren.
+      - titel: "Studentische Hilfskraft: DLR School Lab TUHH"
+        organisation: "DLR - Deutsches Zentrum für Luft- und Raumfahrt e.V."
+        ort: "Hamburg"
+        von: 2021-09 
+        bis: 2023-08 
+        punkte:
+          - "Vermittlung physikalischer Grundlagen der Flugphysik an Schülerinnen und Schülern"
+          - "Leitung von Experimenten"
+          
+
+  # Aus deinen Projekten und deinem Profiltext uebernommen. Bitte pruefen.
+  - titel: Kenntnisse | Skills
+    startseite: true
+    eintraege:
+      - bereich: Programmierung
+        liste: ["Python", "C++"]
+      - bereich: Robotik
+        liste: ["ROS 2"]
+      - bereich: Maschinelles Lernen
+        liste: ["Reinforcement Learning", "PyTorch", "Python"]     
+      - bereich: Sprachen
+        liste: ["Deutsch: Muttersprache", "Englisch: fließend in Wort und Schrift"]

@@ -1,42 +1,42 @@
 ---
 import Abbildung from './Abbildung.astro';
-import { hatDetailseite, type Projekt } from '../lib/projekte';
-import { einstellungen } from '../lib/einstellungen';
+import { hatDetailseite, kurzeStichpunkte, type Projekt } from '../lib/projekte';
+import { adresse, spracheVon } from '../lib/sprache';
 import { monatJahr, t, zeitraum } from '../i18n';
 
 interface Props {
   projekt: Projekt;
-  /** Feste Projektnummer, z. B. "P-02". */
-  nummer: string;
   ebene?: 2 | 3;
   zuerst?: boolean;
 }
 
-const { projekt, nummer, ebene = 3, zuerst = false } = Astro.props;
-const texte = t(einstellungen.sprache);
+const { projekt, ebene = 3, zuerst = false } = Astro.props;
+const sprache = spracheVon(Astro.currentLocale);
+const texte = t(sprache);
 const daten = projekt.data;
 
 const detailseite = hatDetailseite(projekt);
-const titelZiel = detailseite ? `/projects/${projekt.id}/` : (daten.code ?? daten.demo);
+const titelZiel = detailseite ? adresse(`/projects/${projekt.id}/`, sprache) : (daten.code ?? daten.demo);
 const Ueberschrift = `h${ebene}` as 'h2' | 'h3';
 
 const angaben = [
   {
     name: texte.datum,
     wert: daten.bis
-      ? zeitraum(daten.datum, daten.bis, einstellungen.sprache)
-      : monatJahr(daten.datum, einstellungen.sprache),
+      ? zeitraum(daten.datum, daten.bis, sprache)
+      : monatJahr(daten.datum, sprache),
   },
   { name: texte.rolle, wert: daten.rolle },
   { name: texte.themen, wert: daten.tags.join(', ') },
 ].filter((angabe) => angabe.wert);
+
+const kompakt = kurzeStichpunkte(projekt);
 ---
 
-{/* Datenblatt: links Nummer, Titel und Angaben, rechts Beschreibung und Bild.
+{/* Datenblatt: links Titel und Angaben, rechts Beschreibung und Bild.
     Der ganze Eintrag ist klickbar, der Titel-Link spannt sich über ihn. */}
-<article class="feld geteilt eintrag zeigbar">
+<article class="feld geteilt eintrag zeigbar" lang={projekt.kopfSprache !== sprache ? projekt.kopfSprache : undefined}>
   <div class="links erscheinen">
-    <p class="etikett nummer">{nummer}</p>
     <Ueberschrift class="titel">
       {titelZiel ? <a class="ziel" href={titelZiel}>{daten.titel}</a> : daten.titel}
       {daten.entwurf && <span class="etikett entwurf">{texte.entwurf}</span>}
@@ -55,7 +55,16 @@ const angaben = [
   </div>
 
   <div class="rechts erscheinen">
-    <p class="kurz">{daten.kurz}</p>
+    {daten.kurz && <p class="kurz">{daten.kurz}</p>}
+    {
+      daten.stichpunkte.length > 0 && (
+        <ul class:list={['stichpunkte', { kompakt }]}>
+          {daten.stichpunkte.map((punkt) => (
+            <li>{punkt}</li>
+          ))}
+        </ul>
+      )
+    }
     {
       daten.titelbild && (
         <div class="medium">
@@ -68,7 +77,6 @@ const angaben = [
             breite={1600}
             sizes="(min-width: 80rem) 48rem, (min-width: 60rem) 62vw, 100vw"
             bewegt={false}
-            nummer={nummer}
           />
         </div>
       )
@@ -107,12 +115,7 @@ const angaben = [
     outline-offset: -4px;
   }
 
-  .nummer {
-    color: var(--color-text);
-  }
-
   .titel {
-    margin-top: var(--space-16);
     font-size: var(--text-h2);
   }
 
@@ -151,6 +154,49 @@ const angaben = [
     color: var(--color-text-muted);
   }
 
+  /* Stichpunkte wie eine Legende auf der Zeichnung: Haarlinien zwischen den
+     Zeilen, vor jeder Zeile eine kleine Kreuzmarke wie an den Feldrändern. */
+  .stichpunkte {
+    max-width: 44ch;
+    font-size: var(--text-gross);
+    line-height: 1.5;
+    border-top: 1px solid var(--color-haarlinie);
+  }
+
+  .stichpunkte li {
+    display: grid;
+    grid-template-columns: var(--space-24) minmax(0, 1fr);
+    padding-block: var(--space-12);
+    border-bottom: 1px solid var(--color-haarlinie);
+  }
+
+  .stichpunkte.kompakt {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: none;
+  }
+
+  .stichpunkte.kompakt li {
+    padding-right: var(--space-16);
+  }
+
+  @media (min-width: 40rem) {
+    .stichpunkte.kompakt {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .stichpunkte li::before {
+    content: '';
+    width: 11px;
+    height: 11px;
+    margin-top: calc(0.75em - 5.5px);
+    background:
+      linear-gradient(var(--color-text-muted), var(--color-text-muted)) center / 100% 1px no-repeat,
+      linear-gradient(var(--color-text-muted), var(--color-text-muted)) center / 1px 100% no-repeat;
+  }
+
+  .kurz + .stichpunkte,
   .medium {
     margin-top: var(--space-32);
   }

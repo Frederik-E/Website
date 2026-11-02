@@ -1,9 +1,9 @@
 import type { Sprache } from './lib/einstellungen-schema';
 
 /**
- * Alle Oberflächentexte in beiden Sprachen. Die URLs bleiben gleich,
- * nur die Beschriftungen wechseln. Englisch legt die Form fest, Deutsch
- * muss dieselben Schlüssel haben.
+ * Alle Oberflächentexte in beiden Sprachen. Deutsch steht unter /, Englisch
+ * unter /en/, sonst sind die Adressen gleich. Englisch legt die Form fest,
+ * Deutsch muss dieselben Schlüssel haben.
  */
 const en = {
   zumInhalt: 'Skip to content',
@@ -14,13 +14,15 @@ const en = {
   navGithub: 'GitHub',
   navLinkedin: 'LinkedIn',
   navEmail: 'Email',
-  ueberMich: 'About me',
+  profil: 'Profile',
   projekte: 'Projects',
   weitereInhalte: 'More on this site',
   ausgewaehlteArbeiten: 'Selected work',
   alleProjekteKurz: 'Every project, newest first',
-  ueberMichKurz: 'A short text about me',
-  lebenslaufKurz: 'Education, experience and skills, also as a PDF',
+  lebenslaufGanz: 'Full CV',
+  lebenslaufPdf: 'PDF',
+  foto: 'Photo',
+  fotoVon: (name: string) => `Photo of ${name}`,
   alleProjekte: (anzahl: number) => `All projects (${anzahl})`,
   details: 'Details',
   codeAufGithub: 'Code on GitHub',
@@ -35,16 +37,13 @@ const en = {
   index: 'Index',
   stand: 'Updated',
   zuletzt: 'Latest',
-  abbildung: 'Fig.',
   zeichen: 'Mark',
-  nummer: 'No.',
   titel: 'Title',
   seite: 'Page',
   pfad: 'Path',
   name: 'Name',
   rechtliches: 'Legal',
   mailSchreiben: 'Send an email',
-  video: 'Video',
   bild: 'Image',
   lebenslauf: 'CV',
   cvHerunterladen: 'Download CV (PDF)',
@@ -55,6 +54,11 @@ const en = {
   nichtGefundenText: 'This address does not exist on this site.',
   zurStartseite: 'Go to the home page',
   keineProjekte: 'No projects published yet.',
+  // Link in der Kopfzeile zur selben Seite in der anderen Sprache. Er nennt
+  // die Zielsprache in ihrer eigenen Sprache.
+  sprachwechsel: 'Deutsch',
+  lebenslaufVon: (name: string) => `CV of ${name}.`,
+  alleProjekteVon: (name: string) => `All projects by ${name}.`,
 };
 
 const de: typeof en = {
@@ -66,13 +70,15 @@ const de: typeof en = {
   navGithub: 'GitHub',
   navLinkedin: 'LinkedIn',
   navEmail: 'E-Mail',
-  ueberMich: 'Über mich',
+  profil: 'Profil',
   projekte: 'Projekte',
   weitereInhalte: 'Weitere Inhalte',
   ausgewaehlteArbeiten: 'Ausgewählte Arbeiten',
   alleProjekteKurz: 'Alle Arbeiten, neueste zuerst',
-  ueberMichKurz: 'Kurzer Text über mich',
-  lebenslaufKurz: 'Stationen, Kenntnisse und PDF',
+  lebenslaufGanz: 'Ganzer Lebenslauf',
+  lebenslaufPdf: 'PDF',
+  foto: 'Foto',
+  fotoVon: (name: string) => `Foto von ${name}`,
   alleProjekte: (anzahl: number) => `Alle Projekte (${anzahl})`,
   details: 'Details',
   codeAufGithub: 'Code auf GitHub',
@@ -87,16 +93,13 @@ const de: typeof en = {
   index: 'Index',
   stand: 'Stand',
   zuletzt: 'Zuletzt',
-  abbildung: 'Abb.',
   zeichen: 'Zeichen',
-  nummer: 'Nr.',
   titel: 'Titel',
   seite: 'Seite',
   pfad: 'Pfad',
   name: 'Name',
   rechtliches: 'Rechtliches',
   mailSchreiben: 'E-Mail schreiben',
-  video: 'Video',
   bild: 'Bild',
   lebenslauf: 'Lebenslauf',
   cvHerunterladen: 'Lebenslauf herunterladen (PDF)',
@@ -107,6 +110,9 @@ const de: typeof en = {
   nichtGefundenText: 'Diese Adresse gibt es auf dieser Seite nicht.',
   zurStartseite: 'Zur Startseite',
   keineProjekte: 'Noch keine Projekte veröffentlicht.',
+  sprachwechsel: 'English',
+  lebenslaufVon: (name: string) => `Lebenslauf von ${name}.`,
+  alleProjekteVon: (name: string) => `Alle Projekte von ${name}.`,
 };
 
 const texte: Record<Sprache, Texte> = { en, de };

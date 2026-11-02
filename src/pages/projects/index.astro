@@ -1,34 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Seitenkopf from '../../components/Seitenkopf.astro';
-import Stueckliste from '../../components/Stueckliste.astro';
-import { alleProjekte } from '../../lib/projekte';
-import { einstellungen } from '../../lib/einstellungen';
-import { ogAdresse } from '../../lib/og';
-import { t } from '../../i18n';
-
-const texte = t(einstellungen.sprache);
-const projekte = await alleProjekte();
-const ogBild = await ogAdresse(projekte[0]?.data.titelbild, Astro.site);
-const beschreibung =
-  einstellungen.sprache === 'de'
-    ? `Alle Projekte von ${einstellungen.name}.`
-    : `All projects by ${einstellungen.name}.`;
+import Projekte from '../../ansichten/Projekte.astro';
 ---
 
-<BaseLayout titel={texte.projekte} beschreibung={beschreibung} ogBild={ogBild}>
-  <Seitenkopf
-    titel={texte.projekte}
-    einleitung={texte.alleProjekteKurz}
-    etikettRechts={`${texte.projekte} ${String(projekte.length).padStart(2, '0')}`}
-  />
-
-  {projekte.length > 0 && <Stueckliste projekte={projekte} />}
-  {
-    projekte.length === 0 && (
-      <div class="feld">
-        <p>{texte.keineProjekte}</p>
-      </div>
-    )
-  }
-</BaseLayout>
+<Projekte />

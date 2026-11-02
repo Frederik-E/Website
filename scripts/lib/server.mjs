@@ -2,8 +2,21 @@
 import { spawn } from 'node:child_process';
 import { statikServerStarten } from './statik-server.mjs';
 
-/** Feste Seiten der Website. Projektseiten kommen aus /projects/ dazu. */
-const GRUNDSEITEN = ['/', '/projects/', '/about/', '/cv/', '/impressum/', '/datenschutz/', '/404/', '/404'];
+/** Feste Seiten der Website, deutsch und englisch. Projektseiten kommen aus /projects/ dazu. */
+const GRUNDSEITEN = [
+  '/',
+  '/cv/',
+  '/projects/',
+  '/impressum/',
+  '/datenschutz/',
+  '/404/',
+  '/404',
+  '/en/',
+  '/en/cv/',
+  '/en/projects/',
+  '/en/impressum/',
+  '/en/datenschutz/',
+];
 
 async function erreichbar(adresse, zeitlimit = 1500) {
   try {
@@ -50,17 +63,24 @@ export async function seitenFinden(basis) {
     if (await erreichbar(basis + pfad, 5000)) gefunden.add(pfad);
   }
 
-  // Frei angelegte Seiten stehen in der Kopfzeile der Startseite.
-  const startseite = await (await fetch(basis + '/')).text();
-  for (const treffer of startseite.matchAll(/href="(\/[a-z0-9-]+\/)"/g)) {
-    if (await erreichbar(basis + treffer[1], 5000)) gefunden.add(treffer[1]);
+  // Frei angelegte Seiten stehen auf der Startseite, in jeder Sprache.
+  for (const [start, muster] of [
+    ['/', /href="(\/[a-z0-9-]+\/)"/g],
+    ['/en/', /href="(\/en\/[a-z0-9-]+\/)"/g],
+  ]) {
+    const startseite = await (await fetch(basis + start)).text();
+    for (const treffer of startseite.matchAll(muster)) {
+      if (await erreichbar(basis + treffer[1], 5000)) gefunden.add(treffer[1]);
+    }
   }
 
-  if (gefunden.has('/projects/')) {
-    const html = await (await fetch(basis + '/projects/')).text();
-    for (const treffer of html.matchAll(/href="(\/projects\/[^"/]+\/)"/g)) {
-      gefunden.add(treffer[1]);
-    }
+  for (const [liste, muster] of [
+    ['/projects/', /href="(\/projects\/[^"/]+\/)"/g],
+    ['/en/projects/', /href="(\/en\/projects\/[^"/]+\/)"/g],
+  ]) {
+    if (!gefunden.has(liste)) continue;
+    const html = await (await fetch(basis + liste)).text();
+    for (const treffer of html.matchAll(muster)) gefunden.add(treffer[1]);
   }
 
   return [...gefunden];

@@ -1,19 +1,5 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Seitenkopf from '../components/Seitenkopf.astro';
-import { Content } from '../../inhalt/datenschutz.md';
-import { einstellungen } from '../lib/einstellungen';
-import { t } from '../i18n';
-
-const texte = t(einstellungen.sprache);
+import Rechtliches from '../ansichten/Rechtliches.astro';
 ---
 
-<BaseLayout titel={texte.datenschutz} beschreibung={texte.datenschutz} noindex>
-  <Seitenkopf titel={texte.datenschutz} etikett={texte.rechtliches} />
-
-  <div class="feld geteilt">
-    <div class="zweispaltig">
-      <div class="fliesstext rechts"><Content /></div>
-    </div>
-  </div>
-</BaseLayout>
+<Rechtliches art="datenschutz" />

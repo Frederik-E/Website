@@ -1,10 +1,13 @@
 ---
 titel: "[TODO: Projektname]"                 # Pflicht: Name des Projekts
-kurz: "[TODO: Ein bis zwei Saetze fuer die Uebersicht, hoechstens 200 Zeichen]"
+kurz: "[TODO: Ein bis zwei Saetze fuer die Uebersicht, hoechstens 200 Zeichen]"   # Pflicht, ausser es gibt stichpunkte
 datum: "[TODO: JJJJ-MM]"                     # Pflicht: bestimmt die Reihenfolge
 # bis: JJJJ-MM                               # optional, Ende eines Zeitraums
 rolle: "[TODO: z. B. Allein, oder Perception im Viererteam]"   # optional
 tags: []                                     # optional, z. B. [ROS 2, SLAM, Python]
+# stichpunkte:                               # optional, stehen im Eintrag über dem Titelbild
+#   - "Projekt: Name des Projekts"
+#   - "Skills: Python, PyTorch"
 # titelbild: ./titelbild.jpg                 # optional, Pflicht wenn video gesetzt ist
 # titelbild_alt: "[TODO: Bildbeschreibung]"  # Pflicht wenn titelbild gesetzt ist
 # video: demo.mp4                            # optional, Dateiname im Projektordner

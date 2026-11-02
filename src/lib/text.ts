@@ -12,8 +12,11 @@ export function slug(text: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
-/** Dateiname für den heruntergeladenen Lebenslauf, z. B. Anna-Meier-CV.pdf */
-export function cvDateiname(name: string): string {
+/**
+ * Dateiname für den heruntergeladenen Lebenslauf, z. B. Anna-Meier-CV.pdf,
+ * auf Englisch Anna-Meier-CV-EN.pdf.
+ */
+export function cvDateiname(name: string, sprache: 'de' | 'en' = 'de'): string {
   const sauber = name
     .replaceAll('ä', 'ae')
     .replaceAll('ö', 'oe')
@@ -26,7 +29,7 @@ export function cvDateiname(name: string): string {
     .replace(/[̀-ͯ]/g, '')
     .replace(/[^A-Za-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
-  return `${sauber || 'Lebenslauf'}-CV.pdf`;
+  return `${sauber || 'Lebenslauf'}-CV${sprache === 'en' ? '-EN' : ''}.pdf`;
 }
 
 /** Stand der Seite als "JJJJ-MM": der Monat, in dem sie gebaut wurde. */

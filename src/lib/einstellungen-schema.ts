@@ -1,8 +1,8 @@
 import { z } from 'astro/zod';
 import { parse as parseYaml } from 'yaml';
 
-/** Sprachen, in denen die Oberflächentexte vorliegen. */
-export const sprachen = ['en', 'de'] as const;
+/** Die Sprachen der Seite: Deutsch unter /, Englisch unter /en/. */
+export const sprachen = ['de', 'en'] as const;
 export type Sprache = (typeof sprachen)[number];
 
 const text = (feld: string) =>
@@ -13,10 +13,13 @@ const text = (feld: string) =>
  * damit die Seite auch mit unfertigen Angaben läuft.
  */
 export const einstellungenSchema = z.object({
-  sprache: z.enum(sprachen, { error: 'Feld "sprache" muss "en" oder "de" sein.' }),
   name: text('name').min(1, { error: 'Feld "name" darf nicht leer sein.' }),
   untertitel: text('untertitel').min(1, { error: 'Feld "untertitel" darf nicht leer sein.' }),
   einleitung: text('einleitung').default(''),
+  // Englische Fassungen. Fehlen sie, steht auch auf der englischen Seite der
+  // deutsche Text; npm run check weist darauf hin.
+  untertitel_en: text('untertitel_en').optional(),
+  einleitung_en: text('einleitung_en').optional(),
   email: text('email').min(1, { error: 'Feld "email" darf nicht leer sein.' }),
   github: text('github').default(''),
   linkedin: text('linkedin').default(''),
@@ -56,6 +59,8 @@ export const einstellungenStreng = einstellungenSchema.extend({
   name: ohnePlatzhalter('name'),
   untertitel: ohnePlatzhalter('untertitel'),
   einleitung: ohnePlatzhalter('einleitung'),
+  untertitel_en: ohnePlatzhalter('untertitel_en').optional(),
+  einleitung_en: ohnePlatzhalter('einleitung_en').optional(),
   email: z.email({ error: 'Feld "email" ist keine gültige E-Mail-Adresse.' }),
   github: optionaleUrl('github'),
   linkedin: optionaleUrl('linkedin'),

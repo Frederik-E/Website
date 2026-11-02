@@ -678,92 +678,44 @@ z
 " clip-path="url(#p9712683a59)" style="fill: #f0ecf4; stroke-dasharray: 2.42,1.76; stroke-dashoffset: 2.2; stroke: #394648; stroke-width: 1.1; stroke-linejoin: miter"/>
    </g>
    <g id="patch_19">
-    <path d="M -1 113.9328 
-L 23.93856 113.9328 
-L 23.93856 94.64832 
-L -1 94.64832 
-" clip-path="url(#p9712683a59)" style="fill: none; stroke: #b2b4ba; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, 0,40 × 0,30 m -->
+    <g clip-path="url(#p9712683a59)"><g transform="translate(11.0822 104.2906) rotate(0.000)"><g><rect x="-10.54" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-10.54" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-12.86" y="-6.94" width="25.71" height="13.88" rx="3.34" fill="none" stroke="#b2b4ba" stroke-width="1"/><path d="M6.17 -5.79 L6.17 5.79 L1.8 4.63 L1.8 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/><path d="M-8.49 -5.4 L-8.49 5.4 L-5.66 4.63 L-5.66 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/></g></g></g>
    </g>
    <g id="patch_20">
-    <path d="M 27.611794 113.9328 
-L 53.324434 113.9328 
-L 53.324434 94.64832 
-L 27.611794 94.64832 
-L 27.611794 113.9328 
-z
-" clip-path="url(#p9712683a59)" style="fill: none; stroke: #b2b4ba; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, 0,40 × 0,30 m -->
+    <g clip-path="url(#p9712683a59)"><g transform="translate(40.4681 104.2906) rotate(0.000)"><g><rect x="-10.54" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-10.54" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-12.86" y="-6.94" width="25.71" height="13.88" rx="3.34" fill="none" stroke="#b2b4ba" stroke-width="1"/><path d="M6.17 -5.79 L6.17 5.79 L1.8 4.63 L1.8 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/><path d="M-8.49 -5.4 L-8.49 5.4 L-5.66 4.63 L-5.66 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/></g></g></g>
    </g>
    <g id="patch_21">
-    <path d="M 56.997669 113.9328 
-L 82.710309 113.9328 
-L 82.710309 94.64832 
-L 56.997669 94.64832 
-L 56.997669 113.9328 
-z
-" clip-path="url(#p9712683a59)" style="fill: none; stroke: #b2b4ba; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, 0,40 × 0,30 m -->
+    <g clip-path="url(#p9712683a59)"><g transform="translate(69.8540 104.2906) rotate(0.000)"><g><rect x="-10.54" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-10.54" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-12.86" y="-6.94" width="25.71" height="13.88" rx="3.34" fill="none" stroke="#b2b4ba" stroke-width="1"/><path d="M6.17 -5.79 L6.17 5.79 L1.8 4.63 L1.8 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/><path d="M-8.49 -5.4 L-8.49 5.4 L-5.66 4.63 L-5.66 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/></g></g></g>
    </g>
    <g id="patch_22">
-    <path d="M 86.383543 113.9328 
-L 112.096183 113.9328 
-L 112.096183 94.64832 
-L 86.383543 94.64832 
-L 86.383543 113.9328 
-z
-" clip-path="url(#p9712683a59)" style="fill: none; stroke: #b2b4ba; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, 0,40 × 0,30 m -->
+    <g clip-path="url(#p9712683a59)"><g transform="translate(99.2399 104.2906) rotate(0.000)"><g><rect x="-10.54" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-10.54" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-12.86" y="-6.94" width="25.71" height="13.88" rx="3.34" fill="none" stroke="#b2b4ba" stroke-width="1"/><path d="M6.17 -5.79 L6.17 5.79 L1.8 4.63 L1.8 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/><path d="M-8.49 -5.4 L-8.49 5.4 L-5.66 4.63 L-5.66 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/></g></g></g>
    </g>
    <g id="patch_23">
-    <path d="M 115.769417 113.9328 
-L 141.482057 113.9328 
-L 141.482057 94.64832 
-L 115.769417 94.64832 
-L 115.769417 113.9328 
-z
-" clip-path="url(#p9712683a59)" style="fill: none; stroke: #b2b4ba; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, 0,40 × 0,30 m -->
+    <g clip-path="url(#p9712683a59)"><g transform="translate(128.6257 104.2906) rotate(0.000)"><g><rect x="-10.54" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-10.54" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-12.86" y="-6.94" width="25.71" height="13.88" rx="3.34" fill="none" stroke="#b2b4ba" stroke-width="1"/><path d="M6.17 -5.79 L6.17 5.79 L1.8 4.63 L1.8 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/><path d="M-8.49 -5.4 L-8.49 5.4 L-5.66 4.63 L-5.66 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/></g></g></g>
    </g>
    <g id="patch_24">
-    <path d="M 158.130138 113.305206 
-L 179.944771 99.694121 
-L 169.736457 83.333146 
-L 147.921824 96.944231 
-L 158.130138 113.305206 
-z
-" clip-path="url(#p9712683a59)" style="fill: none; stroke: #b2b4ba; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, 0,40 × 0,30 m -->
+    <g clip-path="url(#p9712683a59)"><g transform="translate(163.9333 98.3192) rotate(-31.962)"><g><rect x="-10.54" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-10.54" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-12.86" y="-6.94" width="25.71" height="13.88" rx="3.34" fill="none" stroke="#b2b4ba" stroke-width="1"/><path d="M6.17 -5.79 L6.17 5.79 L1.8 4.63 L1.8 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/><path d="M-8.49 -5.4 L-8.49 5.4 L-5.66 4.63 L-5.66 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/></g></g></g>
    </g>
    <g id="patch_25">
-    <path d="M 191.894193 80.73615 
-L 216.169313 72.259218 
-L 209.811614 54.052878 
-L 185.536494 62.52981 
-L 191.894193 80.73615 
-z
-" clip-path="url(#p9712683a59)" style="fill: none; stroke: #b2b4ba; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, 0,40 × 0,30 m -->
+    <g clip-path="url(#p9712683a59)"><g transform="translate(200.8529 67.3945) rotate(-19.249)"><g><rect x="-10.54" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-10.54" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-12.86" y="-6.94" width="25.71" height="13.88" rx="3.34" fill="none" stroke="#b2b4ba" stroke-width="1"/><path d="M6.17 -5.79 L6.17 5.79 L1.8 4.63 L1.8 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/><path d="M-8.49 -5.4 L-8.49 5.4 L-5.66 4.63 L-5.66 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/></g></g></g>
    </g>
    <g id="patch_26">
-    <path d="M 238.190239 70.973269 
-L 263.63298 67.257519 
-L 260.846168 48.175464 
-L 235.403427 51.891213 
-L 238.190239 70.973269 
-z
-" clip-path="url(#p9712683a59)" style="fill: none; stroke: #b2b4ba; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, 0,40 × 0,30 m -->
+    <g clip-path="url(#p9712683a59)"><g transform="translate(249.5182 59.5744) rotate(-8.309)"><g><rect x="-10.54" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-10.54" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-12.86" y="-6.94" width="25.71" height="13.88" rx="3.34" fill="none" stroke="#b2b4ba" stroke-width="1"/><path d="M6.17 -5.79 L6.17 5.79 L1.8 4.63 L1.8 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/><path d="M-8.49 -5.4 L-8.49 5.4 L-5.66 4.63 L-5.66 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/></g></g></g>
    </g>
    <g id="patch_27">
-    <path d="M 290.017227 63.972526 
-L 315.613386 61.52784 
-L 313.779872 42.330721 
-L 288.183713 44.775407 
-L 290.017227 63.972526 
-z
-" clip-path="url(#p9712683a59)" style="fill: none; stroke: #b2b4ba; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, 0,40 × 0,30 m -->
+    <g clip-path="url(#p9712683a59)"><g transform="translate(301.8985 53.1516) rotate(-5.456)"><g><rect x="-10.54" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-10.54" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-12.86" y="-6.94" width="25.71" height="13.88" rx="3.34" fill="none" stroke="#b2b4ba" stroke-width="1"/><path d="M6.17 -5.79 L6.17 5.79 L1.8 4.63 L1.8 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/><path d="M-8.49 -5.4 L-8.49 5.4 L-5.66 4.63 L-5.66 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/></g></g></g>
    </g>
    <g id="patch_28">
-    <path d="M 342.003158 59.984268 
-L 367.704556 59.224 
-L 367.134354 39.947951 
-L 341.432957 40.70822 
-L 342.003158 59.984268 
-z
-" clip-path="url(#p9712683a59)" style="fill: none; stroke: #b2b4ba; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, 0,40 × 0,30 m -->
+    <g clip-path="url(#p9712683a59)"><g transform="translate(354.5688 49.9661) rotate(-1.694)"><g><rect x="-10.54" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-10.54" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="-9.64" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="4.89" y="6.44" width="5.66" height="3.2" rx="1.07" fill="#b2b4ba"/><rect x="-12.86" y="-6.94" width="25.71" height="13.88" rx="3.34" fill="none" stroke="#b2b4ba" stroke-width="1"/><path d="M6.17 -5.79 L6.17 5.79 L1.8 4.63 L1.8 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/><path d="M-8.49 -5.4 L-8.49 5.4 L-5.66 4.63 L-5.66 -4.63 Z" fill="#b2b4ba" stroke="#b2b4ba" stroke-width="0.5" stroke-linejoin="round"/></g></g></g>
    </g>
    <g id="text_1">
     <!-- Übergang -->

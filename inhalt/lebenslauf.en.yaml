@@ -1,0 +1,83 @@
+# Englische Fassung von lebenslauf.yaml. Sie steht auf /en/cv/, als
+# englisches PDF und in Kurzform auf der englischen Startseite.
+#
+# Aufbau wie in lebenslauf.yaml: dieselben Abschnitte und Einträge in derselben
+# Reihenfolge, mit denselben Zeitangaben. Änderst du dort etwas, ändere es hier
+# auch. npm run check meldet, wenn die beiden Dateien auseinanderlaufen.
+
+profil: |
+  Mechatronics student with sound knowledge in the fields of mechanical engineering, machine learning and Python software development.
+  Through internships and working student positions in the development of automated test benches, I have gained experience in an engineering environment. Looking for a master's thesis in order to help develop technical solutions with a practical focus, contribute my knowledge and further expand my skills.
+
+abschnitte:
+  - titel: Education
+    startseite: true
+    eintraege:
+      - titel: "M. Sc. Mechatronics and Information Technology - autonomous systems and AI"
+        organisation: "Karlsruhe Institute of Technology (KIT)"
+        ort: "Karlsruhe"
+        von: 2025-04
+        bis:
+        punkte:
+          - "Focus on AI and autonomous systems"
+
+      - titel: "B. Sc. General Engineering Science - Mechanical Engineering - Biomechanics"
+        organisation: "Hamburg University of Technology (TUHH)"
+        ort: "Hamburg"
+        von: 2020-10
+        bis: 2024-09
+        punkte:
+          - "Bachelor's thesis: Influence of the spatial engagement conditions in peripheral grinding of carbon fibre reinforced plastics on the machining forces and surface roughness"
+
+  - titel: Practical experience
+    startseite: true
+    eintraege:
+      - titel: "Student research assistant: Reinforcement learning for circular factories"
+        organisation: "wbk Institute of Production Science, KIT"
+        ort: "Karlsruhe"
+        von: 2026-07
+        bis: 2027-03
+        punkte:
+          - "Reconfiguration of production stations in circular factories: intelligent reconfiguration management using reinforcement learning agents, to increase KPIs relevant to production engineering"
+
+      - titel: "Internship and working student position: Development of automated test benches"
+        organisation: "Löwenstein Medical Technologies GmbH & Co. KG"
+        ort: "Hamburg"
+        von: 2024-01
+        bis: 2025-09
+        punkte:
+          - "Development of an automated test bench to prepare material ageing tests"
+          - "Development of an automated test bench to check the CO2 rebreathing of medical masks"
+          - "Implementation using Arduino, C++, Python"
+          - "Design and rapid prototyping of mechanical components with Creo"
+
+      - titel: "Internship: Fundamentals of metalworking and machining"
+        organisation: "Möllering Gummi- und Kunststofftechnik GmbH"
+        ort: "Norderstedt"
+        von: 2023-09
+        bis: 2023-12
+        punkte:
+          - "CNC milling, turning, drilling, grinding"
+          - "Building fixtures and tools"
+          - "Applying for environmental certifications (EcoVadis)"
+
+      - titel: "Student assistant: DLR School Lab TUHH"
+        organisation: "DLR - German Aerospace Center"
+        ort: "Hamburg"
+        von: 2021-09
+        bis: 2023-08
+        punkte:
+          - "Teaching the physical principles of flight to school students"
+          - "Leading experiments"
+
+  - titel: Skills
+    startseite: true
+    eintraege:
+      - bereich: Programming
+        liste: ["Python", "C++"]
+      - bereich: Robotics
+        liste: ["ROS 2"]
+      - bereich: Machine learning
+        liste: ["Reinforcement Learning", "PyTorch", "Python"]
+      - bereich: Languages
+        liste: ["German: native language", "English: fluent, spoken and written"]

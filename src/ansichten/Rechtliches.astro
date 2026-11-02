@@ -1,0 +1,40 @@
+---
+/*
+  Impressum und Datenschutz, für beide Sprachen. Der Text steht in
+  inhalt/impressum.md und inhalt/datenschutz.md, die englische Fassung in
+  impressum.en.md und datenschutz.en.md. Fehlt sie, steht der deutsche Text da.
+*/
+import type { MarkdownInstance } from 'astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { spracheVon } from '../lib/sprache';
+import { t } from '../i18n';
+
+interface Props {
+  art: 'impressum' | 'datenschutz';
+}
+
+const dateien = import.meta.glob<MarkdownInstance<Record<string, unknown>>>(
+  '/inhalt/{impressum,datenschutz}*.md',
+  { eager: true },
+);
+
+const { art } = Astro.props;
+const sprache = spracheVon(Astro.currentLocale);
+const texte = t(sprache);
+const englisch = sprache === 'en' ? dateien[`/inhalt/${art}.en.md`] : undefined;
+const datei = englisch ?? dateien[`/inhalt/${art}.md`];
+if (!datei) throw new Error(`inhalt/${art}.md fehlt.`);
+const { Content } = datei;
+const textLang = sprache === 'en' && !englisch ? 'de' : undefined;
+---
+
+<BaseLayout titel={texte[art]} beschreibung={texte[art]} noindex>
+  <Seitenkopf titel={texte[art]} etikett={texte.rechtliches} />
+
+  <div class="feld geteilt">
+    <div class="zweispaltig">
+      <div class="fliesstext rechts" lang={textLang}><Content /></div>
+    </div>
+  </div>
+</BaseLayout>

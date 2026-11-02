@@ -1,0 +1,11 @@
+---
+import type { GetStaticPaths } from 'astro';
+import FreieSeite from '../../ansichten/FreieSeite.astro';
+import { seitenPfade } from '../../lib/seiten';
+
+export const getStaticPaths = (() => seitenPfade('en')) satisfies GetStaticPaths;
+
+const { seite } = Astro.props;
+---
+
+<FreieSeite seite={seite} />

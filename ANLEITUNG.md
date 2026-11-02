@@ -29,14 +29,17 @@ Alles, was du pflegst, liegt in **`inhalt/`**. Dort brauchst du keinen Code anzu
 
 ```
 inhalt/
-  einstellungen.yaml     Name, Sprache, Links, Domain
-  ueber-mich.md          Der Text auf /about/
-  lebenslauf.yaml        Der Lebenslauf auf /cv/
-  impressum.md
-  datenschutz.md
-  projekte/              Ein Ordner pro Projekt
-  seiten/                Eine Datei pro eigener Seite
+  einstellungen.yaml     Name, Links, Domain, Untertitel und Einleitung in beiden Sprachen
+  lebenslauf.yaml        Profil und Lebenslauf, auf der Startseite und auf /cv/
+  lebenslauf.en.yaml     Dasselbe auf Englisch
+  foto/                  Dein Foto, ein Bild
+  impressum.md           (und impressum.en.md)
+  datenschutz.md         (und datenschutz.en.md)
+  projekte/              Ein Ordner pro Projekt, darin index.md und index.en.md
+  seiten/                Eine Datei pro eigener Seite, dazu <name>.en.md
 ```
+
+Die Seite gibt es auf Deutsch unter `/` und auf Englisch unter `/en/`. Die englischen Texte stehen in den Dateien mit `.en` im Namen. Wie das zusammenhängt, steht in [Inhalte schreiben](ANLEITUNG-INHALTE.md#die-englische-fassung).
 
 Der Rest des Projekts ist Code und Werkzeug:
 

@@ -1,0 +1,11 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Projekt from '../../../ansichten/Projekt.astro';
+import { projektPfade } from '../../../lib/projekte';
+
+export const getStaticPaths = (() => projektPfade('en')) satisfies GetStaticPaths;
+
+const { projekt, projekte } = Astro.props;
+---
+
+<Projekt projekt={projekt} projekte={projekte} />

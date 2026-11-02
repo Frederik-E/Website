@@ -13,6 +13,14 @@ export default defineConfig({
   trailingSlash: 'always',
   build: { format: 'directory' },
 
+  // Zwei Sprachen: Deutsch unter /, Englisch unter /en/. Die Seiten unter
+  // src/pages/en/ binden dieselben Ansichten ein wie die deutschen.
+  i18n: {
+    locales: ['de', 'en'],
+    defaultLocale: 'de',
+    routing: { prefixDefaultLocale: false },
+  },
+
   markdown: {
     // Keine Syntaxfaerbung: sie brächte fremde Farben und eine dunkle Flaeche
     // in die Seite. Code-Schnipsel stehen schlicht in IBM Plex Mono.
@@ -41,8 +49,13 @@ export default defineConfig({
 
   integrations: [
     sitemap({
-      // Rechtliche Seiten gehören nicht in die Sitemap.
+      // Rechtliche Seiten gehören nicht in die Sitemap, in keiner Sprache.
       filter: (seite) => !/\/(impressum|datenschutz)\/$/.test(seite),
+      // Verknüpft jede Seite mit ihrer Fassung in der anderen Sprache.
+      i18n: {
+        defaultLocale: 'de',
+        locales: { de: 'de-DE', en: 'en-GB' },
+      },
     }),
   ],
 

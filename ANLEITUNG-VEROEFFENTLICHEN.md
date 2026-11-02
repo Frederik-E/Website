@@ -59,8 +59,8 @@ Dauert etwa eine Minute. Am Ende steht ein Bericht in drei Teilen.
 Stellen, an denen noch dein Text fehlt. Beispiel:
 
 ```
-inhalt/ueber-mich.md
-  Zeile 1: [TODO: 60 bis 120 Woerter ueber dich ...
+inhalt/lebenslauf.yaml
+  Zeile 34: - titel: "[TODO: Bachelor, z. B. B.Sc. Mechatronik]"
 ```
 
 Öffne die genannte Datei in der genannten Zeile und ersetze den Platzhalter. Die Seite wird nicht veröffentlicht, solange irgendwo `[TODO` steht.

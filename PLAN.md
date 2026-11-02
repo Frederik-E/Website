@@ -44,7 +44,7 @@ URLs einheitlich mit Schrägstrich am Ende (`trailingSlash: "always"`), Seiten-U
 
 ### Konzept „Technische Zeichnung“
 
-Die Seite ist ein Zeichnungsblatt: Randlinien, Felder mit Kreuzmarken, Millimeterraster, Maßlinien, Sucherecken, ein Schriftfeld und Beschriftungen in Monospace. Das passt zu einem Ingenieur für autonome Systeme. Das weiche, bewegte Zeichen steht als Kontrast im strengen Raster. Die Projekte mit Bildern und Videos bleiben der Kern.
+Die Seite ist ein Zeichnungsblatt: Randlinien, Felder mit Kreuzmarken, Millimeterraster, Sucherecken, ein Schriftfeld und Beschriftungen in Monospace. Das passt zu einem Ingenieur für autonome Systeme. Das weiche, bewegte Zeichen steht als Kontrast im strengen Raster. Die Projekte mit Bildern und Videos bleiben der Kern.
 
 ### Farben
 
@@ -62,7 +62,7 @@ Die Palette bleibt. Alle weiteren Töne sind mit `color-mix` aus Iron Grey und L
 | `--color-line` | `#B98389` Dusty Rose | zweite Welle des Zeichens, Farbschimmer |
 | `--color-haarlinie` | 16 % Iron Grey auf Mist | Randlinien, Feldlinien, Zellen |
 | `--color-flaeche` | 6 % Iron Grey auf Mist | Fläche beim Zeigen, Grund hinter ladenden Bildern |
-| `--color-konstruktion` | 38 % Iron Grey auf Mist | Kreuzmarken, Punkte des Zeichens, Sucherecken, Maßlinien. **Nie für Text** |
+| `--color-konstruktion` | 38 % Iron Grey auf Mist | Kreuzmarken, Punkte des Zeichens, Sucherecken. **Nie für Text** |
 | `--color-raster` | 7 % Iron Grey auf Mist | Millimeterraster |
 | `--color-auf-dunkel-leise` | 70 % Mist auf Iron Grey | Etiketten auf der dunklen Fläche |
 | `--color-linie-dunkel` | 18 % Mist auf Iron Grey | Linien auf der dunklen Fläche |
@@ -135,13 +135,13 @@ Gemessene Kontraste (WCAG):
 
 ### Nur echte Angaben in der Zeichnung
 
-Schriftfeld, Datenleiste, Etiketten und Maßlinien zeigen nur, was aus den Daten folgt: Pfad der Seite, Baumonat (`STAND` in `src/lib/text.ts`), Anzahl der Projekte, Datum des neuesten, Themen aus den Kopfdaten, Pixelmaße der Bilddatei. Keine erfundenen Koordinaten, Versionsnummern oder Kennzahlen über die Person.
+Schriftfeld, Datenleiste und Etiketten zeigen nur, was aus den Daten folgt: Pfad der Seite, Baumonat (`STAND` in `src/lib/text.ts`), Anzahl der Projekte, Datum des neuesten, Themen aus den Kopfdaten. Keine erfundenen Koordinaten, Versionsnummern oder Kennzahlen über die Person.
 
 ### Seiten im Einzelnen
 
 - **Startseite:** Startbild mit Einleitung groß links und der großen Punktmatrix als „Abb. 01“ rechts, dahinter Millimeterraster und Farbschimmer. Darunter die Datenleiste. Dann „01 Ausgewählte Arbeiten“ als Datenblätter (`ProjectEntry`): links Projektnummer, Titel und Angaben, die beim Scrollen stehen bleiben; rechts Kurztext und Titelbild. Zuletzt „02 Weitere Inhalte“.
 - **Projektnummer:** `P-01` ab dem ältesten Projekt (`projektNummer`), damit neue Projekte die alten Nummern nicht verschieben.
-- **Abbildung** (`Abbildung.astro`): Sucherecken an allen vier Ecken, darunter eine Maßlinie mit Endstrichen und den Pixelmaßen, bei laufendem Video „Video“.
+- **Abbildung** (`Abbildung.astro`): Sucherecken an allen vier Ecken. Keine Maßlinie darunter (vom Betreiber am 2026-11-01 entfernt).
 - **Projektübersicht:** Stückliste (`Stueckliste.astro`) mit den Spalten Nr., Vorschau, Titel, Themen, Datum. Ohne Titelbild steht der technische Platzhalter, ein Rechteck mit Diagonalkreuz.
 - **Bilder behalten ihr eigenes Seitenverhältnis**, nur Videos stehen im festen 16:9-Kasten. Technische Zeichnungen sind flach und würden darin beschnitten. Breite einfarbige Ränder nimmt `npm run bild` weg.
 - **Quelltexte zu einem Projekt** liegen in `public/code/<projekt>/` und werden aus dem Text verlinkt. `public/_headers` gibt ihnen `text/plain`, sonst lädt der Browser sie herunter, statt sie anzuzeigen.
@@ -208,11 +208,11 @@ Alles Pflegbare liegt im Ordner `inhalt/`. Code liegt in `src/` und `scripts/`, 
 
 ```
 inhalt/
-  einstellungen.yaml        Sprache, Name, Untertitel, Einleitung, Links, Domain
+  einstellungen.yaml        Name, Untertitel, Einleitung (je mit _en), Links, Domain
   ueber-mich.md             Kurzer Text über mich (60–120 Wörter)
   seiten/                   Frei angelegte Seiten, eine Datei pro Seite
   lebenslauf.yaml           Stationen und Kenntnisse
-  lebenslauf.pdf            Optional: eigenes PDF; fehlt es, wird eines erzeugt
+  lebenslauf-pdf/           Optional: eigenes PDF (englisch *.en.pdf); fehlt es, wird eines erzeugt
   impressum.md
   datenschutz.md
   projekte/
@@ -281,7 +281,7 @@ Frei benennbare Abschnitte in fester Reihenfolge, zwei Eintragsarten (Stationen 
 
 ### Lebenslauf als PDF
 
-- Liegt `inhalt/lebenslauf.pdf` vor, wird es vor dem Build nach `public/cv.pdf` kopiert.
+- Liegt in `inhalt/lebenslauf-pdf/` ein eigenes PDF, wird es nach `public/cv.pdf` kopiert (`*.en.pdf` nach `public/en/cv.pdf`).
 - Sonst erzeugt `npm run cv` das PDF aus der gebauten Seite `/cv/` mit Playwright (A4, Druck-Stylesheet, ohne Navigation und Footer, Domain und E-Mail in der Fußzeile) und schreibt es nach `public/cv.pdf` und `dist/cv.pdf`.
 - `public/cv.pdf` steht in `.gitignore`.
 
@@ -293,7 +293,7 @@ Frei benennbare Abschnitte in fester Reihenfolge, zwei Eintragsarten (Stationen 
 
 ## Seiten
 
-URLs sind unabhängig von der Sprache gleich.
+Die Seite gibt es auf Deutsch unter `/` und auf Englisch unter `/en/` (umgesetzt am 2026-11-02, vorher „Später möglich“). Die Pfade sind sonst gleich: zu jeder Route unten gehört `/en/…`. Englische Inhalte liegen in Dateien mit `.en` im Namen neben den deutschen; Einzelheiten in `CLAUDE.md`, Abschnitt „Zwei Sprachen“.
 
 | Route | Inhalt |
 |---|---|
@@ -307,7 +307,8 @@ URLs sind unabhängig von der Sprache gleich.
 | `/datenschutz/` | Aus `inhalt/datenschutz.md`; `noindex`; Titel „Datenschutz“ bzw. „Privacy“ |
 | `/404` | Kurzer Hinweis und Link zur Startseite |
 
-- Oberflächentexte für `en` und `de` in `src/i18n.ts`; Datumsangaben mit `Intl.DateTimeFormat` in der gewählten Sprache.
+- Oberflächentexte für `en` und `de` in `src/i18n.ts`; Datumsangaben mit `Intl.DateTimeFormat` in der Sprache der Seite.
+- `hreflang`-Verweise auf beide Fassungen in jeder Seite und in der Sitemap.
 - `@astrojs/sitemap` ohne Impressum und Datenschutz, `robots.txt` mit Verweis auf die Sitemap.
 - Pro Seite: Titel, Beschreibung, `canonical`-Link, Open-Graph-Tags (Titelbild des Projekts, als 1200×630 erzeugt).
 - JSON-LD vom Typ `Person` mit Name, URL und `sameAs` (GitHub, LinkedIn).
@@ -382,7 +383,6 @@ URLs sind unabhängig von der Sprache gleich.
 
 ## Später möglich (nicht jetzt umsetzen)
 
-- Zweisprachige Seite über Astros i18n-Routing
 - Dark Mode mit Iron Grey als Hintergrund
 - Kurze Projektnotizen als weitere Collection
 - Cookiefreie Besucherstatistik

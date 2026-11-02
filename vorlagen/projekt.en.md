@@ -1,34 +1,29 @@
 ---
-titel: "[TODO: Project name]"                # Required: name of the project
-kurz: "[TODO: One or two sentences for the overview, at most 200 characters]"
-datum: "[TODO: YYYY-MM]"                     # Required: sets the order
-# bis: YYYY-MM                               # optional, end of a period
-rolle: "[TODO: e.g. On my own, or Perception in a team of four]"  # optional
-tags: []                                     # optional, e.g. [ROS 2, SLAM, Python]
-# titelbild: ./titelbild.jpg                 # optional, required if video is set
-# titelbild_alt: "[TODO: Image description]" # required if titelbild is set
-# video: demo.mp4                            # optional, file name in the project folder
-# code: https://github.com/...               # optional, link to the repository
-# demo: https://...                          # optional, live demo, video or paper
-startseite: true                             # true shows the project on the home page
-# reihenfolge: 1                             # optional, smaller number comes first
-entwurf: true                                # true hides the project on the published site
+# Englische Fassung von index.md, für die Seite unter /en/. Hier stehen nur
+# die übersetzten Texte. Datum, Links, Video, Reihenfolge und Entwurf stehen
+# allein in index.md und gelten für beide Sprachen.
+titel: "[TODO: Projektname auf Englisch]"
+kurz: "[TODO: kurz auf Englisch, hoechstens 200 Zeichen]"   # wie in index.md: Pflicht, ausser es gibt stichpunkte
+rolle: "[TODO: Rolle auf Englisch, z. B. Perception in a team of four]"   # optional
+tags: []                                     # optional, Themen auf Englisch, z. B. [ROS 2, Path planning]
+# stichpunkte:                               # optional, auf Englisch
+#   - "Skills: Python, PyTorch"
+# titelbild: ./titelbild.en.jpg              # nur wenn im Bild Text steht; sonst gilt das Bild aus index.md
+# titelbild_alt: "[TODO: Bildbeschreibung auf Englisch]"   # Pflicht, wenn index.md ein titelbild hat
 ---
 
 ## Problem
 
-[TODO: What was the task, and why was it not trivial? One to three sentences.]
+[TODO: Der Abschnitt "Problem" auf Englisch.]
 
 ## Approach
 
-[TODO: What did you build, with which tools, and why that way? Name your own
-role if it was a team project.]
+[TODO: Der Abschnitt "Ansatz" auf Englisch.]
 
 ## Result
 
-[TODO: What came out of it? With a number if there is one: accuracy, runtime,
-error rate, number of runs.]
+[TODO: Der Abschnitt "Ergebnis" auf Englisch.]
 
 ## What I learned
 
-[TODO: One to three sentences. What would you do differently next time?]
+[TODO: Der Abschnitt "Was ich gelernt habe" auf Englisch.]

@@ -50,10 +50,10 @@ try {
       await seite.screenshot({ path: datei, fullPage: true });
       console.log(`  ${datei}`);
 
-      // Zusätzlich der sichtbare Bereich der Startseite, um zu prüfen,
-      // dass das erste Projekt-Medium ohne Scrollen beginnt.
-      if (pfad === '/' && breite === 1440) {
-        const fenster = `${ordner}/start@1440-fenster.png`;
+      // Zusätzlich der sichtbare Bereich der Startseite (beide Sprachen), um
+      // zu prüfen, dass das erste Projekt-Medium ohne Scrollen beginnt.
+      if ((pfad === '/' || pfad === '/en/') && breite === 1440) {
+        const fenster = `${ordner}/${dateiname(pfad)}@1440-fenster.png`;
         await seite.screenshot({ path: fenster });
         console.log(`  ${fenster}`);
       }

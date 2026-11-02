@@ -1,13 +1,13 @@
 ---
-titel: "[TODO: Title of the page]"
-beschreibung: "[TODO: One sentence shown under the title in search results]"
-navigation: false # true puts the page in the header
-# reihenfolge: 1  # optional, smaller number comes first
-entwurf: true # true shows the page only in the local preview
+# Englische Fassung der Seite, unter /en/<name>/. Hier stehen nur Titel,
+# Beschreibung und Text. navigation, reihenfolge und entwurf stehen allein in
+# der deutschen Datei und gelten für beide Sprachen.
+titel: "[TODO: Titel der Seite auf Englisch]"
+beschreibung: "[TODO: Ein Satz auf Englisch, der bei Google unter dem Titel steht]"
 ---
 
-[TODO: The text of the page goes here. Separate paragraphs with a blank line.]
+[TODO: Der Text der Seite auf Englisch. Absaetze durch eine Leerzeile trennen.]
 
-## [TODO: Subheading]
+## [TODO: Zwischenueberschrift auf Englisch]
 
-[TODO: More text.]
+[TODO: Weiterer Text auf Englisch.]

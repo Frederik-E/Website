@@ -15,9 +15,12 @@ const projekte = defineCollection({
       .object({
         titel: z.string({ error: 'Feld "titel" fehlt.' }).min(1, { error: 'Feld "titel" darf nicht leer sein.' }),
         kurz: z
-          .string({ error: 'Feld "kurz" fehlt.' })
+          .string()
           .min(1, { error: 'Feld "kurz" darf nicht leer sein.' })
-          .max(200, { error: 'Feld "kurz" darf hoechstens 200 Zeichen haben.' }),
+          .max(200, { error: 'Feld "kurz" darf hoechstens 200 Zeichen haben.' })
+          .optional(),
+        // Stichpunkte stehen im Eintrag rechts, dort wo sonst das Titelbild steht.
+        stichpunkte: z.array(z.string().min(1, { error: 'Ein Stichpunkt darf nicht leer sein.' })).default([]),
         datum: monatSchema('datum'),
         bis: monatSchema('bis').optional(),
         rolle: z.string().optional(),
@@ -30,6 +33,10 @@ const projekte = defineCollection({
         startseite: z.boolean().default(false),
         reihenfolge: z.number().optional(),
         entwurf: z.boolean().default(false),
+      })
+      .refine((daten) => daten.kurz || daten.stichpunkte.length > 0, {
+        error: 'Feld "kurz" fehlt. Ohne "kurz" braucht das Projekt "stichpunkte".',
+        path: ['kurz'],
       })
       .refine((daten) => !daten.bis || daten.bis >= daten.datum, {
         error: 'Feld "bis" liegt vor "datum".',
@@ -45,9 +52,47 @@ const projekte = defineCollection({
       }),
 });
 
+/**
+ * Englische Fassung eines Projekts: inhalt/projekte/<ordner>/index.en.md.
+ * Sie enthält nur die übersetzten Texte. Datum, Links, Reihenfolge, Video und
+ * Entwurf stehen allein in index.md und gelten für beide Sprachen. Ein eigenes
+ * Titelbild ist nur nötig, wenn im Bild Text steht.
+ */
+const projekteEn = defineCollection({
+  loader: glob({
+    base: './inhalt/projekte',
+    pattern: '*/index.en.md',
+    generateId: ({ entry }) => entry.replace(/\/index\.en\.md$/, ''),
+  }),
+  schema: ({ image }) =>
+    z.strictObject(
+      {
+        titel: z.string({ error: 'Feld "titel" fehlt.' }).min(1, { error: 'Feld "titel" darf nicht leer sein.' }),
+        kurz: z
+          .string()
+          .min(1, { error: 'Feld "kurz" darf nicht leer sein.' })
+          .max(200, { error: 'Feld "kurz" darf hoechstens 200 Zeichen haben.' })
+          .optional(),
+        stichpunkte: z.array(z.string().min(1, { error: 'Ein Stichpunkt darf nicht leer sein.' })).optional(),
+        rolle: z.string().optional(),
+        tags: z.array(z.string()).optional(),
+        titelbild: image().optional(),
+        titelbild_alt: z.string().optional(),
+      },
+      {
+        error: (problem) =>
+          problem.code === 'unrecognized_keys'
+            ? `In index.en.md stehen nur titel, kurz, stichpunkte, rolle, tags, titelbild und titelbild_alt. ` +
+              `${problem.keys.join(', ')} gehört in index.md und gilt dann für beide Sprachen.`
+            : undefined,
+      },
+    ),
+});
+
 /** Frei angelegte Seiten aus inhalt/seiten/<name>.md, erreichbar unter /<name>/. */
 const seiten = defineCollection({
-  loader: glob({ base: './inhalt/seiten', pattern: '*.md' }),
+  // Englische Fassungen (<name>.en.md) gehören in die Sammlung darunter.
+  loader: glob({ base: './inhalt/seiten', pattern: ['*.md', '!*.en.md'] }),
   schema: z.object({
     titel: z.string({ error: 'Feld "titel" fehlt.' }).min(1, { error: 'Feld "titel" darf nicht leer sein.' }),
     beschreibung: z.string().optional(),
@@ -58,4 +103,17 @@ const seiten = defineCollection({
   }),
 });
 
-export const collections = { projekte, seiten };
+/** Englische Fassung einer freien Seite: inhalt/seiten/<name>.en.md, unter /en/<name>/. */
+const seitenEn = defineCollection({
+  loader: glob({
+    base: './inhalt/seiten',
+    pattern: '*.en.md',
+    generateId: ({ entry }) => entry.replace(/\.en\.md$/, ''),
+  }),
+  schema: z.object({
+    titel: z.string({ error: 'Feld "titel" fehlt.' }).min(1, { error: 'Feld "titel" darf nicht leer sein.' }),
+    beschreibung: z.string().optional(),
+  }),
+});
+
+export const collections = { projekte, projekteEn, seiten, seitenEn };

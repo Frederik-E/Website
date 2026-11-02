@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" width="720" height="400"
+     role="img" aria-labelledby="baum-titel baum-text">
+  <title id="baum-titel">Solution tree of the path planning</title>
+  <desc id="baum-text">The path planning is split into the track through the corridor and the transition from the map line. For the track there is the optimal solution, Voronoi and Delaunay, as well as two fallbacks: a chain of cones and a target point from three cones. For the transition, the Dubins path is chosen and the clothoid rejected.</desc>
+  <style>
+    .etikett { font: 500 11px "Liberation Sans", Arial, sans-serif; letter-spacing: .09em;
+               fill: #60696d; text-transform: uppercase; }
+    .kopf    { font: 400 14px "Liberation Sans", Arial, sans-serif; fill: #394648; }
+    .leise   { font: 400 12px "Liberation Sans", Arial, sans-serif; fill: #60696d; }
+    .ergebnis { font: 400 12px "Liberation Sans", Arial, sans-serif; fill: #394648; }
+    .haar    { stroke: #dddbe2; stroke-width: 1; }
+    .konstr  { stroke: #b2b4ba; stroke-width: 1; fill: none; }
+    .kante   { stroke: #394648; stroke-width: 1.25; fill: none; }
+    .verworfen { stroke: #b2b4ba; stroke-width: 1.25; fill: none; stroke-dasharray: 4 4; }
+    .mitte   { text-anchor: middle; }
+  </style>
+
+  <!-- Head: the requirement -->
+  <line class="haar" x1="0" y1="24" x2="720" y2="24"/>
+  <text class="etikett" x="0" y="16">Requirement: a path from any amount of information</text>
+
+  <!-- Root -->
+  <circle cx="360" cy="48" r="5" fill="#394648"/>
+  <text class="kopf mitte" x="360" y="74">Path planning</text>
+  <text class="leise mitte" x="360" y="92">Input: cones, output: trajectory</text>
+
+  <path class="kante" d="M360 102 V116 M228 132 V116 H588 V132"/>
+
+  <!-- Subproblem 1: track -->
+  <circle cx="228" cy="136" r="4.5" fill="#394648"/>
+  <text class="etikett mitte" x="228" y="160">Subproblem 1</text>
+  <text class="kopf mitte" x="228" y="180">Track through the corridor</text>
+  <text class="leise mitte" x="228" y="198">replanned in every cycle</text>
+
+  <path class="kante" d="M228 208 V222 M80 238 V222 H376 V238 M228 222 V238"/>
+
+  <!-- Subproblem 2: transition -->
+  <circle cx="588" cy="136" r="4.5" fill="#394648"/>
+  <text class="etikett mitte" x="588" y="160">Subproblem 2</text>
+  <text class="kopf mitte" x="588" y="180">Transition from the map line</text>
+  <text class="leise mitte" x="588" y="198">planned once per run</text>
+
+  <path class="kante" d="M588 208 V222 H524 V238"/>
+  <path class="verworfen" d="M588 222 H652 V238"/>
+
+  <!-- Optimal: Voronoi + Delaunay -->
+  <circle cx="80" cy="243" r="5" fill="#65afff"/>
+  <text class="etikett mitte" x="80" y="268">Optimal</text>
+  <text class="kopf mitte" x="80" y="288">Voronoi + Delaunay</text>
+  <text class="leise mitte" x="80" y="306">both rows, start</text>
+  <text class="leise mitte" x="80" y="322">and end detected</text>
+  <text class="ergebnis mitte" x="80" y="338">exact centre line</text>
+
+  <!-- Fallback 1: chain -->
+  <circle cx="228" cy="243" r="5" fill="#b98389"/>
+  <text class="etikett mitte" x="228" y="268">Fallback 1</text>
+  <text class="kopf mitte" x="228" y="288">Chain of cones</text>
+  <text class="leise mitte" x="228" y="306">one row detected</text>
+  <text class="ergebnis mitte" x="228" y="322">track beside the chain</text>
+
+  <!-- Fallback 2: three cones -->
+  <circle cx="376" cy="243" r="5" fill="#b98389"/>
+  <text class="etikett mitte" x="376" y="268">Fallback 2</text>
+  <text class="kopf mitte" x="376" y="288">Three cones</text>
+  <text class="leise mitte" x="376" y="306">no row yet</text>
+  <text class="ergebnis mitte" x="376" y="322">target point in the triangle</text>
+
+  <!-- Transition: Dubins chosen -->
+  <circle cx="524" cy="243" r="5" fill="#65afff"/>
+  <text class="etikett mitte" x="524" y="268">Chosen</text>
+  <text class="kopf mitte" x="524" y="288">Dubins path</text>
+  <text class="leise mitte" x="524" y="306">arcs and straight lines</text>
+  <text class="ergebnis mitte" x="524" y="322">closed-form solvable</text>
+
+  <!-- Transition: clothoid rejected -->
+  <circle cx="652" cy="243" r="4.5" fill="none" stroke="#b2b4ba" stroke-width="1.25"/>
+  <text class="etikett mitte" x="652" y="268">Rejected</text>
+  <text class="leise mitte" x="652" y="288" style="font-size: 14px">Clothoid</text>
+  <text class="leise mitte" x="652" y="306">continuous curvature</text>
+  <text class="ergebnis mitte" x="652" y="322">too compute-intensive</text>
+
+  <!-- Order of checks for the track -->
+  <line class="konstr" x1="20" y1="364" x2="430" y2="364"/>
+  <path d="M430 360 L438 364 L430 368 Z" fill="#b2b4ba"/>
+  <text class="etikett" x="20" y="388">Order of checks: from most to least information</text>
+</svg>

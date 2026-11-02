@@ -1,0 +1,133 @@
+---
+/*
+  Der Lebenslauf, für /cv/ und /en/cv/. Aus beiden entsteht mit npm run cv
+  ein PDF (/cv.pdf und /en/cv.pdf).
+*/
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CvSection from '../components/CvSection.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import Portrait from '../components/Portrait.astro';
+import { lebenslaufIn } from '../lib/lebenslauf';
+import { einstellungenIn } from '../lib/einstellungen';
+import { adresse, spracheVon } from '../lib/sprache';
+import { cvDateiname } from '../lib/text';
+import { t } from '../i18n';
+
+const sprache = spracheVon(Astro.currentLocale);
+const texte = t(sprache);
+const einstellungen = einstellungenIn(sprache);
+const lebenslauf = lebenslaufIn(sprache);
+const { profil } = lebenslauf;
+const beschreibung = texte.lebenslaufVon(einstellungen.name);
+---
+
+<BaseLayout titel={texte.lebenslauf} beschreibung={beschreibung}>
+  <Seitenkopf titel={texte.lebenslauf} blob="blau">
+    <div slot="vorne" class="foto-bildschirm">
+      <Portrait breite="clamp(4.5rem, 1rem + 7vw, 7rem)" sizes="7rem" zuerst />
+    </div>
+    <p class="druck-name">{einstellungen.name}</p>
+    <p class="druck-untertitel">{einstellungen.untertitel}</p>
+    <p class="herunterladen nicht-drucken">
+      <a class="dezent" href={adresse('/cv.pdf', sprache)} download={cvDateiname(einstellungen.name, sprache)}>
+        {texte.cvHerunterladen}
+      </a>
+    </p>
+    {/* Nur im PDF: das Foto oben rechts neben Name und Untertitel. */}
+    <div slot="seitlich" class="foto-druck">
+      <Portrait breite="30mm" sizes="9rem" zuerst />
+    </div>
+  </Seitenkopf>
+
+  {
+    profil.length > 0 && (
+      <CvSection titel={texte.profil} ebene={2}>
+        {profil.map((absatz) => (
+          <p>{absatz}</p>
+        ))}
+      </CvSection>
+    )
+  }
+
+  {
+    lebenslauf.abschnitte.map((abschnitt) => <CvSection abschnitt={abschnitt} ebene={2} />)
+  }
+
+  <p class="druck-fuss">
+    <span>{einstellungen.domain.replace(/^https?:\/\//, '')}</span>
+    <span>{einstellungen.email}</span>
+  </p>
+</BaseLayout>
+
+<style>
+  .herunterladen {
+    margin-top: var(--space-24);
+    font-size: var(--text-ui);
+  }
+
+  .druck-name,
+  .druck-untertitel,
+  .druck-fuss,
+  .foto-druck {
+    display: none;
+  }
+
+  /* Druck: A4 ohne Navigation und Fusszeile, Kontakt unten auf der Seite. */
+  @media print {
+    @page {
+      size: A4;
+      margin: 16mm 14mm;
+    }
+
+    .herunterladen {
+      display: none;
+    }
+
+    :global(.seitenkopf h1),
+    :global(.seitenkopf .einleitung) {
+      display: none;
+    }
+
+    .druck-name {
+      display: block;
+      font-size: 22pt;
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: var(--laufweite-gross);
+    }
+
+    .druck-untertitel {
+      display: block;
+      margin-top: 2mm;
+      color: var(--color-text-muted);
+    }
+
+    :global(.seitenkopf) {
+      padding: 0 0 8mm;
+    }
+
+    /* Foto oben rechts neben Name und Untertitel, wie bei einer Bewerbung.
+       Das Foto neben der Überschrift fällt dafür weg. */
+    :global(.seitenkopf .koerper) {
+      align-items: flex-start;
+    }
+
+    .foto-druck {
+      display: block;
+    }
+
+    .foto-bildschirm {
+      display: none;
+    }
+
+    .druck-fuss {
+      display: flex;
+      gap: 8mm;
+      margin-top: 10mm;
+      padding-top: 3mm;
+      border-top: 1px solid var(--color-text-muted);
+      font-size: 9pt;
+      color: var(--color-text-muted);
+    }
+  }
+</style>

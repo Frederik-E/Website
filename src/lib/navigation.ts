@@ -1,31 +1,23 @@
 import { navigationsSeiten } from './seiten';
+import { adresse } from './sprache';
+import type { Sprache } from './einstellungen-schema';
 import type { Texte } from '../i18n';
 
 export interface NavigationsEintrag {
   adresse: string;
   text: string;
-  /** Zweistellig, z. B. "01". Steht in der Kopfzeile und im Seitenkopf. */
-  nummer: string;
 }
 
-/** Feste Seiten plus alles aus inhalt/seiten/ mit navigation: true, durchnummeriert. */
-export async function navigation(texte: Texte): Promise<NavigationsEintrag[]> {
+/** Feste Seiten plus alles aus inhalt/seiten/ mit navigation: true. */
+export async function navigation(texte: Texte, sprache: Sprache): Promise<NavigationsEintrag[]> {
+  // Das Profil steht vorn: erst der Lebenslauf, dann die Projekte.
   const feste = [
-    { adresse: '/projects/', text: texte.navProjekte },
-    { adresse: '/about/', text: texte.ueberMich },
-    { adresse: '/cv/', text: texte.navLebenslauf },
+    { adresse: adresse('/cv/', sprache), text: texte.navLebenslauf },
+    { adresse: adresse('/projects/', sprache), text: texte.navProjekte },
   ];
-  const seiten = (await navigationsSeiten()).map((seite) => ({
-    adresse: `/${seite.id}/`,
+  const seiten = (await navigationsSeiten(sprache)).map((seite) => ({
+    adresse: adresse(`/${seite.id}/`, sprache),
     text: seite.data.titel,
   }));
-  return [...feste, ...seiten].map((eintrag, stelle) => ({
-    ...eintrag,
-    nummer: String(stelle + 1).padStart(2, '0'),
-  }));
-}
-
-/** Der Navigationspunkt, zu dem eine Adresse gehört. Projektseiten gehören zu "Projekte". */
-export async function eintragFuer(pfad: string, texte: Texte): Promise<NavigationsEintrag | undefined> {
-  return (await navigation(texte)).find((eintrag) => pfad.startsWith(eintrag.adresse));
+  return [...feste, ...seiten];
 }

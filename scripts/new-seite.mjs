@@ -1,13 +1,13 @@
 /**
  * Legt eine neue Seite an:  npm run new-seite -- "Titel der Seite"
- * Ergebnis: inhalt/seiten/<name>.md, erreichbar unter /<name>/
+ * Ergebnis: inhalt/seiten/<name>.md, erreichbar unter /<name>/, und die
+ * englische Fassung inhalt/seiten/<name>.en.md unter /en/<name>/.
  */
 import { mkdir, readFile, writeFile, access } from 'node:fs/promises';
-import { parseEinstellungen } from '../src/lib/einstellungen-schema.ts';
 import { slug } from '../src/lib/text.ts';
 import { setzeFeld } from './lib/frontmatter.mjs';
 
-const VERGEBEN = new Set(['about', 'cv', 'projects', 'impressum', 'datenschutz', '404', 'robots', 'favicon', 'index']);
+const VERGEBEN = new Set(['cv', 'projects', 'impressum', 'datenschutz', '404', 'robots', 'favicon', 'index', 'en']);
 
 const titel = process.argv.slice(2).join(' ').trim();
 
@@ -16,7 +16,6 @@ if (titel === '') {
   process.exit(1);
 }
 
-const einstellungen = parseEinstellungen(await readFile('inhalt/einstellungen.yaml', 'utf8'));
 const name = slug(titel);
 
 if (name === '') {
@@ -39,16 +38,19 @@ try {
   // Datei gibt es noch nicht, alles gut.
 }
 
-const vorlage = await readFile(`vorlagen/seite.${einstellungen.sprache}.md`, 'utf8');
+const vorlage = await readFile('vorlagen/seite.de.md', 'utf8');
 const text = setzeFeld(vorlage, 'titel', JSON.stringify(titel));
+const dateiEnglisch = `inhalt/seiten/${name}.en.md`;
 
 await mkdir('inhalt/seiten', { recursive: true });
 await writeFile(datei, text);
+await writeFile(dateiEnglisch, await readFile('vorlagen/seite.en.md', 'utf8'));
 
-console.log(`Angelegt: ${datei}`);
-console.log(`Adresse:  /${name}/`);
+console.log(`Angelegt: ${datei} und ${dateiEnglisch}`);
+console.log(`Adressen: /${name}/ und /en/${name}/`);
 console.log('');
 console.log('Naechste Schritte:');
 console.log(`  1. ${datei} oeffnen und die [TODO]-Stellen ersetzen.`);
-console.log('  2. Soll die Seite in die Kopfzeile, navigation auf true setzen.');
-console.log('  3. Wenn sie fertig ist, entwurf auf false setzen.');
+console.log(`  2. ${dateiEnglisch} oeffnen und Titel und Text auf Englisch eintragen.`);
+console.log('  3. Soll die Seite in die Kopfzeile, navigation auf true setzen.');
+console.log('  4. Wenn sie fertig ist, entwurf auf false setzen.');

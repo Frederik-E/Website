@@ -2043,13 +2043,8 @@ z
 " clip-path="url(#p1c39226283)" style="fill: #f0ecf4; stroke-dasharray: 2.42,1.76; stroke-dashoffset: 2.2; stroke: #394648; stroke-width: 1.1; stroke-linejoin: miter"/>
    </g>
    <g id="patch_19">
-    <path d="M 86.610462 93.555692 
-L 107.080615 93.555692 
-L 107.080615 78.203077 
-L 86.610462 78.203077 
-L 86.610462 93.555692 
-z
-" clip-path="url(#p1c39226283)" style="fill: none; stroke: #394648; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, 0,40 × 0,30 m -->
+    <g clip-path="url(#p1c39226283)"><g transform="translate(96.8455 85.8794) rotate(0.000)"><g><rect x="-8.39" y="-7.68" width="4.5" height="2.65" rx="0.88" fill="#394648"/><rect x="-8.39" y="5.03" width="4.5" height="2.65" rx="0.88" fill="#394648"/><rect x="3.89" y="-7.68" width="4.5" height="2.65" rx="0.88" fill="#394648"/><rect x="3.89" y="5.03" width="4.5" height="2.65" rx="0.88" fill="#394648"/><rect x="-10.24" y="-5.53" width="20.47" height="11.05" rx="2.66" fill="none" stroke="#394648" stroke-width="1"/><path d="M4.91 -4.61 L4.91 4.61 L1.43 3.68 L1.43 -3.68 Z" fill="#394648" stroke="#394648" stroke-width="0.5" stroke-linejoin="round"/><path d="M-6.76 -4.3 L-6.76 4.3 L-4.5 3.68 L-4.5 -3.68 Z" fill="#394648" stroke="#394648" stroke-width="0.5" stroke-linejoin="round"/></g></g></g>
    </g>
    <g id="text_1">
     <!-- gewählter Abzweigpunkt, LSR, 1,24 m -->

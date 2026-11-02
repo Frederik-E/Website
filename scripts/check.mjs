@@ -6,9 +6,11 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { chromium } from 'playwright';
 import AxePaket from '@axe-core/playwright';
+import { parse as parseYaml } from 'yaml';
 import { parseEinstellungen } from '../src/lib/einstellungen-schema.ts';
+import { teileAuf } from './lib/frontmatter.mjs';
 import { bauen, fremdeAnfrage, seitenFinden, serverBereitstellen } from './lib/server.mjs';
-import { cvErzeugen } from './cv.mjs';
+import { cvErzeugen, eigenePdfs, PDF_ORDNER } from './cv.mjs';
 
 const AxeBuilder = AxePaket.default ?? AxePaket;
 
@@ -23,8 +25,9 @@ const technischerFehler = (ort, meldung) => technischeFehler.push({ ort, meldung
 const warnung = (ort, meldung) => warnungen.push({ ort, meldung });
 
 // 1. Einstellungen -----------------------------------------------------------
+let einstellungen;
 try {
-  parseEinstellungen(await readFile('inhalt/einstellungen.yaml', 'utf8'), true);
+  einstellungen = parseEinstellungen(await readFile('inhalt/einstellungen.yaml', 'utf8'), true);
 } catch (fehler) {
   for (const zeile of String(fehler.message).split('\n').slice(1)) {
     inhaltFehlt('inhalt/einstellungen.yaml', zeile.replace(/^\s*-\s*/, ''));
@@ -84,12 +87,153 @@ for (const eintrag of await readdir('inhalt/projekte', { withFileTypes: true }))
 }
 
 // Beispielseiten sind Entwuerfe und werden nie veroeffentlicht, deshalb nur ein Hinweis.
-for (const eintrag of await readdir('inhalt/seiten', { withFileTypes: true })) {
+// Der Ordner kann fehlen, wenn es keine eigenen Seiten gibt.
+for (const eintrag of await readdir('inhalt/seiten', { withFileTypes: true }).catch(() => [])) {
   if (eintrag.isFile() && eintrag.name.startsWith('beispiel-')) {
     warnung(
       `inhalt/seiten/${eintrag.name}`,
       'Beispielseite. Sie ist ein Entwurf und wird nicht veroeffentlicht. Du kannst sie loeschen.',
     );
+  }
+}
+
+// Das Foto fuer Startseite und Lebenslauf.
+const fotos = (await readdir('inhalt/foto').catch(() => [])).filter((name) => /\.(jpe?g|png|webp|avif)$/i.test(name));
+if (fotos.length === 0) {
+  inhaltFehlt('inhalt/foto/', 'Noch kein Foto. Leg ein Bild als JPG, PNG oder WebP hier ab, im Hochformat.');
+} else if (fotos.length > 1) {
+  warnung('inhalt/foto/', `Mehrere Bilder. Benutzt wird nur ${fotos.sort()[0]}.`);
+}
+
+// Eigene Lebenslauf-PDFs: mehrere je Sprache sind ein Fehler, ein deutsches
+// ohne englisches nur ein Hinweis (auf /en/ wird dann eines aus der Seite gedruckt).
+try {
+  const pdfs = await eigenePdfs();
+  if (pdfs.de && !pdfs.en) {
+    warnung(
+      `${PDF_ORDNER}/`,
+      'Nur ein deutsches PDF. Auf der englischen Seite wird ein PDF aus /en/cv/ erzeugt. Lege die englische Fassung als <name>.en.pdf daneben.',
+    );
+  } else if (pdfs.en && !pdfs.de) {
+    warnung(`${PDF_ORDNER}/`, 'Nur ein englisches PDF. Auf der deutschen Seite wird ein PDF aus /cv/ erzeugt.');
+  }
+} catch (fehler) {
+  inhaltFehlt(`${PDF_ORDNER}/`, fehler.message);
+}
+
+// 4b. Englische Fassungen ----------------------------------------------------
+// Fehlt eine Übersetzung, steht auf /en/ der deutsche Text. Das blockiert die
+// Veröffentlichung nicht, wird aber gemeldet.
+const ohneEnglisch = 'Keine englische Fassung. Auf der englischen Seite steht der deutsche Text.';
+
+async function lesen(pfad) {
+  return readFile(pfad, 'utf8').catch(() => undefined);
+}
+
+function kopfdaten(text) {
+  try {
+    const { kopf, rest } = teileAuf(text);
+    return { daten: parseYaml(kopf) ?? {}, text: rest.trim() };
+  } catch {
+    return { daten: {}, text: '' };
+  }
+}
+
+if (einstellungen) {
+  if (einstellungen.untertitel_en === undefined) {
+    warnung('inhalt/einstellungen.yaml', 'Feld "untertitel_en" fehlt. Auf der englischen Seite steht der deutsche Untertitel.');
+  }
+  if (einstellungen.einleitung !== '' && einstellungen.einleitung_en === undefined) {
+    warnung('inhalt/einstellungen.yaml', 'Feld "einleitung_en" fehlt. Auf der englischen Startseite steht die deutsche Einleitung.');
+  }
+}
+
+for (const eintrag of await readdir('inhalt/projekte', { withFileTypes: true })) {
+  if (!eintrag.isDirectory()) continue;
+  const ordner = `inhalt/projekte/${eintrag.name}`;
+  const deutsch = await lesen(`${ordner}/index.md`);
+  if (deutsch === undefined) continue;
+  const de = kopfdaten(deutsch);
+  if (de.daten.entwurf === true) continue;
+  const englisch = await lesen(`${ordner}/index.en.md`);
+  if (englisch === undefined) {
+    warnung(`${ordner}/index.en.md`, ohneEnglisch);
+    continue;
+  }
+  const en = kopfdaten(englisch);
+  const fehlend = ['kurz', 'stichpunkte', 'rolle', 'tags', 'titelbild_alt'].filter(
+    (feld) => de.daten[feld] !== undefined && en.daten[feld] === undefined,
+  );
+  if (fehlend.length > 0) {
+    warnung(`${ordner}/index.en.md`, `Nicht übersetzt: ${fehlend.join(', ')}. Dort steht auf Englisch der deutsche Text.`);
+  }
+  if (de.text !== '' && en.text === '') {
+    warnung(`${ordner}/index.en.md`, 'Der Text unter den Kopfdaten fehlt. Die englische Detailseite zeigt den deutschen Text.');
+  }
+}
+
+for (const name of await readdir('inhalt/seiten').catch(() => [])) {
+  if (!name.endsWith('.md') || name.endsWith('.en.md') || name.startsWith('beispiel-')) continue;
+  const de = kopfdaten((await lesen(`inhalt/seiten/${name}`)) ?? '');
+  if (de.daten.entwurf === true) continue;
+  const englisch = `inhalt/seiten/${name.replace(/\.md$/, '.en.md')}`;
+  if ((await lesen(englisch)) === undefined) warnung(englisch, ohneEnglisch);
+}
+
+for (const datei of ['inhalt/impressum.en.md', 'inhalt/datenschutz.en.md']) {
+  if ((await lesen(datei)) === undefined) warnung(datei, ohneEnglisch);
+}
+
+// Der englische Lebenslauf muss denselben Aufbau haben: dieselben Abschnitte,
+// Einträge und Zeitangaben in derselben Reihenfolge.
+{
+  const englisch = await lesen('inhalt/lebenslauf.en.yaml');
+  if (englisch === undefined) {
+    warnung('inhalt/lebenslauf.en.yaml', ohneEnglisch);
+  } else {
+    const monat = (wert) =>
+      wert instanceof Date
+        ? `${wert.getUTCFullYear()}-${String(wert.getUTCMonth() + 1).padStart(2, '0')}`
+        : String(wert ?? '').trim().replace(/\s*-\s*/, '-');
+    const aufbau = (text) => {
+      try {
+        return (parseYaml(text)?.abschnitte ?? []).map((abschnitt) => ({
+          startseite: Boolean(abschnitt.startseite),
+          eintraege: (abschnitt.eintraege ?? []).map((e) =>
+            'bereich' in e ? `Liste mit ${(e.liste ?? []).length} Angaben` : `${monat(e.von)} bis ${monat(e.bis) || 'heute'}, ${(e.punkte ?? []).length} Punkte`,
+          ),
+        }));
+      } catch {
+        return undefined;
+      }
+    };
+    const de = aufbau((await lesen('inhalt/lebenslauf.yaml')) ?? '');
+    const en = aufbau(englisch);
+    const unterschiede = [];
+    if (de && en) {
+      if (de.length !== en.length) unterschiede.push(`${de.length} Abschnitte auf Deutsch, ${en.length} auf Englisch.`);
+      de.forEach((abschnitt, i) => {
+        const gegenstueck = en[i];
+        if (!gegenstueck) return;
+        if (abschnitt.startseite !== gegenstueck.startseite) {
+          unterschiede.push(`Abschnitt ${i + 1}: "startseite" ist verschieden.`);
+        }
+        const laenge = Math.max(abschnitt.eintraege.length, gegenstueck.eintraege.length);
+        for (let j = 0; j < laenge; j++) {
+          if (abschnitt.eintraege[j] !== gegenstueck.eintraege[j]) {
+            unterschiede.push(
+              `Abschnitt ${i + 1}, Eintrag ${j + 1}: Deutsch ${abschnitt.eintraege[j] ?? 'fehlt'}, Englisch ${gegenstueck.eintraege[j] ?? 'fehlt'}.`,
+            );
+          }
+        }
+      });
+    }
+    if (unterschiede.length > 0) {
+      warnung(
+        'inhalt/lebenslauf.en.yaml',
+        ['Weicht im Aufbau von lebenslauf.yaml ab:', ...unterschiede.slice(0, 6)].join('\n'),
+      );
+    }
   }
 }
 
@@ -116,7 +260,8 @@ const browser = await chromium.launch();
 
 try {
   console.log('Lebenslauf-PDF wird erzeugt ...');
-  await cvErzeugen({ leise: true, basis });
+  // Mehrere PDFs je Sprache sind oben schon gemeldet; hier nicht abbrechen.
+  await cvErzeugen({ leise: true, basis }).catch((fehler) => technischerFehler('npm run cv', fehler.message));
 
   const seiten = await seitenFinden(basis);
   const fremde = new Map();

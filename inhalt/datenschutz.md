@@ -1,16 +1,31 @@
-[TODO: Hier steht deine Datenschutzerklaerung. Diese Website hat folgende Eigenschaften,
-die darin vorkommen sollten:
+## Verantwortlicher
 
-- Hosting bei Cloudflare (Cloudflare Workers, statische Dateien). Beim Aufruf
-  entstehen Server-Logs mit IP-Adresse, Zeitpunkt, angefragter Datei und Browser-Kennung.
-  Rechtsgrundlage: berechtigtes Interesse am sicheren Betrieb (Art. 6 Abs. 1 lit. f DSGVO).
-- Gegebenenfalls E-Mail-Weiterleitung ueber Cloudflare Email Routing.
-- Kontakt ausschliesslich per E-Mail. Es gibt kein Kontaktformular.
-- Die Seite setzt keine Cookies und nutzt kein Tracking und keine Analyse.
-- Schriften und Videos liegen auf dem eigenen Server. Es werden keine Inhalte von
-  fremden Servern nachgeladen.
-- Deine Rechte als betroffene Person (Auskunft, Berichtigung, Loeschung, Widerspruch,
-  Beschwerde bei einer Aufsichtsbehoerde).
+Frederik Eichlohn. Anschrift und E-Mail-Adresse stehen im Impressum.
 
-Einen Text kannst du mit einem Datenschutz-Generator erzeugen und hier einsetzen.
-Diesen Platzhalter vollstaendig ersetzen.]
+## Hosting bei GitHub Pages
+
+Diese Seite liegt bei GitHub Pages. Betreiber ist GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA, ein Unternehmen von Microsoft. Beim Aufruf der Seite verarbeitet GitHub technisch notwendige Daten: deine IP-Adresse, Datum und Uhrzeit, die angefragte Datei, die Kennung deines Browsers und die zuvor besuchte Seite. Darauf habe ich keinen Einfluss. Ich bekomme diese Daten nicht zu sehen.
+
+Rechtsgrundlage ist mein berechtigtes Interesse an einer sicheren und stabilen Bereitstellung der Seite (Art. 6 Abs. 1 lit. f DSGVO). Die Daten können in die USA übermittelt werden. Grundlage dafür sind die Standardvertragsklauseln der EU-Kommission und, soweit der Empfänger zertifiziert ist, der Angemessenheitsbeschluss zum EU-US Data Privacy Framework. Mehr dazu steht in der Datenschutzerklärung von GitHub: <https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement>.
+
+## Cookies und Tracking
+
+Die Seite setzt keine Cookies. Sie nutzt keine Analyse, keine Werbung und keine Werkzeuge zur Reichweitenmessung.
+
+## Schriften, Bilder und Videos
+
+Schriften, Bilder und Videos liegen auf demselben Server wie die Seite. Es werden keine Inhalte von anderen Servern nachgeladen.
+
+## Kontakt
+
+Es gibt kein Kontaktformular. Schreibst du mir eine E-Mail, speichere ich Absender, Inhalt und Zeitpunkt, um dir zu antworten (Art. 6 Abs. 1 lit. f DSGVO, bei einer Anfrage zu einem Vertrag lit. b). Ich lösche die Nachricht, wenn sich die Sache erledigt hat und keine Aufbewahrungspflicht besteht. Mein Postfach liegt bei Google (Gmail). Deine Nachricht läuft deshalb über deren Server.
+
+## Links zu anderen Seiten
+
+Die Seite verlinkt auf GitHub und gegebenenfalls andere Angebote. Erst wenn du einen Link anklickst, werden Daten an den jeweiligen Anbieter übertragen. Für deren Datenverarbeitung gelten die Erklärungen der Anbieter.
+
+## Deine Rechte
+
+Du hast das Recht auf Auskunft über deine gespeicherten Daten (Art. 15 DSGVO), auf Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen die Verarbeitung (Art. 21). Schreib mir dazu eine E-Mail.
+
+Du kannst dich außerdem bei einer Aufsichtsbehörde beschweren, zum Beispiel bei der Datenschutzbehörde deines Bundeslandes.

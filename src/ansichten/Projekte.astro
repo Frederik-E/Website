@@ -1,0 +1,37 @@
+---
+/*
+  Alle Projekte als Stückliste, für /projects/ und /en/projects/.
+*/
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import Stueckliste from '../components/Stueckliste.astro';
+import { alleProjekte } from '../lib/projekte';
+import { einstellungen } from '../lib/einstellungen';
+import { ogAdresse } from '../lib/og';
+import { spracheVon } from '../lib/sprache';
+import { t } from '../i18n';
+
+const sprache = spracheVon(Astro.currentLocale);
+const texte = t(sprache);
+const projekte = await alleProjekte(sprache);
+const ogBild = await ogAdresse(projekte[0]?.data.titelbild, Astro.site);
+const beschreibung = texte.alleProjekteVon(einstellungen.name);
+---
+
+<BaseLayout titel={texte.projekte} beschreibung={beschreibung} ogBild={ogBild}>
+  <Seitenkopf
+    titel={texte.projekte}
+    einleitung={texte.alleProjekteKurz}
+    etikettRechts={`${texte.projekte} ${projekte.length}`}
+    blob="rose"
+  />
+
+  {projekte.length > 0 && <Stueckliste projekte={projekte} />}
+  {
+    projekte.length === 0 && (
+      <div class="feld">
+        <p>{texte.keineProjekte}</p>
+      </div>
+    )
+  }
+</BaseLayout>

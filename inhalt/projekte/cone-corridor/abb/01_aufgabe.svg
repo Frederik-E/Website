@@ -407,13 +407,8 @@ z
 " clip-path="url(#p9032f226eb)" style="fill: #f0ecf4; stroke-dasharray: 2.42,1.76; stroke-dashoffset: 2.2; stroke: #394648; stroke-width: 1.1; stroke-linejoin: miter"/>
    </g>
    <g id="patch_19">
-    <path d="M 62.022857 116.228571 
-L 87.531429 116.228571 
-L 87.531429 97.097143 
-L 62.022857 97.097143 
-L 62.022857 116.228571 
-z
-" clip-path="url(#p9032f226eb)" style="fill: none; stroke: #394648; stroke-linejoin: miter"/>
+    <!-- Fahrzeug als Auto in Draufsicht, Außenmaß 0,40 × 0,30 m -->
+    <g transform="translate(74.7771 106.6629)"><g><rect x="-10.46" y="-9.57" width="5.61" height="3.18" rx="1.06" fill="#394648"/><rect x="-10.46" y="6.39" width="5.61" height="3.18" rx="1.06" fill="#394648"/><rect x="4.85" y="-9.57" width="5.61" height="3.18" rx="1.06" fill="#394648"/><rect x="4.85" y="6.39" width="5.61" height="3.18" rx="1.06" fill="#394648"/><rect x="-12.75" y="-6.89" width="25.51" height="13.77" rx="3.32" fill="none" stroke="#394648" stroke-width="1"/><path d="M6.12 -5.74 L6.12 5.74 L1.79 4.59 L1.79 -4.59 Z" fill="#394648" stroke="#394648" stroke-width="0.5" stroke-linejoin="round"/><path d="M-8.42 -5.36 L-8.42 5.36 L-5.61 4.59 L-5.61 -4.59 Z" fill="#394648" stroke="#394648" stroke-width="0.5" stroke-linejoin="round"/></g></g>
    </g>
    <g id="patch_20">
     <path d="M 194.857644 113.873223 
@@ -430,7 +425,7 @@ z
 " clip-path="url(#p9032f226eb)" style="fill: none; stroke: #65afff; stroke-width: 1.6; stroke-linejoin: miter"/>
    </g>
    <g id="text_1">
-    <!-- Spur 1 — die Kartenlinie -->
+    <!-- Beschriftung entfernt; die Glyphen hier nutzen andere Texte -->
     <g style="fill: #60696d" transform="translate(14.194286 97.246536) scale(0.085 -0.085)">
      <defs>
       <path id="LiberationSans-53" d="M 3975 1216 
@@ -737,30 +732,6 @@ L 431 0
 z
 " transform="scale(0.015625)"/>
      </defs>
-     <use xlink:href="#LiberationSans-53"/>
-     <use xlink:href="#LiberationSans-70" transform="translate(66.699219 0)"/>
-     <use xlink:href="#LiberationSans-75" transform="translate(122.314453 0)"/>
-     <use xlink:href="#LiberationSans-72" transform="translate(177.929688 0)"/>
-     <use xlink:href="#LiberationSans-20" transform="translate(211.230469 0)"/>
-     <use xlink:href="#LiberationSans-31" transform="translate(239.013672 0)"/>
-     <use xlink:href="#LiberationSans-20" transform="translate(294.628906 0)"/>
-     <use xlink:href="#LiberationSans-2014" transform="translate(322.412109 0)"/>
-     <use xlink:href="#LiberationSans-20" transform="translate(422.412109 0)"/>
-     <use xlink:href="#LiberationSans-64" transform="translate(450.195312 0)"/>
-     <use xlink:href="#LiberationSans-69" transform="translate(505.810547 0)"/>
-     <use xlink:href="#LiberationSans-65" transform="translate(528.027344 0)"/>
-     <use xlink:href="#LiberationSans-20" transform="translate(583.642578 0)"/>
-     <use xlink:href="#LiberationSans-4b" transform="translate(611.425781 0)"/>
-     <use xlink:href="#LiberationSans-61" transform="translate(678.125 0)"/>
-     <use xlink:href="#LiberationSans-72" transform="translate(733.740234 0)"/>
-     <use xlink:href="#LiberationSans-74" transform="translate(767.041016 0)"/>
-     <use xlink:href="#LiberationSans-65" transform="translate(794.824219 0)"/>
-     <use xlink:href="#LiberationSans-6e" transform="translate(850.439453 0)"/>
-     <use xlink:href="#LiberationSans-6c" transform="translate(906.054688 0)"/>
-     <use xlink:href="#LiberationSans-69" transform="translate(928.271484 0)"/>
-     <use xlink:href="#LiberationSans-6e" transform="translate(950.488281 0)"/>
-     <use xlink:href="#LiberationSans-69" transform="translate(1006.103516 0)"/>
-     <use xlink:href="#LiberationSans-65" transform="translate(1028.320312 0)"/>
     </g>
    </g>
    <g id="text_2">

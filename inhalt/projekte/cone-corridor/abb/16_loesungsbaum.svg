@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" width="720" height="400"
+     role="img" aria-labelledby="baum-titel baum-text">
+  <title id="baum-titel">Lösungsbaum der Pfadplanung</title>
+  <desc id="baum-text">Die Pfadplanung teilt sich in die Spur durch den Korridor und den Übergang von der Kartenlinie. Für die Spur gibt es die optimale Lösung Voronoi und Delaunay sowie zwei Fallbacks: eine Kette an Pylonen und einen Zielpunkt aus drei Pylonen. Für den Übergang ist der Dubins-Pfad gewählt, die Klothoide verworfen.</desc>
+  <style>
+    .etikett { font: 500 11px "Liberation Sans", Arial, sans-serif; letter-spacing: .09em;
+               fill: #60696d; text-transform: uppercase; }
+    .kopf    { font: 400 14px "Liberation Sans", Arial, sans-serif; fill: #394648; }
+    .leise   { font: 400 12px "Liberation Sans", Arial, sans-serif; fill: #60696d; }
+    .ergebnis { font: 400 12px "Liberation Sans", Arial, sans-serif; fill: #394648; }
+    .haar    { stroke: #dddbe2; stroke-width: 1; }
+    .konstr  { stroke: #b2b4ba; stroke-width: 1; fill: none; }
+    .kante   { stroke: #394648; stroke-width: 1.25; fill: none; }
+    .verworfen { stroke: #b2b4ba; stroke-width: 1.25; fill: none; stroke-dasharray: 4 4; }
+    .mitte   { text-anchor: middle; }
+  </style>
+
+  <!-- Kopf: die Anforderung -->
+  <line class="haar" x1="0" y1="24" x2="720" y2="24"/>
+  <text class="etikett" x="0" y="16">Anforderung: aus jeder Informationsmenge ein Pfad</text>
+
+  <!-- Wurzel -->
+  <circle cx="360" cy="48" r="5" fill="#394648"/>
+  <text class="kopf mitte" x="360" y="74">Pfadplanung</text>
+  <text class="leise mitte" x="360" y="92">Eingang Pylonen, Ausgang Trajektorie</text>
+
+  <path class="kante" d="M360 102 V116 M228 132 V116 H588 V132"/>
+
+  <!-- Teilproblem 1: Spur -->
+  <circle cx="228" cy="136" r="4.5" fill="#394648"/>
+  <text class="etikett mitte" x="228" y="160">Teilproblem 1</text>
+  <text class="kopf mitte" x="228" y="180">Spur durch den Korridor</text>
+  <text class="leise mitte" x="228" y="198">in jedem Zyklus neu geplant</text>
+
+  <path class="kante" d="M228 208 V222 M80 238 V222 H376 V238 M228 222 V238"/>
+
+  <!-- Teilproblem 2: Übergang -->
+  <circle cx="588" cy="136" r="4.5" fill="#394648"/>
+  <text class="etikett mitte" x="588" y="160">Teilproblem 2</text>
+  <text class="kopf mitte" x="588" y="180">Übergang von der Kartenlinie</text>
+  <text class="leise mitte" x="588" y="198">einmal pro Lauf geplant</text>
+
+  <path class="kante" d="M588 208 V222 H524 V238"/>
+  <path class="verworfen" d="M588 222 H652 V238"/>
+
+  <!-- Optimal: Voronoi + Delaunay -->
+  <circle cx="80" cy="243" r="5" fill="#65afff"/>
+  <text class="etikett mitte" x="80" y="268">Optimal</text>
+  <text class="kopf mitte" x="80" y="288">Voronoi + Delaunay</text>
+  <text class="leise mitte" x="80" y="306">beide Reihen, Anfang</text>
+  <text class="leise mitte" x="80" y="322">und Ende erkannt</text>
+  <text class="ergebnis mitte" x="80" y="338">exakte Mittellinie</text>
+
+  <!-- Fallback 1: Kette -->
+  <circle cx="228" cy="243" r="5" fill="#b98389"/>
+  <text class="etikett mitte" x="228" y="268">Fallback 1</text>
+  <text class="kopf mitte" x="228" y="288">Kette an Pylonen</text>
+  <text class="leise mitte" x="228" y="306">eine Reihe erkannt</text>
+  <text class="ergebnis mitte" x="228" y="322">Spur neben der Kette</text>
+
+  <!-- Fallback 2: drei Pylonen -->
+  <circle cx="376" cy="243" r="5" fill="#b98389"/>
+  <text class="etikett mitte" x="376" y="268">Fallback 2</text>
+  <text class="kopf mitte" x="376" y="288">Drei Pylonen</text>
+  <text class="leise mitte" x="376" y="306">noch keine Reihe</text>
+  <text class="ergebnis mitte" x="376" y="322">Zielpunkt im Dreieck</text>
+
+  <!-- Übergang: Dubins gewählt -->
+  <circle cx="524" cy="243" r="5" fill="#65afff"/>
+  <text class="etikett mitte" x="524" y="268">Gewählt</text>
+  <text class="kopf mitte" x="524" y="288">Dubins-Pfad</text>
+  <text class="leise mitte" x="524" y="306">Bögen und Geraden</text>
+  <text class="ergebnis mitte" x="524" y="322">geschlossen lösbar</text>
+
+  <!-- Übergang: Klothoide verworfen -->
+  <circle cx="652" cy="243" r="4.5" fill="none" stroke="#b2b4ba" stroke-width="1.25"/>
+  <text class="etikett mitte" x="652" y="268">Verworfen</text>
+  <text class="leise mitte" x="652" y="288" style="font-size: 14px">Klothoide</text>
+  <text class="leise mitte" x="652" y="306">stetige Krümmung</text>
+  <text class="ergebnis mitte" x="652" y="322">zu rechenintensiv</text>
+
+  <!-- Prüfreihenfolge der Spur -->
+  <line class="konstr" x1="20" y1="364" x2="430" y2="364"/>
+  <path d="M430 360 L438 364 L430 368 Z" fill="#b2b4ba"/>
+  <text class="etikett" x="20" y="388">Prüfreihenfolge: von viel zu wenig Information</text>
+</svg>

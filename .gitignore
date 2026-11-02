@@ -9,6 +9,7 @@ dist/
 .screenshots/
 .wrangler/
 public/cv.pdf
+public/en/cv.pdf
 
 # Betriebssystem und Editor
 .DS_Store
@@ -16,3 +17,7 @@ Thumbs.db
 *.log
 .env
 .env.production
+
+# Originalfoto: bleibt nur auf diesem Rechner. Die Seite benutzt
+# inhalt/foto/portrait.jpg, das Original braucht nur scripts/foto-aufhellen.py.
+inhalt/foto/original/

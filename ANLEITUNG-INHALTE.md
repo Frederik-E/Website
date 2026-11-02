@@ -10,41 +10,49 @@ Nach jeder Änderung speichern. Läuft `npm run dev`, siehst du das Ergebnis sof
 
 ```
 inhalt/
-  einstellungen.yaml     Name, Sprache, Links, Domain
-  ueber-mich.md          Der Text auf /about/
-  lebenslauf.yaml        Der Lebenslauf auf /cv/
-  lebenslauf.pdf         Optional: dein eigenes PDF
-  impressum.md
-  datenschutz.md
+  einstellungen.yaml     Name, Links, Domain, Untertitel und Einleitung in beiden Sprachen
+  lebenslauf.yaml        Profil und Lebenslauf, auf der Startseite und auf /cv/
+  lebenslauf.en.yaml     Dasselbe auf Englisch, für /en/
+  foto/                  Dein Foto, ein Bild
+  lebenslauf-pdf/        Optional: dein eigenes PDF (englisch mit .en.pdf am Ende)
+  impressum.md           (und impressum.en.md)
+  datenschutz.md         (und datenschutz.en.md)
   projekte/
     mein-projekt/
       index.md           Kopfdaten und Text
+      index.en.md        Die englischen Texte
       titelbild.jpg
       demo.mp4
   seiten/
     meine-seite.md       Wird zu /meine-seite/
+    meine-seite.en.md    Wird zu /en/meine-seite/
 vorlagen/                Vorlagen, von den Skripten benutzt
 ```
+
+Die Seite gibt es zweimal: auf Deutsch unter `/` und auf Englisch unter `/en/`. Zu fast jeder Datei gehört deshalb eine englische Fassung mit `.en` im Namen. Mehr dazu unter [Die englische Fassung](#die-englische-fassung).
 
 ---
 
 ## Die Startseite
 
-Die Startseite ist wie ein technisches Zeichnungsblatt aufgebaut und besteht aus drei Teilen, die du alle über `inhalt/` steuerst.
+Die Startseite ist wie ein technisches Zeichnungsblatt aufgebaut. Sie stellt dein Profil vorn hin, die Projekte kommen danach. Alles steuerst du über `inhalt/`.
 
-**Oben das Startbild.** Deine Einleitung groß links, rechts das bewegte Zeichen als „Abb. 01“: eine Punktmatrix, über die farbige Ringe laufen, jeder von einem zufälligen Punkt aus. Alle 40 Sekunden zeichnen die Ringe deine Initialen, einen Buchstaben nach dem anderen. Welche Buchstaben das sind, steht in `inhalt/einstellungen.yaml` bei `initialen`; leer lassen blendet sie aus. Darunter eine Leiste mit der Anzahl deiner Projekte, dem Datum des neuesten und allen Themen aus den Kopfdaten.
+**Oben das Startbild.** Deine Einleitung groß links, rechts das bewegte Zeichen: eine Punktmatrix, über die farbige Ringe laufen, jeder von einem zufälligen Punkt aus. Alle 40 Sekunden zeichnen die Ringe deine Initialen, einen Buchstaben nach dem anderen. Welche Buchstaben das sind, steht in `inhalt/einstellungen.yaml` bei `initialen`; leer lassen blendet sie aus.
 
-- Die **Einleitung** steht in `inhalt/einstellungen.yaml` bei `einleitung`. Ein bis zwei Sätze, woran du arbeitest, nicht wer du bist. Leer lassen (`einleitung: ""`) blendet sie aus.
-- Die Leiste füllt sich von selbst. Du musst dort nichts eintragen.
+- Die **Einleitung** steht in `inhalt/einstellungen.yaml` bei `einleitung`. Eine kurze Zeile, woran du arbeitest, nicht wer du bist. Leer lassen (`einleitung: ""`) blendet sie aus.
 
-**Darunter die ausgewählten Arbeiten.** Jedes Projekt mit `startseite: true` erscheint als Datenblatt: links Nummer, Titel, Datum, Rolle und Themen, rechts der Satz aus `kurz` und das Titelbild.
+Links neben der Einleitung steht klein dein Foto aus `inhalt/foto/`, darunter dein Profil aus `inhalt/lebenslauf.yaml` (Feld `profil`).
+
+**Darunter der Lebenslauf in Kurzform.** Jeder Abschnitt aus `inhalt/lebenslauf.yaml` mit `startseite: true`, mit Titel, Organisation und Zeitraum. Die Stichpunkte stehen nur auf `/cv/`. Oben rechts zwei Verweise: der ganze Lebenslauf und das PDF.
+
+**Danach die ausgewählten Arbeiten.** Oben eine Leiste mit der Anzahl deiner Projekte, dem Datum des neuesten und allen Themen aus den Kopfdaten. Sie füllt sich von selbst. Jedes Projekt mit `startseite: true` erscheint als Datenblatt: links Titel, Datum, Rolle und Themen, rechts der Satz aus `kurz` und das Titelbild.
+
+- Ein Projekt kann `stichpunkte` haben, zum Beispiel die nötigen Skills. Sie stehen rechts als Liste über dem Titelbild, jede Zeile mit einer kleinen Kreuzmarke. Sind es mehr als drei kurze Punkte (höchstens 24 Zeichen), stehen sie in Spalten. Mit Stichpunkten darfst du `kurz` weglassen.
 
 - Die Anordnung bestimmst du mit `reihenfolge`. Ist kein Projekt markiert, stehen dort die drei neuesten.
 - Drei bis vier Projekte sind ein gutes Maß. Mit Titelbild wirken sie am stärksten.
-- Die Nummer (P-01, P-02 und so weiter) vergibt die Seite selbst, gezählt ab dem ältesten Projekt. Ein neues Projekt verschiebt die Nummern der alten nicht, außer du trägst eines mit älterem Datum nach.
-- Unter jedem Bild steht eine Maßlinie mit seinen echten Pixelmaßen.
 
-**Ganz unten die Übersicht.** Über mich, Lebenslauf und jede Seite aus `inhalt/seiten/`. Legst du eine neue Seite an, erscheint sie hier automatisch mit ihrer `beschreibung`.
+**Ganz unten deine eigenen Seiten.** Jede Seite aus `inhalt/seiten/` mit ihrer `beschreibung`. Gibt es keine, fällt der Teil weg.
 
 ---
 
@@ -56,16 +64,19 @@ Die Startseite ist wie ein technisches Zeichnungsblatt aufgebaut und besteht aus
 4. Darunter die vier Abschnitte schreiben.
 5. Wenn es fertig ist, `entwurf: true` auf `entwurf: false` ändern.
 
+Das Skript legt daneben `index.en.md` an. Dort trägst du die englischen Texte ein, siehe [Die englische Fassung](#die-englische-fassung).
+
 ### Die Kopfdaten
 
 | Feld | Pflicht | Bedeutung |
 |---|---|---|
 | `titel` | ja | Name des Projekts |
-| `kurz` | ja | Ein bis zwei Sätze für die Übersicht, höchstens 200 Zeichen |
+| `kurz` | ja, außer es gibt `stichpunkte` | Ein bis zwei Sätze für die Übersicht, höchstens 200 Zeichen |
 | `datum` | ja | Format `JJJJ-MM`, bestimmt die Reihenfolge |
 | `bis` | nein | Format `JJJJ-MM`, Ende eines Zeitraums. Dann steht auf der Seite „Mai 2026 – Juli 2026“ |
 | `rolle` | nein | „Allein" oder „Perception im Viererteam" |
 | `tags` | nein | `[ROS 2, SLAM, Python]` |
+| `stichpunkte` | nein | Liste, steht im Eintrag über dem Titelbild. Jede Zeile mit `- ` beginnen |
 | `titelbild` | nur mit Video | `./titelbild.jpg` |
 | `titelbild_alt` | nur mit Bild | Was auf dem Bild zu sehen ist |
 | `video` | nein | `demo.mp4` |
@@ -87,7 +98,7 @@ Die Vorlage gibt vier Abschnitte vor. Halte dich daran, sie beantworten genau da
 
 **Was ich gelernt habe.** Ein bis drei Sätze. Was würdest du beim nächsten Mal anders machen?
 
-Auf der Unterseite stehen die Zwischenüberschriften links neben ihrem Text und werden automatisch durchnummeriert (01, 02, ...). Schreib die Nummern also nicht selbst dazu.
+Auf der Unterseite stehen die Zwischenüberschriften links neben ihrem Text.
 
 Schreib in der Ich-Form und in kurzen Sätzen. Keine Floskeln wie „innovativ", „leidenschaftlich" oder „nahtlos".
 
@@ -180,26 +191,44 @@ Die Adresse ergibt sich aus dem Dateinamen: `inhalt/seiten/vortraege.md` wird zu
 
 Bilder für eine Seite legst du nach `inhalt/seiten/` und bindest sie mit `![Was zu sehen ist](./mein-bild.jpg)` ein.
 
-Ein paar Adressen sind vom Code belegt: `about`, `cv`, `projects`, `impressum`, `datenschutz`. Das Skript sagt dir das, falls du eine davon erwischst.
+Das Skript legt daneben `<name>.en.md` an. Dort stehen Titel, Beschreibung und Text auf Englisch; die Seite erscheint dann unter `/en/<name>/`.
+
+Ein paar Adressen sind vom Code belegt: `cv`, `projects`, `impressum`, `datenschutz`, `en`. Das Skript sagt dir das, falls du eine davon erwischst.
 
 ---
 
-## Der Text über dich
+## Dein Foto
 
-1. `inhalt/ueber-mich.md` öffnen.
-2. Den Platzhalter durch deinen Text ersetzen. 60 bis 120 Wörter, in der Ich-Form.
-3. Speichern.
+1. Ein Bild in `inhalt/foto/` legen, als JPG, PNG oder WebP. Der Dateiname ist egal.
+2. Speichern, fertig.
 
-Der Text steht auf `/about/`, erreichbar über die Kopfzeile. Die Startseite zeigt nur Arbeiten.
+Das Foto steht klein auf der Startseite links neben der großen Zeile und im Lebenslauf links neben der Überschrift. Im PDF steht es oben rechts neben deinem Namen. Gezeigt wird ein Ausschnitt im Hochformat 4:5, mittig, das Gesicht im oberen Drittel. 800 Pixel Breite reichen. HEIC-Fotos vom iPhone vorher als JPG exportieren.
+
+Leg nur ein Bild in den Ordner. Liegen dort mehrere, nimmt die Seite das erste nach dem Alphabet. Unterordner beachtet sie nicht.
+
+Dein jetziges Foto ist `portrait.jpg`: das Original mit aufgehelltem, kühlem Hintergrund, damit es zum Weiß der Seite passt. Das Original liegt in `inhalt/foto/original/`. Bei einem neuen Foto vor einfarbigem Hintergrund erzeugt `python3 scripts/foto-aufhellen.py inhalt/foto/original/<datei> inhalt/foto/portrait.jpg` die aufgehellte Fassung (braucht Python mit numpy, scipy und opencv). Solange kein Foto da ist, steht an beiden Stellen ein Platzhalter, und die Seite wird nicht veröffentlicht.
+
+---
+
+## Profil und Lebenslauf
+
+Beides steht in `inhalt/lebenslauf.yaml`. Eine eigene Seite „Über mich“ gibt es nicht mehr.
+
+**Das Profil** steht ganz oben in der Datei bei `profil`: 60 bis 120 Wörter in der Ich-Form. Es erscheint auf der Startseite unter der großen Zeile und im Lebenslauf als erster Abschnitt. Eine Leerzeile beginnt einen neuen Absatz.
+
+```yaml
+profil: |
+  Erster Absatz.
+
+  Zweiter Absatz.
+```
 
 Ein Aufbau, der funktioniert: erster Satz Studium und Schwerpunkt, zweiter bis vierter Satz ein konkretes Projekt mit deiner Rolle und dem Ergebnis, letzter Satz was du als nächstes suchst.
 
----
-
-## Der Lebenslauf
+**Der Lebenslauf:**
 
 1. `inhalt/lebenslauf.yaml` öffnen.
-2. Abschnitte und Einträge ändern. Die Reihenfolge in der Datei ist die Reihenfolge auf der Seite.
+2. Abschnitte und Einträge ändern. Die Reihenfolge in der Datei ist die Reihenfolge auf der Seite. `startseite: true` zeigt einen Abschnitt zusätzlich in Kurzform auf der Startseite.
 3. Zeiten im Format `JJJJ-MM`, zum Beispiel `von: 2025-10`. `bis:` leer lassen bedeutet „heute".
 4. Speichern.
 5. `npm run cv` ausführen, damit das PDF neu entsteht.
@@ -223,17 +252,41 @@ Es gibt zwei Arten von Einträgen:
 
 Keine Adresse, keine Telefonnummer, kein Geburtsdatum. Das gehört nicht auf eine öffentliche Seite.
 
-**Eigenes PDF verwenden:** Leg dein PDF als `inhalt/lebenslauf.pdf` ab und führe `npm run cv` aus. Der Download liefert ab dann dein PDF. Löschst du die Datei wieder, wird das PDF wieder aus der Seite erzeugt.
+**Der englische Lebenslauf** steht in `inhalt/lebenslauf.en.yaml`, mit demselben Aufbau: dieselben Abschnitte und Einträge in derselben Reihenfolge, mit denselben Zeitangaben. Änderst du etwas in `lebenslauf.yaml`, ändere es dort auch. `npm run check` meldet, wenn die beiden Dateien auseinanderlaufen.
+
+`npm run cv` erzeugt beide PDFs: `/cv.pdf` aus `/cv/` und `/en/cv.pdf` aus `/en/cv/`.
+
+**Eigenes PDF verwenden:** Leg dein PDF in den Ordner `inhalt/lebenslauf-pdf/`, der Name ist egal (z. B. `Lebenslauf.pdf`). Die englische Fassung bekommt `.en.pdf` am Ende (z. B. `Lebenslauf.en.pdf`). Je Sprache nur ein PDF. Dann `npm run cv` ausführen. Auf der deutschen Seite lädt man ab dann dein deutsches PDF herunter, auf der englischen dein englisches. Fehlt eine Sprache, wird das PDF dafür weiter aus der Seite erzeugt; `npm run check` weist darauf hin. Löschst du die Dateien wieder, wird wieder aus der Seite erzeugt.
+
+**Englische Fassung deines PDFs:** `python3 scripts/lebenslauf-englisch.py` übersetzt dein deutsches PDF und legt es als `<name>.en.pdf` daneben. Nur der Text ändert sich, das Design bleibt. Die Übersetzungen stehen als Tabelle oben im Skript. Änderst du deinen deutschen Lebenslauf, müssen sie angepasst werden; das Skript sagt dir, welche Zeilen neu sind. Am einfachsten bittest du Claude darum.
 
 ---
 
-## Sprache umstellen
+## Die englische Fassung
 
-1. `inhalt/einstellungen.yaml` öffnen.
-2. `sprache: en` auf `sprache: de` ändern oder umgekehrt.
-3. Speichern.
+Die Seite gibt es auf Deutsch unter `/` und auf Englisch unter `/en/`, sonst sind die Adressen gleich: `/cv/` und `/en/cv/`, `/projects/` und `/en/projects/`. Rechts in der Kopfzeile wechselt ein Link („English“ bzw. „Deutsch“) zur selben Seite in der anderen Sprache. Die Beschriftungen und Datumsangaben übersetzt die Seite selbst. Deine Texte stehen in eigenen Dateien mit `.en` im Namen:
 
-Das ändert alle Beschriftungen und die Datumsangaben. Deine eigenen Texte übersetzt es nicht, die schreibst du in der Sprache, die du willst. Die Adressen der Seiten bleiben gleich.
+| Deutsch | Englisch | Was dort steht |
+|---|---|---|
+| `einstellungen.yaml`: `untertitel`, `einleitung` | `untertitel_en`, `einleitung_en` in derselben Datei | Untertitel und große Zeile |
+| `lebenslauf.yaml` | `lebenslauf.en.yaml` | Profil und Lebenslauf, gleicher Aufbau |
+| `impressum.md`, `datenschutz.md` | `impressum.en.md`, `datenschutz.en.md` | der ganze Text |
+| `projekte/<ordner>/index.md` | `projekte/<ordner>/index.en.md` | nur die Texte, siehe unten |
+| `seiten/<name>.md` | `seiten/<name>.en.md` | Titel, Beschreibung und Text |
+
+**Ein Projekt übersetzen:**
+
+1. `inhalt/projekte/<ordner>/index.en.md` öffnen. `npm run new` legt die Datei an; fehlt sie, kopiere `vorlagen/projekt.en.md` dorthin.
+2. Oben `titel`, `kurz`, `rolle`, `tags`, `stichpunkte` und `titelbild_alt` auf Englisch eintragen, so viele davon, wie `index.md` hat.
+3. Darunter den Text auf Englisch, mit denselben Bildern wie in `index.md`.
+4. Steht im Titelbild Text, eine englische Fassung daneben legen (z. B. `titelbild.en.png`) und als `titelbild` eintragen. Sonst gilt das Bild aus `index.md`.
+5. Speichern und unter `/en/projects/<ordner>/` nachsehen.
+
+In `index.en.md` stehen nur Texte. Datum, Links, Video, Reihenfolge, Startseite und Entwurf trägst du allein in `index.md` ein, sie gelten für beide Sprachen. Schreibst du so ein Feld in `index.en.md`, bricht die Vorschau mit einer Meldung ab, die das erklärt.
+
+Bilder mit Text im Projekttext bekommen ebenfalls eine englische Fassung mit `.en` im Namen, zum Beispiel `abb/01_aufgabe.en.svg`. Die gezeichneten Titelbilder erzeugen ihre Skripte in beiden Sprachen (`node scripts/titelbild-korridor.mjs` usw.). Für Abb. 01 von `cone-corridor` gibt es `python3 scripts/abbildung-01-englisch.py`.
+
+**Fehlt eine Übersetzung,** steht auf der englischen Seite der deutsche Text. Die Seite funktioniert dann trotzdem. `npm run check` listet unter „Hinweise“ alles auf, was noch nicht übersetzt ist. Das hält die Veröffentlichung nicht auf.
 
 ---
 
@@ -256,7 +309,7 @@ Ein Absatz. Eine Leerzeile trennt Absätze.
 2. zweiter Punkt
 
 [Linktext](https://beispiel.de)
-[Auf eine eigene Seite](/about/)
+[Auf eine eigene Seite](/cv/)
 
 ![Was zu sehen ist](./bild.jpg)
 
@@ -274,5 +327,6 @@ Der Marker `<mark>` wirkt wie ein Leuchtstift. Höchstens einmal pro Seite, und 
 - Handyfotos als **JPG** speichern, nicht als HEIC. Am iPhone unter „Einstellungen", „Kamera", „Formate" auf „Maximale Kompatibilität" stellen. `npm run check` warnt, wenn eine HEIC-Datei in `inhalt/` liegt.
 - **Keine GIFs.** Sie sind groß und ruckeln. Nimm ein kurzes MP4 und lass es durch `npm run video` laufen.
 - Bilder über 5 MB machen das Bauen langsam. Ein Foto mit 2000 Pixeln Breite reicht.
+- Fotos ohne Text brauchen keine englische Fassung. Beide Sprachen zeigen dieselbe Datei.
 - Videos ohne Ton aufnehmen oder den Ton ignorieren. Das Skript entfernt ihn, weil die Videos stumm laufen.
 - Zeig lieber ein kurzes Video vom laufenden System als fünf Standbilder davon.

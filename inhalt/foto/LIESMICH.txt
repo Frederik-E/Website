@@ -1,0 +1,19 @@
+Hier kommt dein Foto hin.
+
+- Genau ein Bild ablegen, als JPG, PNG oder WebP. Der Dateiname ist egal.
+- Hochformat. Gezeigt wird ein Ausschnitt im Format 4:5, mittig, das Gesicht
+  im oberen Drittel.
+- 800 Pixel Breite reichen. Groessere Bilder verkleinert die Seite selbst.
+- HEIC (iPhone) geht nicht. Vorher als JPG exportieren.
+
+Das Foto steht klein auf der Startseite links neben der grossen Zeile und
+im Lebenslauf links neben der Ueberschrift, im PDF oben rechts neben deinem
+Namen. Solange hier kein Bild liegt, steht an beiden
+Stellen ein Platzhalter und die Seite wird nicht veroeffentlicht.
+
+portrait.jpg ist dein Foto mit aufgehelltem, kuehlem Hintergrund, passend
+zur Seite. Das Original liegt in original/, die Seite beachtet den Ordner
+nicht, und er wird nicht zu GitHub hochgeladen (.gitignore). Neu erzeugen,
+z. B. nach einem neuen Foto vor einfarbigem Hintergrund:
+
+  python3 scripts/foto-aufhellen.py inhalt/foto/original/<datei> inhalt/foto/portrait.jpg

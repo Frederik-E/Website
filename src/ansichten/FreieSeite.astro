@@ -1,0 +1,34 @@
+---
+/*
+  Eine freie Seite aus inhalt/seiten/, für /<name>/ und /en/<name>/.
+  Die Pfade legen die Seiten unter src/pages/ mit seitenPfade() fest.
+*/
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { spracheVon } from '../lib/sprache';
+import type { Seite } from '../lib/seiten';
+
+interface Props {
+  seite: Seite;
+}
+
+const { seite } = Astro.props;
+const { Content } = await render(seite.text);
+// Fehlt die Übersetzung, steht der deutsche Text da und ist so ausgezeichnet.
+const textLang = seite.textSprache !== spracheVon(Astro.currentLocale) ? seite.textSprache : undefined;
+---
+
+<BaseLayout
+  titel={seite.data.titel}
+  beschreibung={seite.data.beschreibung ?? seite.data.titel}
+  noindex={seite.data.noindex}
+>
+  <Seitenkopf titel={seite.data.titel} lang={textLang} />
+
+  <div class="feld geteilt">
+    <div class="zweispaltig">
+      <div class="fliesstext rechts" lang={textLang}><Content /></div>
+    </div>
+  </div>
+</BaseLayout>

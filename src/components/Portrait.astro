@@ -1,0 +1,115 @@
+---
+import { Image } from 'astro:assets';
+import { foto } from '../lib/foto';
+import { einstellungen } from '../lib/einstellungen';
+import { spracheVon } from '../lib/sprache';
+import { t } from '../i18n';
+
+interface Props {
+  /** Breite auf der Seite als CSS-Wert. Die Höhe folgt im Format 4:5. */
+  breite: string;
+  /** Wie breit das Foto auf der Seite steht, für die Auswahl der Bildgröße. */
+  sizes: string;
+  /** Oben auf der Seite sofort laden. */
+  zuerst?: boolean;
+}
+
+const { breite, sizes, zuerst = false } = Astro.props;
+const texte = t(spracheVon(Astro.currentLocale));
+
+/*
+  Das Foto aus inhalt/foto/, bewusst klein, im Hochformat 4:5 beschnitten.
+  Sucherecken wie bei den Projektbildern. Ohne Foto steht ein Platzhalter wie
+  auf einer Zeichnung: ein Rahmen mit Kreuz. Er enthält "[TODO", damit
+  npm run check die Seite nicht veröffentlicht, solange das Foto fehlt.
+*/
+---
+
+<div class="portrait" style={`--breite: ${breite}`}>
+  {
+    foto ? (
+      <Image
+        class="bild"
+        src={foto}
+        alt={texte.fotoVon(einstellungen.name)}
+        widths={[240, 360, 480]}
+        sizes={sizes}
+        loading={zuerst ? 'eager' : 'lazy'}
+        fetchpriority={zuerst ? 'high' : undefined}
+      />
+    ) : (
+      <div class="platzhalter" aria-hidden="true">
+        <span class="etikett">[TODO: {texte.foto}]</span>
+      </div>
+    )
+  }
+  <span class="sucher" aria-hidden="true"></span>
+</div>
+
+<style>
+  .portrait {
+    position: relative;
+    width: var(--breite);
+    flex: 0 0 auto;
+  }
+
+  .bild,
+  .platzhalter {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius);
+  }
+
+  /* Feine Rahmenlinie: der aufgehellte Fotohintergrund ist fast so hell wie
+     die Seite, die Linie hält die Kante. */
+  .bild {
+    height: auto;
+    object-fit: cover;
+    object-position: 50% 30%;
+    background: var(--color-flaeche);
+    outline: 1px solid var(--color-haarlinie);
+    outline-offset: -1px;
+  }
+
+  /* Platzhalter: Rahmen mit zwei Diagonalen, in der Mitte die Beschriftung. */
+  .platzhalter {
+    display: grid;
+    place-items: center;
+    background:
+      linear-gradient(to top right, transparent calc(50% - 0.5px), var(--color-haarlinie) 50%, transparent calc(50% + 0.5px)),
+      linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--color-haarlinie) 50%, transparent calc(50% + 0.5px));
+    outline: 1px solid var(--color-haarlinie);
+    outline-offset: -1px;
+  }
+
+  .platzhalter .etikett {
+    padding: var(--space-4) var(--space-8);
+    background: var(--color-bg);
+    text-align: center;
+  }
+
+  /* Sucherecken: acht kurze Linien, je zwei pro Ecke. */
+  .sucher {
+    --l: 10px;
+    --strich: var(--color-konstruktion);
+    position: absolute;
+    inset: -8px;
+    pointer-events: none;
+    background:
+      linear-gradient(var(--strich), var(--strich)) top left / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) top left / 1px var(--l) no-repeat,
+      linear-gradient(var(--strich), var(--strich)) top right / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) top right / 1px var(--l) no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom left / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom left / 1px var(--l) no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom right / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom right / 1px var(--l) no-repeat;
+  }
+
+  @media print {
+    .sucher {
+      display: none;
+    }
+  }
+</style>

@@ -1,59 +1,69 @@
 ---
 import { istListe, type Abschnitt } from '../lib/lebenslauf';
-import { einstellungen } from '../lib/einstellungen';
+import { spracheVon } from '../lib/sprache';
 import { zeitraum } from '../i18n';
 
+/*
+  Ein Abschnitt des Lebenslaufs: links der Name, rechts die Einträge.
+  Ohne `abschnitt` steht rechts der Inhalt des Slots, z. B. das Profil.
+*/
 interface Props {
-  abschnitt: Abschnitt;
-  /** Zweistellige Nummer des Abschnitts, z. B. "01". */
-  nummer?: string;
+  abschnitt?: Abschnitt;
+  /** Name des Abschnitts, wenn kein `abschnitt` übergeben wird. */
+  titel?: string;
   /** Kurzform: nur Titel, Organisation und Zeitraum. */
   kurz?: boolean;
   ebene?: 2 | 3;
 }
 
-const { abschnitt, nummer, kurz = false, ebene = 2 } = Astro.props;
-const sprache = einstellungen.sprache;
+const { abschnitt, kurz = false, ebene = 2 } = Astro.props;
+const titel = Astro.props.titel ?? abschnitt?.titel ?? '';
+const sprache = spracheVon(Astro.currentLocale);
 const Ueberschrift = `h${ebene}` as 'h2' | 'h3';
 ---
 
 <section class="feld geteilt abschnitt">
   <div class="kopf erscheinen">
-    {nummer && <p class="etikett nummer">{nummer}</p>}
-    <Ueberschrift class="abschnitt-titel">{abschnitt.titel}</Ueberschrift>
+    <Ueberschrift class="abschnitt-titel">{titel}</Ueberschrift>
   </div>
 
-  <ul class="eintraege erscheinen">
-    {
-      abschnitt.eintraege.map((eintrag) =>
-        istListe(eintrag) ? (
-          <li class="eintrag liste-eintrag">
-            <p class="etikett bereich">{eintrag.bereich}</p>
-            <p class="liste">{eintrag.liste.join(', ')}</p>
-          </li>
-        ) : (
-          <li class="eintrag">
-            <div class="zeile">
-              <p class="eintrag-titel">{eintrag.titel}</p>
-              <p class="etikett zeitraum">{zeitraum(eintrag.von, eintrag.bis ?? undefined, sprache)}</p>
-            </div>
-            {(eintrag.organisation || (eintrag.ort && !kurz)) && (
-              <p class="organisation">
-                {[eintrag.organisation, kurz ? undefined : eintrag.ort].filter(Boolean).join(', ')}
-              </p>
-            )}
-            {!kurz && eintrag.punkte.length > 0 && (
-              <ul class="punkte">
-                {eintrag.punkte.map((punkt) => (
-                  <li>{punkt}</li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ),
-      )
-    }
-  </ul>
+  {
+    abschnitt ? (
+      <ul class="eintraege erscheinen">
+        {abschnitt.eintraege.map((eintrag) =>
+          istListe(eintrag) ? (
+            <li class="eintrag liste-eintrag">
+              <p class="etikett bereich">{eintrag.bereich}</p>
+              <p class="liste">{eintrag.liste.join(', ')}</p>
+            </li>
+          ) : (
+            <li class="eintrag">
+              <div class="zeile">
+                <p class="eintrag-titel">{eintrag.titel}</p>
+                <p class="etikett zeitraum">{zeitraum(eintrag.von, eintrag.bis ?? undefined, sprache)}</p>
+              </div>
+              {(eintrag.organisation || (eintrag.ort && !kurz)) && (
+                <p class="organisation">
+                  {[eintrag.organisation, kurz ? undefined : eintrag.ort].filter(Boolean).join(', ')}
+                </p>
+              )}
+              {!kurz && eintrag.punkte.length > 0 && (
+                <ul class="punkte">
+                  {eintrag.punkte.map((punkt) => (
+                    <li>{punkt}</li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ),
+        )}
+      </ul>
+    ) : (
+      <div class="fliesstext text erscheinen">
+        <slot />
+      </div>
+    )
+  }
 </section>
 
 <style>
@@ -62,13 +72,13 @@ const Ueberschrift = `h${ebene}` as 'h2' | 'h3';
     gap: var(--space-24) var(--luecke);
   }
 
-  .nummer {
-    color: var(--color-text);
-    margin-bottom: var(--space-12);
-  }
-
   .abschnitt-titel {
     font-size: var(--text-h2);
+  }
+
+  .text {
+    font-size: var(--text-gross);
+    line-height: 1.55;
   }
 
   .eintraege {

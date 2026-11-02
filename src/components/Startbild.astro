@@ -1,6 +1,6 @@
 ---
-import Zeichen from './Zeichen.astro';
-import { einstellungen } from '../lib/einstellungen';
+import Blob from './Blob.astro';
+import { spracheVon } from '../lib/sprache';
 import { STAND } from '../lib/text';
 import { t } from '../i18n';
 
@@ -9,41 +9,51 @@ interface Props {
 }
 
 const { einleitung = '' } = Astro.props;
-const texte = t(einstellungen.sprache);
+const texte = t(spracheVon(Astro.currentLocale));
 
 /*
-  Oben auf der Startseite: die Einleitung groß, daneben das Zeichen als
-  Abbildung, die große Punktmatrix. Das Millimeterraster zeichnet das Zeichen
-  selbst, damit die Punkte genau auf seinen Kreuzungen liegen. Es reicht über
-  das ganze Startbild und liegt unter dem Text. Dahinter ein weicher Schimmer
-  aus den beiden Farben des Zeichens.
+  Oben auf der Startseite: links das Foto (Slot "foto") neben der großen
+  Einleitung, darunter das Profil (Slot), rechts als Abbildung der organische
+  Blob. Dahinter ein weicher Schimmer aus seinen beiden Farben.
+  Fadenkreuz, Messkreis und Millimeterraster aus dem früheren Entwurf hat der
+  Betreiber ausdrücklich abgelehnt.
 */
 ---
 
 <section class="feld ohne-linie startbild" aria-label={texte.index}>
-  {/* Der Inhalt liegt in einer beschnittenen Ebene: das Raster des Zeichens
-      reicht weit über die Abbildung hinaus und soll am Rand des Startbilds
-      enden. Die Kreuzmarken des Felds liegen außerhalb und bleiben ganz. */}
+  {/* Der Inhalt liegt in einer beschnittenen Ebene, damit der Schimmer am
+      Rand des Startbilds endet. Die Kreuzmarken des Felds liegen außerhalb
+      und bleiben ganz. */}
   <div class="innen">
     <div class="grund" aria-hidden="true">
       <div class="schimmer"></div>
     </div>
 
-    <div class="etiketten">
-      <p class="etikett">00 / {texte.index}</p>
-      <p class="etikett">{texte.stand} {STAND}</p>
-    </div>
+    {/* "00 / Index" und "Abb. 01 / Zeichen" hat der Betreiber entfernen lassen. */}
+    <p class="etikett stand">{texte.stand} {STAND}</p>
 
     <div class="buehne">
-      {einleitung !== '' && <p class="aussage">{einleitung}</p>}
-
-      <figure class="zeichnung" aria-hidden="true">
-        <div class="zeichen">
-          <Zeichen groesse={320} mitRaster />
+      <div class="text">
+        <div class="kopf">
+          <slot name="foto" />
+          {einleitung !== '' && <p class="aussage">{einleitung}</p>}
         </div>
+        {
+          Astro.slots.has('default') && (
+            <div class="profil">
+              <slot />
+            </div>
+          )
+        }
+      </div>
 
-        <figcaption class="etikett">{texte.abbildung} 01 / {texte.zeichen}</figcaption>
-      </figure>
+      <div class="zeichnung" aria-hidden="true">
+        <div class="flaeche">
+          <div class="blob">
+            <Blob />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -56,7 +66,7 @@ const texte = t(einstellungen.sprache);
   .innen {
     position: relative;
     overflow: clip;
-    padding: var(--space-24) var(--innen) clamp(3rem, 2rem + 5vw, 7rem);
+    padding: var(--space-24) var(--innen) clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
   }
 
   .grund {
@@ -67,21 +77,44 @@ const texte = t(einstellungen.sprache);
     pointer-events: none;
   }
 
-  .etiketten {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: var(--space-8) var(--space-24);
+  .stand {
+    text-align: right;
   }
 
   .buehne {
     display: grid;
-    gap: var(--space-48);
+    gap: var(--space-32);
     align-items: center;
-    margin-top: var(--space-48);
+    margin-top: var(--space-32);
+  }
+
+  /* Foto und große Zeile als Block: das Foto links, senkrecht mittig zur
+     Zeile. */
+  .kopf {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 0.5rem + 2vw, 2rem);
+  }
+
+  .kopf > :global(.portrait) {
+    animation: aufsteigen 1s 0.05s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* Das Profil unter der großen Zeile, gut lesbar. */
+  .profil {
+    max-width: 56ch;
+    margin-top: var(--space-32);
+    font-size: var(--text-gross);
+    line-height: 1.55;
+    animation: aufsteigen 1s 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .profil > :global(* + *) {
+    margin-top: var(--space-16);
   }
 
   .aussage {
+    min-width: 0;
     max-width: 15ch;
     font-size: var(--text-display);
     font-weight: 500;
@@ -91,30 +124,32 @@ const texte = t(einstellungen.sprache);
     animation: aufsteigen 1s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 
-  /* Unter dem Text, damit das Raster des Zeichens nicht über die Schrift läuft. */
+  /* Die Zeichnung: der Blob sitzt mittig in einer quadratischen Fläche. Der
+     schmale Rand reicht, damit die Formen beim Auseinandergehen nicht über
+     die Fläche hinausragen. */
   .zeichnung {
-    position: relative;
-    z-index: -1;
     order: -1;
-    width: min(15rem, 70vw);
+    width: min(11rem, 60vw);
     margin: 0;
   }
 
-  .zeichen {
+  .flaeche {
+    position: relative;
+    aspect-ratio: 1;
+  }
+
+  .blob {
+    position: absolute;
+    inset: 6%;
     line-height: 0;
   }
 
-  .zeichen :global(svg) {
+  .blob :global(svg) {
     width: 100%;
-    height: auto;
+    height: 100%;
   }
 
-  figcaption {
-    margin-top: var(--space-16);
-    text-align: center;
-  }
-
-  /* Weicher Schimmer aus Cool Sky und Dusty Rose hinter dem Zeichen. */
+  /* Weicher Schimmer aus Cool Sky und Dusty Rose hinter dem Blob. */
   .schimmer {
     position: absolute;
     top: 10%;
@@ -130,24 +165,16 @@ const texte = t(einstellungen.sprache);
     pointer-events: none;
   }
 
-  @keyframes schweben {
-    to {
-      translate: 2.5rem -1.5rem;
-      scale: 1.12;
-    }
-  }
-
   @media (min-width: 48rem) {
     .buehne {
       grid-template-columns: minmax(0, 1fr) auto;
       gap: var(--luecke);
-      min-height: 24rem;
-      margin-top: var(--space-32);
+      margin-top: var(--space-24);
     }
 
     .zeichnung {
       order: 0;
-      width: clamp(15rem, 8rem + 14vw, 22rem);
+      width: clamp(12rem, 6rem + 10vw, 16rem);
     }
 
     .schimmer {

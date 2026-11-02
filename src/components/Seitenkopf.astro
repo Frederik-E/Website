@@ -1,36 +1,72 @@
 ---
-import { einstellungen } from '../lib/einstellungen';
-import { eintragFuer } from '../lib/navigation';
+import Blob from './Blob.astro';
+import { spracheVon } from '../lib/sprache';
 import { STAND } from '../lib/text';
 import { t } from '../i18n';
 
 interface Props {
   titel: string;
   einleitung?: string;
-  /** Beschriftung oben links. Ohne Angabe: Nummer und Name aus der Navigation. */
+  /** Beschriftung oben links, z. B. "Projekte" auf einer Projektseite. Ohne Angabe leer. */
   etikett?: string;
   /** Beschriftung oben rechts. Ohne Angabe: Stand der Seite. */
   etikettRechts?: string;
+  /** Sprache von Titel und Einleitung, wenn sie von der Seite abweicht (fehlende Übersetzung). */
+  lang?: string;
+  /**
+   * Eine Form des Blobs von der Startseite, rechts neben der Überschrift
+   * (schmal darüber). Lebenslauf "blau", Projekte "rose".
+   */
+  blob?: 'blau' | 'rose';
 }
 
-const texte = t(einstellungen.sprache);
-const { titel, einleitung, etikett, etikettRechts } = Astro.props;
-const eintrag = await eintragFuer(Astro.url.pathname, texte);
-const links = etikett ?? (eintrag ? `${eintrag.nummer} / ${eintrag.text}` : titel);
+const texte = t(spracheVon(Astro.currentLocale));
+const { titel, einleitung, etikett, etikettRechts, lang, blob } = Astro.props;
 const rechts = etikettRechts ?? `${texte.stand} ${STAND}`;
 ---
 
 <header class="feld ohne-linie seitenkopf">
+  {/* Schimmer in der Farbe des Blobs, wie im Startbild. Er liegt unter dem
+      Raster und endet am Rand des Seitenkopfs. */}
+  {
+    blob && (
+      <div class="grund" aria-hidden="true">
+        <div class:list={['schimmer', blob]} />
+      </div>
+    )
+  }
   <div class="raster-grund" aria-hidden="true"></div>
 
   <div class="etiketten">
-    <p class="etikett">{links}</p>
-    <p class="etikett">{rechts}</p>
+    {etikett && <p class="etikett">{etikett}</p>}
+    <p class="etikett rechts">{rechts}</p>
   </div>
 
-  <h1>{titel}</h1>
-  {einleitung && <p class="einleitung">{einleitung}</p>}
-  <slot />
+  {/* Links neben der Überschrift ist Platz für ein kleines Bild (Slot
+      "vorne"), rechts am Rand für ein weiteres (Slot "seitlich"). Der
+      Lebenslauf zeigt vorne das Foto, im Druck stattdessen seitlich. */}
+  <div class:list={['koerper', blob && 'mit-blob']}>
+    <div class="haupt">
+      <div class="titelzeile">
+        <slot name="vorne" />
+        <h1 lang={lang}>{titel}</h1>
+      </div>
+      {einleitung && <p class="einleitung" lang={lang}>{einleitung}</p>}
+      <slot />
+    </div>
+    <slot name="seitlich" />
+    {
+      blob && (
+        <div class="zeichnung" aria-hidden="true">
+          <div class="flaeche">
+            <div class="blob">
+              <Blob farbe={blob} />
+            </div>
+          </div>
+        </div>
+      )
+    }
+  </div>
 </header>
 
 <style>
@@ -44,6 +80,32 @@ const rechts = etikettRechts ?? `${texte.stand} ${STAND}`;
     justify-content: space-between;
     gap: var(--space-8) var(--space-24);
     margin-bottom: clamp(3rem, 2rem + 5vw, 7rem);
+  }
+
+  .rechts {
+    margin-left: auto;
+  }
+
+  .koerper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-24) var(--luecke);
+  }
+
+  .haupt {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .titelzeile {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 0.5rem + 2vw, 2rem);
+  }
+
+  .titelzeile > h1 {
+    min-width: 0;
   }
 
   h1 {
@@ -60,8 +122,109 @@ const rechts = etikettRechts ?? `${texte.stand} ${STAND}`;
     animation: aufsteigen 0.9s 0.12s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 
+  /* Der einzelne Blob. Fläche und Rand wie im Startbild der Startseite,
+     schmal kleiner, damit der Inhalt nicht weit nach unten rutscht. */
+  .seitenkopf {
+    --blob: min(9rem, 45vw);
+  }
+
+  .zeichnung {
+    flex: none;
+  }
+
+  .flaeche {
+    position: relative;
+    width: var(--blob);
+    aspect-ratio: 1;
+  }
+
+  .blob {
+    position: absolute;
+    inset: 6%;
+    line-height: 0;
+  }
+
+  .blob :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .grund {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .schimmer {
+    --farbe: var(--color-mark);
+    position: absolute;
+    top: -2rem;
+    left: -4rem;
+    width: 22rem;
+    height: 22rem;
+    background: radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--farbe) 55%, transparent),
+      transparent 60%
+    );
+    filter: blur(48px);
+    opacity: 0.55;
+    animation: schweben 18s ease-in-out infinite alternate;
+  }
+
+  .schimmer.rose {
+    --farbe: var(--color-line);
+  }
+
+  /* Schmal steht der Blob über der Überschrift, wie auf der Startseite. Der
+     negative Rand nutzt den leeren Rand der Fläche. Nur am Bildschirm: im
+     Druck soll der Kopf des Lebenslaufs nicht umbrechen. */
+  @media screen and (max-width: 47.99rem) {
+    .mit-blob {
+      flex-wrap: wrap;
+    }
+
+    .zeichnung {
+      order: -1;
+      flex-basis: 100%;
+      margin-block: calc(var(--blob) * -0.2) calc(var(--blob) * -0.1);
+    }
+  }
+
+  /* Breit steht er rechts, senkrecht mittig zur Überschrift, so groß wie auf
+     der Startseite. Der negative Rand lässt ihn in den Freiraum über und
+     unter der Überschrift ragen, ohne den Kopf höher zu machen. */
+  @media (min-width: 48rem) {
+    .seitenkopf {
+      --blob: clamp(12rem, 6rem + 10vw, 16rem);
+    }
+
+    .zeichnung {
+      align-self: center;
+      margin-block: calc(var(--blob) * -0.3);
+    }
+
+    .schimmer {
+      top: calc(55% - 15rem);
+      left: auto;
+      right: calc(var(--innen) + var(--blob) / 2 - 15rem);
+      width: 30rem;
+      height: 30rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .schimmer {
+      animation: none;
+    }
+  }
+
   @media print {
-    .etiketten {
+    .etiketten,
+    .zeichnung,
+    .grund {
       display: none;
     }
   }

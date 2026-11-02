@@ -1,24 +1,27 @@
 # Grundeinstellungen der Website. Nach jeder Änderung speichern,
 # die lokale Vorschau (npm run dev) aktualisiert sich von selbst.
 
-# Sprache aller Oberflächentexte: en oder de
-sprache: de
+# Die Seite gibt es auf Deutsch (unter /) und auf Englisch (unter /en/).
+# Felder mit "_en" am Ende sind die englische Fassung des Felds darüber.
 
 # Dein Name. Er steht klein in der Fusszeile, im Browser-Tab und im Lebenslauf.
 name: "Frederik Eichlohn"
 
 # Kurze Einordnung, z. B. Studiengang und Hochschule. Steht nicht auf der
 # Seite selbst, sondern im Browser-Tab, in Suchergebnissen und im Lebenslauf-PDF.
-untertitel: "Master-Student KIT - Mechatronics and Information Techonlogy - AI and autonomous systems"
+untertitel: "Master-Student KIT - Mechatronics and Information Technology - AI and autonomous systems"
+untertitel_en: "Master's student at KIT - Mechatronics and Information Technology - AI and autonomous systems"
 
-# Ein bis zwei Saetze ganz oben auf der Startseite: woran du arbeitest.
+# Eine kurze Zeile ganz oben auf der Startseite, gross gesetzt: woran du
+# arbeitest. Darunter steht das Profil aus inhalt/lebenslauf.yaml.
 # Leer lassen ("") blendet die Zeile aus.
-einleitung: "Sammlung an Projekten und Arbeiten"
+einleitung: "Mechatronik, KI und autonome Systeme"
+einleitung_en: "Mechatronics, AI and autonomous systems"
 
 # Kontakt
 email: "frederik.eichlohn@gmail.com"
 github: "https://github.com/Frederik-E"
-#linkedin: "[TODO: https://www.linkedin.com/in/benutzername]"
+linkedin: "https://www.linkedin.com/in/frederik-eichlohn-4a889a205"
 
 # Deine Initialen, bis zu drei Buchstaben. Die Wellen im bewegten Zeichen oben
 # auf der Startseite zeichnen sie alle 40 Sekunden, einen Buchstaben
@@ -27,4 +30,4 @@ initialen: "FE"
 
 # Deine gekaufte Domain, mit https:// und ohne Schrägstrich am Ende.
 # Sie darf noch nicht auf die Seite zeigen.
-domain: "https://example.com"
+domain: "https://frederik-eichlohn.de"

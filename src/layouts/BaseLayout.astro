@@ -1,8 +1,9 @@
 ---
 import { Font } from 'astro:assets';
-import Zeichen from '../components/Zeichen.astro';
-import { einstellungen } from '../lib/einstellungen';
+import Blob from '../components/Blob.astro';
+import { einstellungenIn } from '../lib/einstellungen';
 import { navigation } from '../lib/navigation';
+import { adresse, andereSprache, ohneSprache, spracheVon } from '../lib/sprache';
 import { STAND } from '../lib/text';
 import { t } from '../i18n';
 import '../styles/tokens.css';
@@ -16,6 +17,11 @@ interface Props {
   /** Absolute Adresse eines Vorschaubildes für geteilte Links. */
   ogBild?: string;
   noindex?: boolean;
+  /**
+   * Ziel des Sprachwechsels in der Kopfzeile. Ohne Angabe dieselbe Seite in
+   * der anderen Sprache; die 404-Seite verweist auf die andere Startseite.
+   */
+  andereFassung?: string;
 }
 
 const {
@@ -25,13 +31,24 @@ const {
   ogBild,
   noindex = false,
 } = Astro.props;
-const texte = t(einstellungen.sprache);
+const sprache = spracheVon(Astro.currentLocale);
+const zweite = andereSprache(sprache);
+const texte = t(sprache);
+const einstellungen = einstellungenIn(sprache);
 
 const seitentitel = istStartseite
   ? `${einstellungen.name}, ${einstellungen.untertitel}`
   : `${titel} | ${einstellungen.name}`;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// Dieselbe Seite in der anderen Sprache. Jede Seite gibt es in beiden.
+const andereFassung = Astro.props.andereFassung ?? adresse(ohneSprache(Astro.url.pathname), zweite);
+const fassungen = {
+  de: new URL(adresse(ohneSprache(Astro.url.pathname), 'de'), Astro.site).href,
+  en: new URL(adresse(ohneSprache(Astro.url.pathname), 'en'), Astro.site).href,
+};
+const ogLocale = { de: 'de_DE', en: 'en_GB' } as const;
 
 const sameAs = [einstellungen.github, einstellungen.linkedin].filter(
   (adresse) => adresse !== '' && !adresse.includes('[TODO'),
@@ -46,10 +63,10 @@ const person = {
   ...(sameAs.length > 0 ? { sameAs } : {}),
 };
 
-// Feste Seiten plus alles aus inhalt/seiten/ mit navigation: true, durchnummeriert.
+// Feste Seiten plus alles aus inhalt/seiten/ mit navigation: true.
 // Die Kopfzeile markiert den aktuellen Punkt selbst. Auf einer Projekt-
 // Detailseite bleibt dadurch "Projekte" markiert.
-const eintraege = await navigation(texte);
+const eintraege = await navigation(texte, sprache);
 const seitenname = istStartseite ? texte.index : titel;
 
 const pfad = Astro.url.pathname;
@@ -60,7 +77,7 @@ const zustand = (adresse: string) => {
 ---
 
 <!doctype html>
-<html lang={einstellungen.sprache}>
+<html lang={sprache}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -70,12 +87,22 @@ const zustand = (adresse: string) => {
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {noindex && <meta name="robots" content="noindex, follow" />}
+    {
+      !noindex && (
+        <>
+          <link rel="alternate" hreflang="de" href={fassungen.de} />
+          <link rel="alternate" hreflang="en" href={fassungen.en} />
+          <link rel="alternate" hreflang="x-default" href={fassungen.de} />
+        </>
+      )
+    }
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={seitentitel} />
     <meta property="og:description" content={beschreibung} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content={einstellungen.sprache === 'de' ? 'de_DE' : 'en_GB'} />
+    <meta property="og:locale" content={ogLocale[sprache]} />
+    <meta property="og:locale:alternate" content={ogLocale[zweite]} />
     {ogBild && <meta property="og:image" content={ogBild} />}
     <meta name="twitter:card" content={ogBild ? 'summary_large_image' : 'summary'} />
 
@@ -94,22 +121,25 @@ const zustand = (adresse: string) => {
 
     <header class="kopfzeile">
       <div class="blatt kopf">
-        <a class="zeichen" href="/" aria-label={texte.zurStartseite}>
-          <Zeichen groesse={28} />
+        <a class="zeichen" href={adresse('/', sprache)} aria-label={texte.zurStartseite}>
+          <Blob groesse={36} />
         </a>
 
-        <nav class="nav" aria-label={texte.navigation}>
-          {
-            eintraege.map((eintrag) => (
-              <a href={eintrag.adresse} aria-current={zustand(eintrag.adresse)}>
-                <span class="nr" aria-hidden="true">
-                  {eintrag.nummer}
-                </span>
-                <span class:list={['text', zustand(eintrag.adresse) && 'mark']}>{eintrag.text}</span>
-              </a>
-            ))
-          }
-        </nav>
+        <div class="rechts">
+          <nav class="nav" aria-label={texte.navigation}>
+            {
+              eintraege.map((eintrag) => (
+                <a href={eintrag.adresse} aria-current={zustand(eintrag.adresse)}>
+                  <span class:list={['text', zustand(eintrag.adresse) && 'mark']}>{eintrag.text}</span>
+                </a>
+              ))
+            }
+          </nav>
+          {/* Dieselbe Seite in der anderen Sprache, in deren eigener Sprache benannt. */}
+          <a class="sprachwechsel" href={andereFassung} hreflang={zweite} lang={zweite}>
+            <span class="text">{texte.sprachwechsel}</span>
+          </a>
+        </div>
       </div>
     </header>
 
@@ -152,8 +182,8 @@ const zustand = (adresse: string) => {
             <div>
               <dt class="etikett">{texte.rechtliches}</dt>
               <dd class="reihe">
-                <a href="/impressum/">{texte.impressum}</a>
-                <a href="/datenschutz/">{texte.datenschutz}</a>
+                <a href={adresse('/impressum/', sprache)}>{texte.impressum}</a>
+                <a href={adresse('/datenschutz/', sprache)}>{texte.datenschutz}</a>
               </dd>
             </div>
           </dl>
@@ -190,14 +220,41 @@ const zustand = (adresse: string) => {
     text-decoration: none;
   }
 
-  .nav {
+  /* Rechts: Navigation, dahinter durch eine Haarlinie getrennt der Wechsel
+     in die andere Sprache. */
+  .rechts {
     display: flex;
-    gap: var(--space-8) var(--space-24);
+    align-items: center;
+    gap: var(--space-24);
     font-size: var(--text-ui);
     line-height: 1.4;
   }
 
-  .nav a {
+  .nav {
+    display: flex;
+    gap: var(--space-8) var(--space-24);
+  }
+
+  .sprachwechsel {
+    padding-left: var(--space-24);
+    border-left: 1px solid var(--color-haarlinie);
+  }
+
+  /* Sehr schmale Bildschirme (bis 320 px): engere Abstände, damit die
+     Kopfzeile mit dem Sprachwechsel nicht seitlich überläuft. */
+  @media (max-width: 24rem) {
+    .rechts,
+    .nav {
+      column-gap: var(--space-16);
+    }
+
+    .sprachwechsel {
+      padding-left: var(--space-16);
+    }
+  }
+
+  .nav a,
+  .sprachwechsel {
     display: inline-flex;
     align-items: baseline;
     gap: 0.45rem;
@@ -206,21 +263,14 @@ const zustand = (adresse: string) => {
   }
 
   .nav a:hover,
-  .nav a[aria-current] {
+  .nav a[aria-current],
+  .sprachwechsel:hover {
     color: var(--color-text);
   }
 
-  .nr {
-    display: none;
-    font-family: var(--font-etikett, system-ui, sans-serif);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: var(--sperrung-etikett);
-    color: var(--color-text-muted);
-  }
-
   /* Beim Zeigen wächst eine feine Linie unter dem Wort von links heran. */
-  .nav a:not([aria-current]) .text {
+  .nav a:not([aria-current]) .text,
+  .sprachwechsel .text {
     background-image: linear-gradient(currentColor, currentColor);
     background-repeat: no-repeat;
     background-position: 0 100%;
@@ -228,7 +278,8 @@ const zustand = (adresse: string) => {
     transition: background-size 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
-  .nav a:not([aria-current]):hover .text {
+  .nav a:not([aria-current]):hover .text,
+  .sprachwechsel:hover .text {
     background-size: 100% 1px;
   }
 
@@ -271,7 +322,7 @@ const zustand = (adresse: string) => {
   .mail {
     display: inline-block;
     margin-top: var(--space-24);
-    font-size: clamp(1.75rem, 0.9rem + 3.6vw, 4rem);
+    font-size: clamp(1.375rem, 1rem + 1.6vw, 2.25rem);
     font-weight: 500;
     line-height: 1.1;
     letter-spacing: var(--laufweite-gross);
@@ -316,12 +367,6 @@ const zustand = (adresse: string) => {
 
   .stand {
     white-space: nowrap;
-  }
-
-  @media (min-width: 34rem) {
-    .nr {
-      display: inline;
-    }
   }
 
   @media (min-width: 60rem) {
