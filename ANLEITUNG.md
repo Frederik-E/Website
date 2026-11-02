@@ -30,7 +30,7 @@ Alles, was du pflegst, liegt in **`inhalt/`**. Dort brauchst du keinen Code anzu
 ```
 inhalt/
   einstellungen.yaml     Name, Links, Domain, Untertitel und Einleitung in beiden Sprachen
-  lebenslauf.yaml        Profil und Lebenslauf, auf der Startseite und auf /cv/
+  lebenslauf.yaml        Profil und Lebenslauf: auf /cv/, Kurzform auf der Startseite
   lebenslauf.en.yaml     Dasselbe auf Englisch
   foto/                  Dein Foto, ein Bild
   impressum.md           (und impressum.en.md)

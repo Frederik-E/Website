@@ -47,7 +47,7 @@ Der ganze Weg in der Reihenfolge, in der du ihn gehen solltest. Einmal durcharbe
 4. Bei `untertitel_en` und `einleitung_en` dieselben Angaben auf Englisch eintragen. Sie stehen auf der englischen Seite unter `/en/`.
 5. Speichern und im Browser nachsehen.
 
-`einleitung` ist die erste Zeile auf der Startseite, groß gesetzt. Schreib dort, woran du arbeitest. Darunter steht dein Profil aus `inhalt/lebenslauf.yaml`.
+`einleitung` ist die erste Zeile auf der Startseite, groß gesetzt. Schreib dort, woran du arbeitest. Dein Profil aus `inhalt/lebenslauf.yaml` steht im Lebenslauf.
 
 `initialen` sind bis zu drei Buchstaben, die das bewegte Zeichen auf der Startseite alle 40 Sekunden zeichnet. Leer lassen (`initialen: ""`) blendet sie aus.
 

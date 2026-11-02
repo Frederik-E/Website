@@ -1,8 +1,9 @@
 # Dein Lebenslauf. Er steht auf /cv/, als PDF zum Herunterladen und in
 # Kurzform auf der Startseite.
 #
-# Ganz oben das Profil: ein paar Saetze in der Ich-Form. Es steht auf der
-# Startseite unter der grossen Zeile und im Lebenslauf als erster Abschnitt. Eine Leerzeile beginnt einen neuen Absatz.
+# Ganz oben das Profil: ein paar Saetze in der Ich-Form. Es steht im
+# Lebenslauf als erster Abschnitt, nicht auf der Startseite. Eine Leerzeile
+# beginnt einen neuen Absatz.
 #
 # Danach die Abschnitte, in der Reihenfolge, in der sie hier stehen. Es gibt
 # zwei Arten von Eintraegen:

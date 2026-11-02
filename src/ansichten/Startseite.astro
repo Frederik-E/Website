@@ -19,7 +19,7 @@ import { monatJahr, t } from '../i18n';
 const sprache = spracheVon(Astro.currentLocale);
 const texte = t(sprache);
 const einstellungen = einstellungenIn(sprache);
-const { kurzfassung, profil } = lebenslaufIn(sprache);
+const { kurzfassung } = lebenslaufIn(sprache);
 const projekte = await alleProjekte(sprache);
 const auswahl = startseitenProjekte(projekte);
 const ogBild = await ogAdresse(auswahl[0]?.data.titelbild, Astro.site);
@@ -32,8 +32,8 @@ const daten = [
   ...(themen.length > 0 ? [{ name: texte.themen, wert: themen.join(', ') }] : []),
 ];
 
-// Die Startseite stellt das Profil vorn hin: oben das Profil, dann der
-// Lebenslauf in Kurzform, danach die Arbeiten. Freie Seiten aus
+// Reihenfolge: oben Foto und große Zeile, dann der Lebenslauf in Kurzform,
+// danach die Arbeiten. Freie Seiten aus
 // inhalt/seiten/ stehen am Ende, wenn es welche gibt.
 const weitereInhalte = (await alleSeiten(sprache)).map((seite) => ({
   adresse: adresse(`/${seite.id}/`, sprache),
@@ -45,12 +45,11 @@ const weitereInhalte = (await alleSeiten(sprache)).map((seite) => ({
 <BaseLayout istStartseite beschreibung={einstellungen.einleitung || einstellungen.untertitel} ogBild={ogBild}>
   <h1 class="nur-vorlesen">{einstellungen.name}</h1>
 
-  {/* Das Foto steht links neben der großen Zeile, das Profil darunter. */}
+  {/* Das Foto steht links neben der großen Zeile. Den Profiltext darunter
+      hat der Betreiber am 2026-11-02 entfernen lassen: als Text ganz oben
+      wirkt er wie ein Lebenslauf. Er steht nur noch auf /cv/. */}
   <Startbild einleitung={einstellungen.einleitung}>
     <Portrait slot="foto" breite="clamp(4.5rem, 1rem + 8vw, 8rem)" sizes="8rem" zuerst />
-    {profil.map((absatz) => (
-      <p>{absatz}</p>
-    ))}
   </Startbild>
 
   {

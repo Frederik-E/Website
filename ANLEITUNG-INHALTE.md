@@ -11,7 +11,7 @@ Nach jeder Änderung speichern. Läuft `npm run dev`, siehst du das Ergebnis sof
 ```
 inhalt/
   einstellungen.yaml     Name, Links, Domain, Untertitel und Einleitung in beiden Sprachen
-  lebenslauf.yaml        Profil und Lebenslauf, auf der Startseite und auf /cv/
+  lebenslauf.yaml        Profil und Lebenslauf: auf /cv/, Kurzform auf der Startseite
   lebenslauf.en.yaml     Dasselbe auf Englisch, für /en/
   foto/                  Dein Foto, ein Bild
   lebenslauf-pdf/        Optional: dein eigenes PDF (englisch mit .en.pdf am Ende)
@@ -35,13 +35,13 @@ Die Seite gibt es zweimal: auf Deutsch unter `/` und auf Englisch unter `/en/`. 
 
 ## Die Startseite
 
-Die Startseite ist wie ein technisches Zeichnungsblatt aufgebaut. Sie stellt dein Profil vorn hin, die Projekte kommen danach. Alles steuerst du über `inhalt/`.
+Die Startseite ist wie ein technisches Zeichnungsblatt aufgebaut. Oben stehen dein Foto und die große Zeile, darunter dein Lebenslauf in Kurzform, danach die Projekte. Alles steuerst du über `inhalt/`.
 
 **Oben das Startbild.** Deine Einleitung groß links, rechts das bewegte Zeichen: eine Punktmatrix, über die farbige Ringe laufen, jeder von einem zufälligen Punkt aus. Alle 40 Sekunden zeichnen die Ringe deine Initialen, einen Buchstaben nach dem anderen. Welche Buchstaben das sind, steht in `inhalt/einstellungen.yaml` bei `initialen`; leer lassen blendet sie aus.
 
 - Die **Einleitung** steht in `inhalt/einstellungen.yaml` bei `einleitung`. Eine kurze Zeile, woran du arbeitest, nicht wer du bist. Leer lassen (`einleitung: ""`) blendet sie aus.
 
-Links neben der Einleitung steht klein dein Foto aus `inhalt/foto/`, darunter dein Profil aus `inhalt/lebenslauf.yaml` (Feld `profil`).
+Links neben der Einleitung steht klein dein Foto aus `inhalt/foto/`. Dein Profiltext steht nicht auf der Startseite, nur im Lebenslauf.
 
 **Darunter der Lebenslauf in Kurzform.** Jeder Abschnitt aus `inhalt/lebenslauf.yaml` mit `startseite: true`, mit Titel, Organisation und Zeitraum. Die Stichpunkte stehen nur auf `/cv/`. Oben rechts zwei Verweise: der ganze Lebenslauf und das PDF.
 
@@ -214,7 +214,7 @@ Dein jetziges Foto ist `portrait.jpg`: das Original mit aufgehelltem, kühlem Hi
 
 Beides steht in `inhalt/lebenslauf.yaml`. Eine eigene Seite „Über mich“ gibt es nicht mehr.
 
-**Das Profil** steht ganz oben in der Datei bei `profil`: 60 bis 120 Wörter in der Ich-Form. Es erscheint auf der Startseite unter der großen Zeile und im Lebenslauf als erster Abschnitt. Eine Leerzeile beginnt einen neuen Absatz.
+**Das Profil** steht ganz oben in der Datei bei `profil`: 60 bis 120 Wörter in der Ich-Form. Es erscheint im Lebenslauf als erster Abschnitt, nicht auf der Startseite. Eine Leerzeile beginnt einen neuen Absatz.
 
 ```yaml
 profil: |
