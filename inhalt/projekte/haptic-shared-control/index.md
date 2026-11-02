@@ -9,7 +9,7 @@ titelbild: ./joystick.png
 titelbild_alt: "Zeichnung eines Probanden von hinten an einem Tisch. Mit der rechten Hand hält er einen Joystick mit Kraftrückkopplung. Auf dem Bildschirm vor ihm fliegt eine Drohne zwischen kreisförmigen Hindernissen auf ein Ziel zu. Ein blauer Pfeil am Joystick und einer an der Drohne zeigen die Kraft, die vom nächsten Hindernis wegdrückt."
 startseite: true
 reihenfolge: 4
-entwurf: true
+entwurf: false
 ---
 
 ## Worum es ging
