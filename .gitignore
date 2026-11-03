@@ -21,3 +21,9 @@ Thumbs.db
 # Originalfoto: bleibt nur auf diesem Rechner. Die Seite benutzt
 # inhalt/foto/portrait.jpg, das Original braucht nur scripts/foto-aufhellen.py.
 inhalt/foto/original/
+
+# Anleitungen und Arbeitsnotizen: bleiben nur auf diesem Rechner, nicht im
+# öffentlichen Repository (Wunsch des Betreibers, 2026-11-03).
+ANLEITUNG*.md
+CLAUDE.md
+PLAN.md
