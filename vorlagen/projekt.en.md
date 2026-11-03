@@ -10,6 +10,7 @@ tags: []                                     # optional, Themen auf Englisch, z.
 #   - "Skills: Python, PyTorch"
 # titelbild: ./titelbild.en.jpg              # nur wenn im Bild Text steht; sonst gilt das Bild aus index.md
 # titelbild_alt: "[TODO: Bildbeschreibung auf Englisch]"   # Pflicht, wenn index.md ein titelbild hat
+# linkedin_text: "Post by ..., with photos of ..."         # nur wenn index.md linkedin_text hat
 ---
 
 ## Problem

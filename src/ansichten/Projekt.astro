@@ -7,6 +7,7 @@ import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
 import Abbildung from '../components/Abbildung.astro';
+import LinkedinBeitrag from '../components/LinkedinBeitrag.astro';
 import { naechstesProjekt, type Projekt } from '../lib/projekte';
 import { ogAdresse } from '../lib/og';
 import { adresse, spracheVon } from '../lib/sprache';
@@ -96,6 +97,22 @@ const textLang = projekt.textSprache !== sprache ? projekt.textSprache : undefin
   <div class="feld geteilt">
     <div class="fliesstext gegliedert" lang={textLang}>
       <Content />
+      {/* Ein LinkedIn-Beitrag steht als letzter Abschnitt im Text, die
+          Überschrift links wie bei den Abschnitten darüber. */}
+      {
+        daten.linkedin && (
+          <h2 lang={textLang && sprache}>{texte.linkedinUeberschrift}</h2>
+        )
+      }
+      {
+        daten.linkedin && (
+          <LinkedinBeitrag
+            url={daten.linkedin}
+            text={daten.linkedin_text}
+            textLang={kopfLang}
+          />
+        )
+      }
     </div>
   </div>
 

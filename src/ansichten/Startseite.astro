@@ -57,8 +57,10 @@ const weitereInhalte = (await alleSeiten(sprache)).map((seite) => ({
       <section aria-labelledby="lebenslauf">
         <div class="feld knapp geteilt abschnittskopf">
           <h2 class="etikett" id="lebenslauf">{texte.lebenslauf}</h2>
+          {/* Die Verweise "Ganzer Lebenslauf" und "Alle Projekte" neben den
+              Abschnittsnamen hat der Betreiber am 2026-11-03 entfernen lassen.
+              Lebenslauf und Projekte stehen in der Navigation. */}
           <p class="verweise">
-            <a class="etikett alle" href={adresse('/cv/', sprache)}>{texte.lebenslaufGanz}</a>
             <a class="etikett alle" href={adresse('/cv.pdf', sprache)} download={cvDateiname(einstellungen.name, sprache)}>
               {texte.lebenslaufPdf}
             </a>
@@ -75,9 +77,6 @@ const weitereInhalte = (await alleSeiten(sprache)).map((seite) => ({
   <section aria-labelledby="arbeiten">
     <div class="feld knapp geteilt abschnittskopf">
       <h2 class="etikett" id="arbeiten">{texte.ausgewaehlteArbeiten}</h2>
-      <p class="verweise">
-        <a class="etikett alle" href={adresse('/projects/', sprache)}>{texte.alleProjekte(projekte.length)}</a>
-      </p>
     </div>
 
     <div class="feld datenleiste">
@@ -161,8 +160,8 @@ const weitereInhalte = (await alleSeiten(sprache)).map((seite) => ({
     color: var(--color-text);
   }
 
-  /* Zwei Verweise nebeneinander: Flex mit Lücke, weil compressHTML den
-     Leerraum zwischen Links entfernt. */
+  /* Verweise neben dem Abschnittsnamen (derzeit nur das PDF): Flex mit
+     Lücke, weil compressHTML den Leerraum zwischen Links entfernt. */
   .verweise {
     display: flex;
     flex-wrap: wrap;

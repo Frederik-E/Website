@@ -10,11 +10,19 @@ Rechtsgrundlage ist mein berechtigtes Interesse an einer sicheren und stabilen B
 
 ## Cookies und Tracking
 
-Die Seite setzt keine Cookies. Sie nutzt keine Analyse, keine Werbung und keine Werkzeuge zur Reichweitenmessung.
+Die Seite setzt keine Cookies. Sie nutzt keine Analyse, keine Werbung und keine Werkzeuge zur Reichweitenmessung. Nur wenn du einen LinkedIn-Beitrag lädst, kann LinkedIn Cookies setzen (siehe unten).
 
 ## Schriften, Bilder und Videos
 
-Schriften, Bilder und Videos liegen auf demselben Server wie die Seite. Es werden keine Inhalte von anderen Servern nachgeladen.
+Schriften, Bilder und Videos liegen auf demselben Server wie die Seite. Ohne deinen Klick werden keine Inhalte von anderen Servern nachgeladen.
+
+## Eingebettete LinkedIn-Beiträge
+
+Auf manchen Projektseiten steht ein Beitrag von LinkedIn. Zunächst siehst du dort nur einen Platzhalter, und es werden keine Daten an LinkedIn übertragen. Erst wenn du auf „Beitrag laden“ klickst, lädt dein Browser den Beitrag von LinkedIn. Anbieter ist die LinkedIn Ireland Unlimited Company, Wilton Plaza, Wilton Place, Dublin 2, Irland.
+
+Dabei erhält LinkedIn deine IP-Adresse, die Kennung deines Browsers, Datum und Uhrzeit und die Adresse dieser Seite. LinkedIn kann Cookies setzen und Daten in deinem Browser speichern. Bist du bei LinkedIn angemeldet, kann LinkedIn den Aufruf deinem Konto zuordnen. Der Beitrag lädt außerdem selbst Dienste weiterer Anbieter nach, bei meinem Test im November 2026 von Google und von HUMAN Security (protechts.net). Darauf habe ich keinen Einfluss, und ich bekomme diese Daten nicht zu sehen.
+
+Rechtsgrundlage ist deine Einwilligung, die du mit dem Klick erteilst (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG). Sie gilt nur für diesen einen Aufruf und wird nicht gespeichert. Lädst du die Seite neu, steht wieder der Platzhalter da. Cookies, die LinkedIn gesetzt hat, kannst du in deinem Browser löschen. Die Daten können in die USA übermittelt werden. Grundlage dafür sind die Standardvertragsklauseln der EU-Kommission und der Angemessenheitsbeschluss zum EU-US Data Privacy Framework. Mehr dazu steht in der Datenschutzrichtlinie von LinkedIn: <https://de.linkedin.com/legal/privacy-policy>.
 
 ## Kontakt
 
@@ -22,7 +30,7 @@ Es gibt kein Kontaktformular. Schreibst du mir eine E-Mail, speichere ich Absend
 
 ## Links zu anderen Seiten
 
-Die Seite verlinkt auf GitHub und gegebenenfalls andere Angebote. Erst wenn du einen Link anklickst, werden Daten an den jeweiligen Anbieter übertragen. Für deren Datenverarbeitung gelten die Erklärungen der Anbieter.
+Die Seite verlinkt auf GitHub, LinkedIn und gegebenenfalls andere Angebote. Erst wenn du einen Link anklickst, werden Daten an den jeweiligen Anbieter übertragen. Für deren Datenverarbeitung gelten die Erklärungen der Anbieter.
 
 ## Deine Rechte
 

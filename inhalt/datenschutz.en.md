@@ -10,11 +10,19 @@ The legal basis is my legitimate interest in the secure and stable provision of 
 
 ## Cookies and tracking
 
-The site does not set any cookies. It uses no analytics, no advertising and no tools for audience measurement.
+The site does not set any cookies. It uses no analytics, no advertising and no tools for audience measurement. Only if you load a LinkedIn post may LinkedIn set cookies (see below).
 
 ## Fonts, images and videos
 
-Fonts, images and videos are stored on the same server as the site. No content is loaded from other servers.
+Fonts, images and videos are stored on the same server as the site. Without your click, no content is loaded from other servers.
+
+## Embedded LinkedIn posts
+
+Some project pages contain a post from LinkedIn. At first you only see a placeholder there, and no data is transferred to LinkedIn. Only when you click "Load post" does your browser load the post from LinkedIn. The provider is LinkedIn Ireland Unlimited Company, Wilton Plaza, Wilton Place, Dublin 2, Ireland.
+
+LinkedIn then receives your IP address, the identifier of your browser, the date and time and the address of this page. LinkedIn may set cookies and store data in your browser. If you are logged in to LinkedIn, LinkedIn can link the visit to your account. The post also loads services from other providers itself; when I tested it in November 2026, these were Google and HUMAN Security (protechts.net). I have no influence on this, and I do not have access to this data.
+
+The legal basis is your consent, which you give with the click (Art. 6(1)(a) GDPR, Section 25(1) TDDDG). It only applies to this one visit and is not stored. If you reload the page, the placeholder is shown again. You can delete cookies set by LinkedIn in your browser. The data may be transferred to the USA. This is based on the EU Commission's standard contractual clauses and the adequacy decision for the EU-US Data Privacy Framework. More on this can be found in LinkedIn's privacy policy: <https://www.linkedin.com/legal/privacy-policy>.
 
 ## Contact
 
@@ -22,7 +30,7 @@ There is no contact form. If you send me an email, I store the sender, content a
 
 ## Links to other sites
 
-The site links to GitHub and possibly other services. Only when you click a link is data transferred to the respective provider. The providers' own privacy policies apply to their data processing.
+The site links to GitHub, LinkedIn and possibly other services. Only when you click a link is data transferred to the respective provider. The providers' own privacy policies apply to their data processing.
 
 ## Your rights
 

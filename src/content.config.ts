@@ -2,6 +2,7 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { monatSchema } from './lib/monat';
+import { linkedinKennung } from './lib/linkedin';
 
 const projekte = defineCollection({
   loader: glob({
@@ -30,6 +31,18 @@ const projekte = defineCollection({
         video: z.string().optional(),
         code: z.url({ error: 'Feld "code" ist keine gueltige Adresse.' }).optional(),
         demo: z.url({ error: 'Feld "demo" ist keine gueltige Adresse.' }).optional(),
+        // Ein LinkedIn-Beitrag, der am Ende der Detailseite eingebettet wird.
+        // Er lädt erst, wenn jemand auf "Beitrag laden" klickt.
+        linkedin: z
+          .url({ error: 'Feld "linkedin" ist keine gueltige Adresse.' })
+          .refine((adresse) => linkedinKennung(adresse) !== undefined, {
+            error:
+              'Feld "linkedin" ist keine Adresse eines LinkedIn-Beitrags. Einen Kurzlink (lnkd.in) erst im Browser oeffnen ' +
+              'und die lange Adresse aus der Adresszeile eintragen.',
+          })
+          .optional(),
+        // Unterschrift unter dem Beitrag: von wem er ist und was er zeigt.
+        linkedin_text: z.string().min(1).optional(),
         startseite: z.boolean().default(false),
         reihenfolge: z.number().optional(),
         entwurf: z.boolean().default(false),
@@ -45,6 +58,10 @@ const projekte = defineCollection({
       .refine((daten) => !daten.video || daten.titelbild, {
         error: 'Wenn "video" gesetzt ist, braucht das Projekt auch "titelbild" als Posterbild.',
         path: ['titelbild'],
+      })
+      .refine((daten) => !daten.linkedin_text || daten.linkedin, {
+        error: 'Feld "linkedin_text" ist gesetzt, aber "linkedin" fehlt.',
+        path: ['linkedin'],
       })
       .refine((daten) => !daten.titelbild || (daten.titelbild_alt ?? '').trim().length > 0, {
         error: 'Zu "titelbild" gehoert "titelbild_alt" mit einer Bildbeschreibung.',
@@ -78,11 +95,12 @@ const projekteEn = defineCollection({
         tags: z.array(z.string()).optional(),
         titelbild: image().optional(),
         titelbild_alt: z.string().optional(),
+        linkedin_text: z.string().min(1).optional(),
       },
       {
         error: (problem) =>
           problem.code === 'unrecognized_keys'
-            ? `In index.en.md stehen nur titel, kurz, stichpunkte, rolle, tags, titelbild und titelbild_alt. ` +
+            ? `In index.en.md stehen nur titel, kurz, stichpunkte, rolle, tags, titelbild, titelbild_alt und linkedin_text. ` +
               `${problem.keys.join(', ')} gehört in index.md und gilt dann für beide Sprachen.`
             : undefined,
       },

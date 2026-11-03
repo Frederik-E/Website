@@ -1,0 +1,196 @@
+---
+/*
+  Ein LinkedIn-Beitrag, eingebettet mit Zustimmung per Klick. Bis dahin steht
+  ein Platzhalter da, und es geht nichts an LinkedIn: Der Rahmen von LinkedIn
+  setzt beim Laden Cookies (bcookie, lidc u. a.), dafür braucht es eine
+  Einwilligung (§ 25 TDDDG). Ohne JavaScript bleibt nur der Link zum Beitrag.
+*/
+import { t } from '../i18n';
+import { linkedinBeitrag, linkedinEinbettung, linkedinKennung } from '../lib/linkedin';
+import { adresse, spracheVon } from '../lib/sprache';
+
+interface Props {
+  /** Adresse des Beitrags, wie sie in den Kopfdaten des Projekts steht. */
+  url: string;
+  /** Unterschrift: von wem der Beitrag ist und was er zeigt. */
+  text?: string;
+  /** Sprache der Unterschrift, wenn sie von der Seite abweicht. Der Rest
+      steht immer in der Sprache der Seite, auch wenn der Projekttext darum
+      herum mangels Übersetzung deutsch ist. */
+  textLang?: string;
+}
+
+const { url, text, textLang } = Astro.props;
+const sprache = spracheVon(Astro.currentLocale);
+const texte = t(sprache);
+const kennung = linkedinKennung(url);
+if (!kennung) throw new Error(`"${url}" ist keine Adresse eines LinkedIn-Beitrags.`);
+---
+
+<figure class="linkedin" lang={sprache} data-quelle={linkedinEinbettung(kennung)} data-titel={texte.linkedinBeitrag}>
+  <div class="rahmen">
+    <div class="platzhalter">
+      <p class="etikett">{texte.linkedinBeitrag}</p>
+      <p class="hinweis mit-skript" hidden>
+        {texte.linkedinHinweis}{' '}
+        <a class="dezent" href={adresse('/datenschutz/', sprache)}>{texte.linkedinMehr}</a>
+      </p>
+      <div class="aktionen">
+        <button class="laden etikett mit-skript" type="button" hidden>{texte.linkedinLaden}</button>
+        <a class="dezent" href={linkedinBeitrag(kennung)}>{texte.linkedinOeffnen}</a>
+      </div>
+    </div>
+    <span class="sucher" aria-hidden="true"></span>
+  </div>
+  {text && <figcaption lang={textLang}>{text}</figcaption>}
+</figure>
+
+<script>
+  // Erst der Klick lädt den Rahmen von LinkedIn. Die Zustimmung gilt nur für
+  // diesen Aufruf der Seite und wird nirgends gespeichert.
+  for (const figur of document.querySelectorAll<HTMLElement>('figure.linkedin')) {
+    const platzhalter = figur.querySelector<HTMLElement>('.platzhalter');
+    const knopf = figur.querySelector<HTMLButtonElement>('.laden');
+    const quelle = figur.dataset.quelle;
+    if (!platzhalter || !knopf || !quelle) continue;
+
+    for (const element of figur.querySelectorAll<HTMLElement>('.mit-skript')) element.hidden = false;
+
+    knopf.addEventListener(
+      'click',
+      () => {
+        const rahmen = document.createElement('iframe');
+        rahmen.src = quelle;
+        rahmen.title = figur.dataset.titel ?? 'LinkedIn';
+        rahmen.className = 'beitrag';
+        rahmen.allowFullscreen = true;
+        // Der Beitrag darf Skripte ausführen und Links in neuen Fenstern
+        // öffnen, aber nicht diese Seite wegnavigieren.
+        rahmen.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox');
+        rahmen.tabIndex = -1;
+        platzhalter.replaceWith(rahmen);
+        rahmen.focus();
+      },
+      { once: true },
+    );
+  }
+</script>
+
+<style>
+  /* Abstand zur Überschrift darüber: schmal steht sie direkt darüber, breit
+     links daneben auf der Höhe der anderen Abschnitte. */
+  .linkedin {
+    margin: var(--space-24) 0 0;
+  }
+
+  @media (min-width: 60rem) {
+    .linkedin {
+      margin-top: var(--space-64);
+    }
+  }
+
+  .rahmen {
+    position: relative;
+    /* Die Höhe des Rahmens hängt von seiner Breite ab, siehe unten. */
+    container-type: inline-size;
+    max-width: 34rem;
+  }
+
+  /* Platzhalter: Millimeterraster mit Haarlinie, darauf Etikett, Hinweis
+     und die beiden Wege zum Beitrag. */
+  .platzhalter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-16);
+    padding: var(--space-24);
+    border: 1px solid var(--color-haarlinie);
+    border-radius: var(--radius);
+    background-color: var(--color-bg);
+    background-image:
+      linear-gradient(var(--color-raster) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-raster) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: -1px -1px;
+  }
+
+  .platzhalter .etikett {
+    margin: 0;
+  }
+
+  .hinweis {
+    margin: 0;
+    font-size: var(--text-klein);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  .aktionen {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-12) var(--space-24);
+  }
+
+  .laden {
+    padding: var(--space-12) var(--space-16);
+    border: 1px solid var(--color-text);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    color: var(--color-text);
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .laden:hover {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  /* Der Rahmen von LinkedIn passt seine Höhe nicht an den Inhalt an. Die
+     Werte sind am Beitrag zum HackXplore 2026 gemessen (Text, drei Fotos,
+     darüber LinkedIns eigener Cookie-Hinweis): je schmaler, desto höher. */
+  .rahmen :global(.beitrag) {
+    display: block;
+    width: 100%;
+    height: clamp(1240px, calc(1240px + (504px - 100cqi) * 1.1), 1480px);
+    border: 0;
+    border-radius: var(--radius);
+    background: #fff;
+  }
+
+  figcaption {
+    max-width: var(--textbreite);
+    margin-top: var(--space-16);
+    font-size: var(--text-klein);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  /* Sucherecken wie bei den Abbildungen. */
+  .sucher {
+    --l: 12px;
+    --strich: var(--color-konstruktion);
+    position: absolute;
+    inset: -10px;
+    pointer-events: none;
+    background:
+      linear-gradient(var(--strich), var(--strich)) top left / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) top left / 1px var(--l) no-repeat,
+      linear-gradient(var(--strich), var(--strich)) top right / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) top right / 1px var(--l) no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom left / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom left / 1px var(--l) no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom right / var(--l) 1px no-repeat,
+      linear-gradient(var(--strich), var(--strich)) bottom right / 1px var(--l) no-repeat;
+  }
+
+  @media print {
+    .sucher,
+    .mit-skript {
+      display: none;
+    }
+  }
+</style>

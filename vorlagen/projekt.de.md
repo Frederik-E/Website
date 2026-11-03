@@ -13,6 +13,8 @@ tags: []                                     # optional, z. B. [ROS 2, SLAM, Pyt
 # video: demo.mp4                            # optional, Dateiname im Projektordner
 # code: https://github.com/...               # optional, Link zum Repository
 # demo: https://...                          # optional, Live-Demo, Video oder Paper
+# linkedin: https://www.linkedin.com/feed/update/urn:li:activity:...   # optional, LinkedIn-Beitrag am Ende der Seite
+# linkedin_text: "Beitrag von ..., mit Fotos vom ..."                    # optional, Unterschrift darunter
 startseite: true                             # true zeigt das Projekt auf der Startseite
 # reihenfolge: 1                             # optional, kleinere Zahl steht weiter oben
 entwurf: true                                # true blendet das Projekt oeffentlich aus

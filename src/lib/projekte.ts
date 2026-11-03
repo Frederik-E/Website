@@ -65,6 +65,7 @@ function inSprache(de: Eintrag, en: EintragEn | undefined): Projekt {
       tags: e.tags ?? de.data.tags,
       titelbild: e.titelbild ?? de.data.titelbild,
       titelbild_alt: e.titelbild_alt ?? de.data.titelbild_alt,
+      linkedin_text: e.linkedin_text ?? de.data.linkedin_text,
     },
     text: hatText(en) ? en : de,
     textSprache: hatText(en) ? 'en' : 'de',
