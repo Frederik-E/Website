@@ -34,7 +34,8 @@ const kompakt = kurzeStichpunkte(projekt);
 ---
 
 {/* Datenblatt: links Titel und Angaben, rechts Beschreibung und Bild.
-    Der ganze Eintrag ist klickbar, der Titel-Link spannt sich über ihn. */}
+    Der ganze Eintrag ist klickbar, auch das Bild: eine Fläche am Ende des
+    Eintrags führt zum selben Ziel wie der Titel. */}
 <article class="feld geteilt eintrag zeigbar" lang={projekt.kopfSprache !== sprache ? projekt.kopfSprache : undefined}>
   <div class="links erscheinen">
     <Ueberschrift class="titel">
@@ -82,6 +83,10 @@ const kompakt = kurzeStichpunkte(projekt);
       )
     }
   </div>
+
+  {/* Für Maus und Touch. Tastatur und Vorleser nehmen den Titel-Link,
+      deshalb ist die Fläche dort ausgeblendet. */}
+  {titelZiel && <a class="flaeche" href={titelZiel} tabindex="-1" aria-hidden="true"></a>}
 </article>
 
 <style>
@@ -95,24 +100,18 @@ const kompakt = kurzeStichpunkte(projekt);
     text-decoration-color: transparent;
   }
 
-  .ziel::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-  }
-
   .eintrag:hover .ziel {
     text-decoration-color: currentColor;
   }
 
-  .ziel:focus-visible {
-    outline: none;
-  }
-
-  .ziel:focus-visible::after {
-    outline: 2px solid var(--color-link);
-    outline-offset: -4px;
+  /* Klickfläche über dem ganzen Eintrag. Früher spannte sich der Titel-Link
+     per ::after auf. Breit ist die linke Spalte aber sticky und damit der
+     Bezugsrahmen für alles absolut Positionierte darin: die Fläche endete an
+     ihrem Rand, Bild und Kurztext rechts waren nicht klickbar. */
+  .flaeche {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
   }
 
   .titel {
