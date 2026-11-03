@@ -93,17 +93,22 @@ const Ueberschrift = `h${ebene}` as 'h2' | 'h3';
     border-top: 1px solid var(--color-haarlinie);
   }
 
-  /* Titel links, Zeitraum rechts auf derselben Grundlinie. */
+  /* Zeitraum immer unter dem Titel, bei jedem Eintrag gleich (Wunsch des
+     Betreibers, 2026-11-03). Vorher stand er rechts daneben und rutschte nur
+     bei langen Titeln darunter: kurze und lange Einträge sahen verschieden
+     aus. */
   .zeile {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-4) var(--space-24);
+    display: grid;
+    gap: var(--space-4);
   }
 
+  /* 1.25rem ist die untere Grenze von --text-h3. So passt breit auch der
+     längste Titel auf eine Zeile ("M. Sc. Mechatronics and Information
+     Technology - autonomous systems and AI", englisch "Internship and working
+     student position: …"): die Spalte ist dort gut 720 px breit, die Titel
+     brauchen bei 1.25rem höchstens 714 px. */
   .eintrag-titel {
-    font-size: var(--text-h3);
+    font-size: 1.25rem;
     font-weight: 500;
     line-height: 1.3;
   }
