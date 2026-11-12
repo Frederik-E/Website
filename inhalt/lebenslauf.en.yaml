@@ -6,7 +6,7 @@
 # auch. npm run check meldet, wenn die beiden Dateien auseinanderlaufen.
 
 profil: |
-  I study mechatronics with a focus on autonomous systems and AI. During internships and as a working student, I helped develop automated test benches and learned how mechanics, electronics and software work together in practice. Since July 2026, I have been working with reinforcement learning as a student research assistant at KIT, including PPO, graph RL and PyTorch. For my master's thesis, I am looking for a project in development or advanced development in which I can actively help shape solutions and further expand my knowledge.
+  I study mechatronics with a focus on autonomous systems and AI. During internships and as a working student, I helped develop automated test benches and learned how mechanics, electronics and software work together in practice. Since July 2026, I have been working with reinforcement learning as a student research assistant at KIT. For my master's thesis, I am looking for a project in development or advanced development in which I can actively help shape solutions and further expand my knowledge.
 
 abschnitte:
   - titel: Education
