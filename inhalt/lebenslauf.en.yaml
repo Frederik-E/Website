@@ -6,8 +6,7 @@
 # auch. npm run check meldet, wenn die beiden Dateien auseinanderlaufen.
 
 profil: |
-  Mechatronics student specialising in mechanical engineering, machine learning and Python software development.
-  Through internships and working student positions in the development of automated test benches, I have gained experience in an engineering environment. Looking for a master's thesis in order to help develop technical solutions with a practical focus, contribute my knowledge and further expand my skills.
+  I study mechatronics with a focus on mechanical engineering, machine learning and Python development. During internships and as a working student, I helped develop automated test benches and learned how mechanics, electronics and software work together in practice. Since July 2026, I have been working with reinforcement learning as a student research assistant at KIT, including PPO, graph RL and PyTorch. For my master's thesis, I am looking for a practice-oriented project in which I can actively help shape solutions and further expand my knowledge.
 
 abschnitte:
   - titel: Education
